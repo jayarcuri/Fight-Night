@@ -9,16 +9,18 @@ public class PlayerMovement : MonoBehaviour {
 	public float speed = 2f;
 	public float jumpForce = 100f;
 
-	public CharacterState state;
-	public MovementDirection moveDirection;
+
 	public float jumpMovementModifier = .25f;
 	public float jumpTime = 1f;
 	public float jumpHeight = 3f;
 
-	string horizontalAxis;
 	Rigidbody playerBody; 
+	CharacterState state;
+	MovementDirection moveDirection;
+	string horizontalAxis;
 	float initialHeight;
 	float remainingJumpTime;
+	// Make these get pulled by code
 	float westStageConstraint = -7.5f;
 	float eastStageConstraint = 7.5f;
 
@@ -31,11 +33,11 @@ public class PlayerMovement : MonoBehaviour {
 		speed = speed / 60;
 	}
 
-	void OnCollisionEnter(Collision collision) {
+	/*void OnCollisionEnter(Collision collision) {
 		if (collision.gameObject.tag == "Floor") {
 			state = CharacterState.Standing;
 		}
-}
+}*/
 
 	public void Move(float horizontal) {
 		if (horizontal != 0 || state == CharacterState.Jumping) {
@@ -48,14 +50,16 @@ public class PlayerMovement : MonoBehaviour {
 				else
 					moveDirection = MovementDirection.Left;
 				moveTo += Vector3.right * speed * horizontal;
-				} 
+			} 
 			// If jumping...
 			else {
 				moveTo += JumpVelocity ();
 				moveTo += Vector3.right * speed * horizontal * jumpMovementModifier;
 			}
+			moveTo = ConstrainPlayerPosition (moveTo);
 			playerBody.MovePosition (moveTo);
-		}
+		} else
+			moveDirection = MovementDirection.None;
 	}
 		
 	// Jumpman, jumpman, jumpman them boys up to somethin'...
@@ -71,12 +75,13 @@ public class PlayerMovement : MonoBehaviour {
 		remainingJumpTime -= Time.fixedDeltaTime;
 		Vector3 moveBy = Vector3.zero;
 
-		if (remainingJumpTime >= jumpTime) {
-			moveBy.y += jumpHeight / (jumpTime / 2);
+		if (remainingJumpTime >= jumpTime / 2) {
+			moveBy.y += jumpHeight * Time.fixedDeltaTime / (jumpTime / 2);
 
-		} else {
-			moveBy.y -= jumpHeight / (jumpTime / 2);
-		}
+		} else if (remainingJumpTime > 0) {
+			moveBy.y -= jumpHeight * Time.fixedDeltaTime / (jumpTime / 2);
+		} else if (remainingJumpTime <= 0)
+			state = CharacterState.Standing;
 
 		// Move horizontal
 		switch (moveDirection) {
@@ -86,60 +91,25 @@ public class PlayerMovement : MonoBehaviour {
 		case MovementDirection.Right:
 			moveBy += Vector3.right * speed;
 			break;
-		}
-
-
-		// Verify player is within bounds of level and constrain them
-		if (playerBody.position.y + moveBy.y > jumpHeight) {
-			moveBy.y = playerBody.position.y - jumpHeight;
-		} else if (playerBody.position.y - moveBy.y <= initialHeight) {
-			moveBy.y = initialHeight - playerBody.position.y;
-			// Test if this works better than a collision check for setting stand state	
-			state = CharacterState.Standing;
 		} 
-		// Verify within horizontal bounds
-		if (playerBody.position.x + moveBy.x > eastStageConstraint) {
-			moveBy.x = eastStageConstraint - playerBody.position.x;
-		} else if (playerBody.position.x + moveBy.x < westStageConstraint) {
-			moveBy.x = playerBody.position.x - westStageConstraint;
-		}
 
 		return moveBy;
 	}
 
-	IEnumerator AirMovement() {
-		Vector3 velocityDelta = playerBody.velocity;
-		while (state == CharacterState.Jumping) {
-			if (moveDirection == MovementDirection.Left) {
-				velocityDelta += Vector3.right * -speed * Time.deltaTime;
-			} else if (moveDirection == MovementDirection.Right) {
-				velocityDelta += Vector3.right * speed * Time.deltaTime;
-			}
-			if (Input.GetAxis(horizontalAxis) > 0)
-				velocityDelta += Vector3.right * speed * jumpMovementModifier * Time.deltaTime;
-			else if (Input.GetAxis(horizontalAxis) < 0)
-				velocityDelta += Vector3.right * speed * -jumpMovementModifier * Time.deltaTime;
-
-			playerBody.velocity = velocityDelta;
-			yield return null;
+	Vector3 ConstrainPlayerPosition(Vector3 newPosition) {
+		// Verify player is within bounds of level and constrain them
+		if (newPosition.y > jumpHeight) {
+			newPosition.y = jumpHeight;
+		} else if (newPosition.y < initialHeight) {
+			newPosition.y = initialHeight;
 		}
-	}
-
-	IEnumerator AirMovement2() {
-		Vector3 velocityDelta = playerBody.velocity;
-		while (state == CharacterState.Jumping) {
-			if (moveDirection == MovementDirection.Left) {
-				velocityDelta += transform.right * -speed * Time.deltaTime;
-			} else if (moveDirection == MovementDirection.Right) {
-				velocityDelta += transform.right * speed * Time.deltaTime;
-			}
-			if (Input.GetAxis(horizontalAxis) > 0)
-				velocityDelta += transform.right * speed * jumpMovementModifier * Time.deltaTime;
-			else if (Input.GetAxis(horizontalAxis) < 0)
-				velocityDelta += transform.right * speed * -jumpMovementModifier * Time.deltaTime;
-
-			playerBody.velocity = velocityDelta;
-			yield return null;
+		// Verify within horizontal bounds
+		if (newPosition.x > eastStageConstraint) {
+			newPosition.x = eastStageConstraint;
+		} else if (newPosition.x < westStageConstraint) {
+			newPosition.x = westStageConstraint;
 		}
+		return newPosition;
 	}
+		
 }
