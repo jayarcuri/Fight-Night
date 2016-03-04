@@ -43,7 +43,8 @@ public class PlayerMovement : MonoBehaviour {
 				moveDirection = MovementDirection.None;
 		}
 	}
-
+		
+	// Jumpman, jumpman, jumpman them boys up to somethin'...
 	public void Jump() {
 		if (state == CharacterState.Standing) {
 			// Set all variables for jump state
