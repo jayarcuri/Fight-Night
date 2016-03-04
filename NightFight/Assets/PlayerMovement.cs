@@ -9,17 +9,24 @@ public class PlayerMovement : MonoBehaviour {
 	public float speed = 2f;
 	public float jumpForce = 100f;
 
-	string horizontalAxis;
-	Rigidbody playerBody; 
 	public CharacterState state;
 	public MovementDirection moveDirection;
 	public float jumpMovementModifier = .25f;
-	public float remainingJumpTime = 1f;
-	// Use this for initialization
+	public float jumpTime = 1f;
+	public float jumpHeight = 3f;
+
+	string horizontalAxis;
+	Rigidbody playerBody; 
+	float initialHeight;
+	float remainingJumpTime;
+
+
 	void Start () {
 		playerBody = GetComponent<Rigidbody>();
 		state = CharacterState.Standing;
 		horizontalAxis = GetComponent<PlayerController> ().horizontalAxis;
+		initialHeight = playerBody.position.y;
+		speed = speed / 60;
 	}
 
 	void OnCollisionEnter(Collision collision) {
@@ -28,19 +35,24 @@ public class PlayerMovement : MonoBehaviour {
 		}
 }
 
-	public void Move(float horizontal){
-		Vector3 newPositionDelta = Vector3.zero;
+	public void Move(float horizontal) {
+		if (horizontal != 0 || state == CharacterState.Jumping) {
+			// variable which will be modified by checks for different states which impact movement
+			Vector3 moveBy = playerBody.position;
 
-		if (state != CharacterState.Jumping) {
-			if (horizontal != 0) {
+			if (state != CharacterState.Jumping) {
 				if (horizontal > 0)
 					moveDirection = MovementDirection.Right;
 				else
 					moveDirection = MovementDirection.Left;
-			
-				playerBody.MovePosition(Vector3.right * speed * horizontal);
-			} else if (state == CharacterState.Jumping)
-				moveDirection = MovementDirection.None;
+				moveBy += Vector3.right * speed * horizontal;
+				} 
+			// If jumping...
+			else {
+				moveBy += JumpVelocity ();
+				moveBy += Vector3.right * speed * horizontal * jumpMovementModifier;
+			}
+			playerBody.MovePosition (moveBy);
 		}
 	}
 		
@@ -49,9 +61,15 @@ public class PlayerMovement : MonoBehaviour {
 		if (state == CharacterState.Standing) {
 			// Set all variables for jump state
 			state = CharacterState.Jumping;
-			playerBody.AddForce (Vector3.up * jumpForce, ForceMode.Impulse);
-			StartCoroutine ("AirMovement");
+			remainingJumpTime = jumpTime;
 		}
+	}
+
+	Vector3 JumpVelocity() {
+		float butts = Time.fixedDeltaTime;
+
+
+		return Vector3.zero;
 	}
 
 	IEnumerator AirMovement() {
