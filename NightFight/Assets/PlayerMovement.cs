@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour {
 	Rigidbody playerBody; 
 	float initialHeight;
 	float remainingJumpTime;
+	float westStageConstraint = -7.5f;
+	float eastStageConstraint = 7.5f;
 
 
 	void Start () {
@@ -38,21 +40,21 @@ public class PlayerMovement : MonoBehaviour {
 	public void Move(float horizontal) {
 		if (horizontal != 0 || state == CharacterState.Jumping) {
 			// variable which will be modified by checks for different states which impact movement
-			Vector3 moveBy = playerBody.position;
+			Vector3 moveTo = playerBody.position;
 
 			if (state != CharacterState.Jumping) {
 				if (horizontal > 0)
 					moveDirection = MovementDirection.Right;
 				else
 					moveDirection = MovementDirection.Left;
-				moveBy += Vector3.right * speed * horizontal;
+				moveTo += Vector3.right * speed * horizontal;
 				} 
 			// If jumping...
 			else {
-				moveBy += JumpVelocity ();
-				moveBy += Vector3.right * speed * horizontal * jumpMovementModifier;
+				moveTo += JumpVelocity ();
+				moveTo += Vector3.right * speed * horizontal * jumpMovementModifier;
 			}
-			playerBody.MovePosition (moveBy);
+			playerBody.MovePosition (moveTo);
 		}
 	}
 		
@@ -66,10 +68,43 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	Vector3 JumpVelocity() {
-		float butts = Time.fixedDeltaTime;
+		remainingJumpTime -= Time.fixedDeltaTime;
+		Vector3 moveBy = Vector3.zero;
+
+		if (remainingJumpTime >= jumpTime) {
+			moveBy.y += jumpHeight / (jumpTime / 2);
+
+		} else {
+			moveBy.y -= jumpHeight / (jumpTime / 2);
+		}
+
+		// Move horizontal
+		switch (moveDirection) {
+		case MovementDirection.Left:
+			moveBy += Vector3.right * -speed;
+			break;
+		case MovementDirection.Right:
+			moveBy += Vector3.right * speed;
+			break;
+		}
 
 
-		return Vector3.zero;
+		// Verify player is within bounds of level and constrain them
+		if (playerBody.position.y + moveBy.y > jumpHeight) {
+			moveBy.y = playerBody.position.y - jumpHeight;
+		} else if (playerBody.position.y - moveBy.y <= initialHeight) {
+			moveBy.y = initialHeight - playerBody.position.y;
+			// Test if this works better than a collision check for setting stand state	
+			state = CharacterState.Standing;
+		} 
+		// Verify within horizontal bounds
+		if (playerBody.position.x + moveBy.x > eastStageConstraint) {
+			moveBy.x = eastStageConstraint - playerBody.position.x;
+		} else if (playerBody.position.x + moveBy.x < westStageConstraint) {
+			moveBy.x = playerBody.position.x - westStageConstraint;
+		}
+
+		return moveBy;
 	}
 
 	IEnumerator AirMovement() {
