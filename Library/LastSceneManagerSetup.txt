@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/ShadowBoxingTest.unity
-  isLoaded: 1
-  isActive: 1
