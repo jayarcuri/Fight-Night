@@ -86,10 +86,10 @@ public class PlayerMovement : MonoBehaviour {
 		// Move horizontal
 		switch (moveDirection) {
 		case MovementDirection.Left:
-			moveBy += Vector3.right * -speed;
+			moveBy += Vector3.right * -speed * 1/3;
 			break;
 		case MovementDirection.Right:
-			moveBy += Vector3.right * speed;
+			moveBy += Vector3.right * speed * 1/3;
 			break;
 		} 
 
