@@ -1,0 +1,27 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class InputController : MonoBehaviour {
+	public string horizontalAxis;
+	public string verticalAxis;
+	public string jump;
+	public string lightAttack;
+	public string heavyAtack;
+	CharacterMovement playerMovement;
+
+	void Start () {
+		playerMovement = GetComponent<CharacterMovement> ();
+	}
+
+	void FixedUpdate() {
+		// read inputs
+		float horizontalInput = Input.GetAxisRaw (horizontalAxis);
+		float verticalInput = Input.GetAxisRaw (verticalAxis);
+		bool jumping = Input.GetButtonDown (jump);
+
+		if (jumping)
+			playerMovement.Jump ();
+
+		playerMovement.Move (horizontalInput);
+	}
+}

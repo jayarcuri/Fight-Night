@@ -4,7 +4,7 @@ using System.Collections;
 public enum CharacterState{Standing, Jumping}
 public enum MovementDirection{None, Left, Right}
 
-public class PlayerMovement : MonoBehaviour {
+public class CharacterMovement : MonoBehaviour {
 
 	public float speed = 2f;
 	public float jumpForce = 100f;
@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour {
 	Rigidbody playerBody; 
 	CharacterState state;
 	MovementDirection moveDirection;
-	string horizontalAxis;
 	float initialHeight;
 	float remainingJumpTime;
 	// Make these get pulled by code
@@ -28,16 +27,9 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
 		playerBody = GetComponent<Rigidbody>();
 		state = CharacterState.Standing;
-		horizontalAxis = GetComponent<PlayerController> ().horizontalAxis;
 		initialHeight = playerBody.position.y;
 		speed = speed / 60;
 	}
-
-	/*void OnCollisionEnter(Collision collision) {
-		if (collision.gameObject.tag == "Floor") {
-			state = CharacterState.Standing;
-		}
-}*/
 
 	public void Move(float horizontal) {
 		if (horizontal != 0 || state == CharacterState.Jumping) {
@@ -53,7 +45,7 @@ public class PlayerMovement : MonoBehaviour {
 			} 
 			// If jumping...
 			else {
-				moveTo += JumpVelocity ();
+				moveTo += GetJumpVelocity ();
 				moveTo += Vector3.right * speed * horizontal * jumpMovementModifier;
 			}
 			moveTo = ConstrainPlayerPosition (moveTo);
@@ -71,7 +63,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
-	Vector3 JumpVelocity() {
+	Vector3 GetJumpVelocity() {
 		remainingJumpTime -= Time.fixedDeltaTime;
 		Vector3 moveBy = Vector3.zero;
 
