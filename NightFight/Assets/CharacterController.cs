@@ -2,16 +2,23 @@
 using System.Collections;
 
 public enum AttackType{Light, Heavy}
-delegate void Move();
+public delegate void Move();
 
 public class CharacterController : MonoBehaviour {
 	public Move move;
+	HitFrame jabHitbox;
+	HitFrame pokeHitbox;
+	HitFrame AAHitbox;
 	MoveFrame[] currentMoveSequence;
 	int currentMoveIndex = 0;
 	bool orientationReversed;
 
 	void Start () {
 		orientationReversed = false;
+		// Must change hit/block stun to factor in active frames as potential recovery.
+		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), new Vector3 (.7f, .25f, 1f), Vector3.zero, 1f, 7, 6, true);
+		pokeHitbox = new HitFrame (new Vector3 (1f, -0.4f, 0f), new Vector3 (1.2f, .2f, 1f), Vector3.zero, 2.5f, 11, 9, true);
+		AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4f, 11, 7, true);
 	}
 	
 	public void ExecuteInput(int horizontalInput, int verticalInput, AttackType attackType) {
@@ -63,14 +70,56 @@ public class CharacterController : MonoBehaviour {
 
 	MoveFrame[] Jab() {
 		MoveFrame[] jab = {
-			MoveFrame.EmptyFrame (), 
-			MoveFrame.EmptyFrame (),
-			HitFrame (Vector3 (0.35f, 0f, 0f), Vector3 (.7f, .7f, 1f), 1f, 7f, 6f),
-			HitFrame (Vector3 (0.35f, 0f, 0f), Vector3 (.7f, .7f, 1f), 1f, 7f, 6f),
-			MoveFrame.EmptyFrame (),
-			MoveFrame.EmptyFrame,
-			MoveFrame.EmptyFrame,
-			MoveFrame.EmptyFrame
+			new MoveFrame (), 
+			new MoveFrame (),
+			jabHitbox,
+			jabHitbox,
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame ()
 		};
+		return jab;
+	}
+
+	MoveFrame[] Poke() {
+		MoveFrame[] poke = {
+			new MoveFrame (), 
+			new MoveFrame (),
+			new MoveFrame (),
+			pokeHitbox,
+			pokeHitbox,
+			pokeHitbox,
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame ()
+		};
+		return poke;
+	}
+
+	MoveFrame[] anitAir () {
+		MoveFrame[] AA = {
+			new MoveFrame (), 
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			AAHitbox,
+			AAHitbox,
+			AAHitbox,
+			AAHitbox,
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame ()
+		};
+		return AA;
 	}
 }

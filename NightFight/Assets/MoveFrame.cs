@@ -6,11 +6,10 @@ public class MoveFrame
 	protected Vector3 movementDuringFrame;
 	protected bool isLit;
 
-	public static MoveFrame EmptyFrame() {
-		MoveFrame newFrame = MoveFrame (Vector3.zero, true);
-		return newFrame;
+	public MoveFrame () {
+		this.movementDuringFrame = Vector3.zero;
+		this.isLit = true;
 	}
-
 	public MoveFrame (Vector3 movementDuringFrame)
 		{
 		this.movementDuringFrame = movementDuringFrame;
