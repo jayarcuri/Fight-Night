@@ -6,6 +6,7 @@ public delegate void Move();
 
 public class CharacterController : MonoBehaviour {
 	public Move move;
+	InputController inputController;
 	HitFrame jabHitbox;
 	HitFrame pokeHitbox;
 	HitFrame AAHitbox;
@@ -15,10 +16,23 @@ public class CharacterController : MonoBehaviour {
 
 	void Start () {
 		orientationReversed = false;
+		inputController = GetComponent<InputController> ();
 		// Must change hit/block stun to factor in active frames as potential recovery.
 		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), new Vector3 (.7f, .25f, 1f), Vector3.zero, 1f, 7, 6, true);
 		pokeHitbox = new HitFrame (new Vector3 (1f, -0.4f, 0f), new Vector3 (1.2f, .2f, 1f), Vector3.zero, 2.5f, 11, 9, true);
 		AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4f, 11, 7, true);
+	}
+
+	void FixedUpdate() {
+		if (currentMoveSequence == null) {
+			float horInput;
+			float vertInput;
+			bool jumpButton;
+			inputController.GetInputs (out horInput, out vertInput, out jumpButton);
+		} else {
+			
+		}
+
 	}
 	
 	public void ExecuteInput(int horizontalInput, int verticalInput, AttackType attackType) {

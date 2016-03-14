@@ -24,4 +24,15 @@ public class InputController : MonoBehaviour {
 
 		playerMovement.Move (horizontalInput);
 	}
+	public void GetInputs (out float horizontalInput, out float verticalInput, out bool jumping, out AttackType attack) {
+		// read inputs
+		horizontalInput = Input.GetAxisRaw (horizontalAxis);
+		verticalInput = Input.GetAxisRaw (verticalAxis);
+		jumping = Input.GetButton (jump);
+		if (Input.GetButton (heavyAtack)) {
+			attack = AttackType.Heavy;
+		} else if (Input.GetButton (lightAttack)) {
+			attack = AttackType.Light;
+		}
+	}
 }
