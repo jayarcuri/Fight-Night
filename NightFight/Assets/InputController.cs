@@ -33,6 +33,7 @@ public class InputController : MonoBehaviour {
 			attack = AttackType.Heavy;
 		} else if (Input.GetButton (lightAttack)) {
 			attack = AttackType.Light;
-		}
+		} else
+			attack = AttackType.None;
 	}
 }

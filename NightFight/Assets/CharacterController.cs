@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum AttackType{Light, Heavy}
+public enum AttackType{Light, Heavy, None}
 public delegate void Move();
 
 public class CharacterController : MonoBehaviour {
 	public Move move;
+	public Light bodyLight;
 	InputController inputController;
 	HitFrame jabHitbox;
 	HitFrame pokeHitbox;
@@ -17,6 +18,8 @@ public class CharacterController : MonoBehaviour {
 	void Start () {
 		orientationReversed = false;
 		inputController = GetComponent<InputController> ();
+		bodyLight = GetComponentInChildren<Light> ();
+		bodyLight.enabled = false;
 		// Must change hit/block stun to factor in active frames as potential recovery.
 		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), new Vector3 (.7f, .25f, 1f), Vector3.zero, 1f, 7, 6, true);
 		pokeHitbox = new HitFrame (new Vector3 (1f, -0.4f, 0f), new Vector3 (1.2f, .2f, 1f), Vector3.zero, 2.5f, 11, 9, true);
@@ -24,14 +27,19 @@ public class CharacterController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		if (currentMoveSequence == null) {
+		//if (currentMoveSequence == null) {
 			float horInput;
 			float vertInput;
 			bool jumpButton;
-			inputController.GetInputs (out horInput, out vertInput, out jumpButton);
-		} else {
-			
-		}
+			AttackType attackType;
+			inputController.GetInputs (out horInput, out vertInput, out jumpButton, out attackType);
+		// } else {
+			//ExecuteNextMoveFrame ();
+		//}
+		if (attackType != AttackType.None)
+			bodyLight.enabled = true;
+		else
+			bodyLight.enabled = false;
 
 	}
 	
@@ -75,7 +83,10 @@ public class CharacterController : MonoBehaviour {
 
 	void ExecuteNextMoveFrame() {
 		if (currentMoveIndex < currentMoveSequence.Length) {
-			
+			MoveFrame frame = currentMoveSequence [currentMoveIndex];
+			// Extend hitbox
+			// if (frame.isLit && 
+
 		} else {
 			currentMoveSequence = null;
 			currentMoveIndex = 0;

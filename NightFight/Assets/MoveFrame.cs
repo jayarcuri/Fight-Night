@@ -3,8 +3,8 @@ using System.Collections;
 
 public class MoveFrame 
 	{
-	protected Vector3 movementDuringFrame;
-	protected bool isLit;
+	public Vector3 movementDuringFrame;
+	public bool isLit;
 
 	public MoveFrame () {
 		this.movementDuringFrame = Vector3.zero;
