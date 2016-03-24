@@ -7,6 +7,7 @@ public delegate void Move();
 public class CharacterController : MonoBehaviour {
 	public Move move;
 	public Light bodyLight;
+	CharacterMovement characterMovement;
 	InputController inputController;
 	HitFrame jabHitbox;
 	HitFrame pokeHitbox;
@@ -18,6 +19,7 @@ public class CharacterController : MonoBehaviour {
 	void Start () {
 		orientationReversed = false;
 		inputController = GetComponent<InputController> ();
+		characterMovement = GetComponent<CharacterMovement> ();
 		bodyLight = GetComponentInChildren<Light> ();
 		bodyLight.enabled = false;
 		// Must change hit/block stun to factor in active frames as potential recovery.
@@ -28,24 +30,27 @@ public class CharacterController : MonoBehaviour {
 
 	void FixedUpdate() {
 		//if (currentMoveSequence == null) {
-			float horInput;
-			float vertInput;
-			bool jumpButton;
-			AttackType attackType;
-			inputController.GetInputs (out horInput, out vertInput, out jumpButton, out attackType);
+			float horizontalInput;
+			float verticalInput;
+			AttackType attack;
+			inputController.GetInputs (out horizontalInput, out verticalInput, out attack);
+		ExecuteInput (horizontalInput, verticalInput, attack);
 		// } else {
 			//ExecuteNextMoveFrame ();
 		//}
-		if (attackType != AttackType.None)
+
+		if (attack != AttackType.None)
 			bodyLight.enabled = true;
 		else
 			bodyLight.enabled = false;
 
 	}
 	
-	public void ExecuteInput(int horizontalInput, int verticalInput, AttackType attackType) {
-		if (move == null) {
-			if (attackType != null) {
+	public void ExecuteInput(float horizontalInput, float verticalInput, AttackType attackType) {
+		// If no action is currently being executed...
+		//if (move == null) {
+			// Attacks take priority over movement
+		if (attackType != AttackType.None) {
 				if (attackType == AttackType.Light) {
 					if (verticalInput < 0) {
 						// Crouch attack
@@ -55,30 +60,23 @@ public class CharacterController : MonoBehaviour {
 					} else if (horizontalInput < 0 && orientationReversed) {
 						// Same
 					} else { // Create default jab
-						currentMoveSequence = Jab();
+						currentMoveSequence = Jab ();
 					}
 				} else {
 					// Execute heavy attack
 				}
-			} // If there is no button input
-		else if (verticalInput > 0) {
-				switch (horizontalInput) {
-				case 1:
-				// right jump
-					break;
-				case 0:
-				// vert jump
-					break;
-				case -1:
-				// left jump
-					break;
-				}
-				// Jump
-			} else if (horizontalInput != 0) {
-				// move right or left
+			} // If there is no attack, jumps take priority
+			else {
+			print ("hey");
+			if (verticalInput > 0 && characterMovement.state != CharacterState.Jumping) {
+				characterMovement.Jump (horizontalInput);
 			}
-		}
-		move ();
+					characterMovement.Move (horizontalInput);
+				}
+		//}
+		// Execute the current move if it exists.
+		//else
+		//	move ();
 	}
 
 	void ExecuteNextMoveFrame() {

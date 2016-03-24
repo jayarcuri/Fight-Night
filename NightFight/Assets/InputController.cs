@@ -8,27 +8,33 @@ public class InputController : MonoBehaviour {
 	public string lightAttack;
 	public string heavyAtack;
 	CharacterMovement playerMovement;
+	public CharacterController characterController;
 
 	void Start () {
 		playerMovement = GetComponent<CharacterMovement> ();
+		characterController = GetComponent<CharacterController> ();
 	}
 
-	void FixedUpdate() {
+/*	void FixedUpdate() {
 		// read inputs
-		float horizontalInput = Input.GetAxisRaw (horizontalAxis);
-		float verticalInput = Input.GetAxisRaw (verticalAxis);
-		bool jumping = Input.GetButton (jump);
+		float horizontalInput, verticalInput;
+		AttackType attack;
+		//bool jumping = Input.GetButton (jump);
+		GetInputs (out horizontalInput, out verticalInput, out attack);
 
+		characterController.ExecuteInput (horizontalInput, verticalInput, attack);
+
+		
 		if (jumping)
-			playerMovement.Jump ();
+			playerMovement.Jump (horizontalInput);
 
 		playerMovement.Move (horizontalInput);
-	}
-	public void GetInputs (out float horizontalInput, out float verticalInput, out bool jumping, out AttackType attack) {
+	}*/
+	public void GetInputs (out float horizontalInput, out float verticalInput, out AttackType attack) {
 		// read inputs
 		horizontalInput = Input.GetAxisRaw (horizontalAxis);
 		verticalInput = Input.GetAxisRaw (verticalAxis);
-		jumping = Input.GetButton (jump);
+
 		if (Input.GetButton (heavyAtack)) {
 			attack = AttackType.Heavy;
 		} else if (Input.GetButton (lightAttack)) {

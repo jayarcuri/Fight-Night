@@ -7,12 +7,8 @@ public enum MovementDirection{None, Left, Right}
 public class CharacterMovement : MonoBehaviour {
 
 	public float speed = 2f;
-	public float jumpForce = 100f;
 
-
-	public float jumpMovementModifier = .25f;
-	public float jumpTime = 1f;
-	public float jumpHeight = 3f;
+	public float jumpMovementModifier;
 
 	public float initialJumpVelocity;
 	public float gravityForce;
@@ -52,7 +48,8 @@ public class CharacterMovement : MonoBehaviour {
 			// If jumping...
 			else {
 				moveTo += GetJumpVelocity ();
-				moveTo += Vector3.right * speed * horizontal * jumpMovementModifier;
+				if (moveDirection == MovementDirection.None) // Allow "steering" in the air if the player neutral jumps
+					moveTo += Vector3.right * speed * horizontal * jumpMovementModifier * 3/5;
 			}
 			moveTo = ConstrainPlayerPosition (moveTo);
 			playerBody.MovePosition (moveTo);
@@ -61,12 +58,22 @@ public class CharacterMovement : MonoBehaviour {
 	}
 		
 	// Jumpman, jumpman, jumpman them boys up to somethin'...
-	public void Jump() {
+	public void Jump(float horizontalInput) {
 		if (state == CharacterState.Standing) {
 			// Set all variables for jump state
 			currentJumpVelocity = initialJumpVelocity;
 			state = CharacterState.Jumping;
-			//remainingJumpTime = jumpTime;
+			switch ((int)horizontalInput) {
+			case 1:
+				moveDirection = MovementDirection.Right;
+				break;
+			case 0:
+				moveDirection = MovementDirection.None;
+				break;
+			case -1:
+				moveDirection = MovementDirection.Left;
+				break;
+			}
 		}
 	}
 
@@ -84,10 +91,10 @@ public class CharacterMovement : MonoBehaviour {
 		// Move horizontal
 		switch (moveDirection) {
 		case MovementDirection.Left:
-			moveBy += Vector3.right * -speed * 1/3;
+			moveBy += Vector3.right * -speed * jumpMovementModifier;
 			break;
 		case MovementDirection.Right:
-			moveBy += Vector3.right * speed * 1/3;
+			moveBy += Vector3.right * speed * jumpMovementModifier;
 			break;
 		} 
 
@@ -96,9 +103,7 @@ public class CharacterMovement : MonoBehaviour {
 
 	Vector3 ConstrainPlayerPosition(Vector3 newPosition) {
 		// Verify player is within bounds of level and constrain them
-		if (newPosition.y > jumpHeight) {
-			//newPosition.y = jumpHeight;
-		} else if (newPosition.y < initialHeight) {
+		if (newPosition.y < initialHeight) {
 			newPosition.y = initialHeight;
 			state = CharacterState.Standing;
 		}
