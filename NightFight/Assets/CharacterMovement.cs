@@ -14,11 +14,17 @@ public class CharacterMovement : MonoBehaviour {
 	public float jumpTime = 1f;
 	public float jumpHeight = 3f;
 
+	public float initialJumpVelocity;
+	public float gravityForce;
+	public float terminalVelocity;
+
 	Rigidbody playerBody; 
-	CharacterState state;
+	public CharacterState state;
 	MovementDirection moveDirection;
+
 	float initialHeight;
 	float remainingJumpTime;
+	public float currentJumpVelocity;
 	// Make these get pulled by code
 	float westStageConstraint = -7.5f;
 	float eastStageConstraint = 7.5f;
@@ -58,22 +64,22 @@ public class CharacterMovement : MonoBehaviour {
 	public void Jump() {
 		if (state == CharacterState.Standing) {
 			// Set all variables for jump state
+			currentJumpVelocity = initialJumpVelocity;
 			state = CharacterState.Jumping;
-			remainingJumpTime = jumpTime;
+			//remainingJumpTime = jumpTime;
 		}
 	}
 
 	Vector3 GetJumpVelocity() {
-		remainingJumpTime -= Time.fixedDeltaTime;
+		remainingJumpTime -= Time.fixedDeltaTime; 
 		Vector3 moveBy = Vector3.zero;
 
-		if (remainingJumpTime >= jumpTime / 2) {
-			moveBy.y += jumpHeight * Time.fixedDeltaTime / (jumpTime / 2);
-
-		} else if (remainingJumpTime > 0) {
-			moveBy.y -= jumpHeight * Time.fixedDeltaTime / (jumpTime / 2);
-		} else if (remainingJumpTime <= 0)
-			state = CharacterState.Standing;
+		moveBy.y += currentJumpVelocity;
+ 
+		currentJumpVelocity -= gravityForce;
+		if (currentJumpVelocity < terminalVelocity) {
+			currentJumpVelocity = terminalVelocity;
+		}
 
 		// Move horizontal
 		switch (moveDirection) {
@@ -91,9 +97,10 @@ public class CharacterMovement : MonoBehaviour {
 	Vector3 ConstrainPlayerPosition(Vector3 newPosition) {
 		// Verify player is within bounds of level and constrain them
 		if (newPosition.y > jumpHeight) {
-			newPosition.y = jumpHeight;
+			//newPosition.y = jumpHeight;
 		} else if (newPosition.y < initialHeight) {
 			newPosition.y = initialHeight;
+			state = CharacterState.Standing;
 		}
 		// Verify within horizontal bounds
 		if (newPosition.x > eastStageConstraint) {

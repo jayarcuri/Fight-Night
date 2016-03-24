@@ -17,7 +17,7 @@ public class InputController : MonoBehaviour {
 		// read inputs
 		float horizontalInput = Input.GetAxisRaw (horizontalAxis);
 		float verticalInput = Input.GetAxisRaw (verticalAxis);
-		bool jumping = Input.GetButtonDown (jump);
+		bool jumping = Input.GetButton (jump);
 
 		if (jumping)
 			playerMovement.Jump ();
