@@ -17,6 +17,7 @@ public class CharacterMovement : MonoBehaviour {
 	Rigidbody playerBody; 
 	public CharacterState state;
 	MovementDirection moveDirection;
+	//Transform 
 
 	float initialHeight;
 	float remainingJumpTime;
@@ -108,10 +109,10 @@ public class CharacterMovement : MonoBehaviour {
 			state = CharacterState.Standing;
 		}
 		// Verify within horizontal bounds
-		if (newPosition.x > eastStageConstraint) {
-			newPosition.x = eastStageConstraint;
-		} else if (newPosition.x < westStageConstraint) {
-			newPosition.x = westStageConstraint;
+		if (newPosition.x + transform.localScale.x/2 > eastStageConstraint) {
+			newPosition.x = eastStageConstraint - transform.localScale.x/2;
+		} else if (newPosition.x - transform.localScale.x/2 < westStageConstraint) {
+			newPosition.x = westStageConstraint + transform.localScale.x/2;
 		}
 		return newPosition;
 	}

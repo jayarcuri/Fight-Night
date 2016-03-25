@@ -7,6 +7,20 @@ public delegate void Move();
 public class CharacterController : MonoBehaviour {
 	public Move move;
 	public Light bodyLight;
+	public bool isPlayer1;
+	public bool isFacingRight { get { 
+			return _isFacingRight; } 
+		set { 
+			Vector3 newRotation = transform.localEulerAngles; 
+			newRotation.y -= 180; 
+			print ("Garbage day!");
+			transform.localEulerAngles = newRotation; 
+			_isFacingRight = value; } 
+	}
+	 
+
+	bool _isFacingRight; //{ get { return isFacingRight; } set { isFacingRight = value; Vector3 newRotation = transform.localEulerAngles; newRotation.y -= 180; transform.localEulerAngles = newRotation; } } // Orientation reversed or not
+	public CharacterController opponent;
 	CharacterMovement characterMovement;
 	InputController inputController;
 	HitFrame jabHitbox;
@@ -14,10 +28,16 @@ public class CharacterController : MonoBehaviour {
 	HitFrame AAHitbox;
 	MoveFrame[] currentMoveSequence;
 	int currentMoveIndex = 0;
-	bool orientationReversed;
 
 	void Start () {
-		orientationReversed = false;
+		if (isPlayer1) {
+			opponent = GameObject.FindGameObjectWithTag ("Player2").GetComponent <CharacterController> ();
+		} else {
+			opponent = GameObject.FindGameObjectWithTag ("Player1").GetComponent <CharacterController> ();
+		}
+
+		isFacingRight = opponent.transform.localPosition.x > transform.localPosition.x;
+
 		inputController = GetComponent<InputController> ();
 		characterMovement = GetComponent<CharacterMovement> ();
 		bodyLight = GetComponentInChildren<Light> ();
@@ -29,20 +49,26 @@ public class CharacterController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		//if (currentMoveSequence == null) {
+		if (isPlayer1) {
 			float horizontalInput;
 			float verticalInput;
 			AttackType attack;
 			inputController.GetInputs (out horizontalInput, out verticalInput, out attack);
-		ExecuteInput (horizontalInput, verticalInput, attack);
-		// } else {
+			ExecuteInput (horizontalInput, verticalInput, attack);
+			// if there is not a current move being executed...
+			if (isFacingRight && opponent.transform.localPosition.x < transform.localPosition.x)
+				isFacingRight = false;
+			else if (!isFacingRight && opponent.transform.localPosition.x > transform.localPosition.x)
+				isFacingRight = true;
+			// } else {
 			//ExecuteNextMoveFrame ();
-		//}
+			//}
 
-		if (attack != AttackType.None)
-			bodyLight.enabled = true;
-		else
-			bodyLight.enabled = false;
+			if (attack != AttackType.None)
+				bodyLight.enabled = true;
+			else
+				bodyLight.enabled = false;
+		}
 
 	}
 	
@@ -55,9 +81,9 @@ public class CharacterController : MonoBehaviour {
 					if (verticalInput < 0) {
 						// Crouch attack
 					}
-					if (horizontalInput > 0 && !orientationReversed) {
+					if (horizontalInput > 0 && !isFacingRight) {
 						// Solar plexus blow
-					} else if (horizontalInput < 0 && orientationReversed) {
+				} else if (horizontalInput < 0 && isFacingRight) {
 						// Same
 					} else { // Create default jab
 						currentMoveSequence = Jab ();
