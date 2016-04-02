@@ -15,8 +15,8 @@ public class HitboxController : MonoBehaviour {
 		enabled = true;
 		hitbox.localPosition = attack.offset;
 		hitbox.localScale = attack.size;
-		if (attackPayload == null || !attackPayload.Equals(attack))
-			attackPayload = attack;
+		//if (attackPayload == null || !attackPayload.Equals(attack))
+		attackPayload = attack;
 	}
 
 	public void Reset () {
@@ -31,6 +31,10 @@ public class HitboxController : MonoBehaviour {
 
 	public int GetCurrentMoveHitStunValue() {
 		return attackPayload.hitStun;
+	}
+
+	public bool IsLoaded() {
+		return (attackPayload != null);
 	}
 
 }

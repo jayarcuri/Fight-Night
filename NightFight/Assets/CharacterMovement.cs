@@ -23,8 +23,8 @@ public class CharacterMovement : MonoBehaviour {
 	float remainingJumpTime;
 	public float currentJumpVelocity;
 	// Make these get pulled by code
-	float westStageConstraint = -7.5f;
-	float eastStageConstraint = 7.5f;
+	float westStageConstraint = -9.5f;
+	float eastStageConstraint = 9.5f;
 
 
 	void Start () {

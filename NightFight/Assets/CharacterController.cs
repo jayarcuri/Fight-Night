@@ -75,19 +75,17 @@ public class CharacterController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-			print (other.tag);
-			print (other.gameObject);
-			print (hitBox.gameObject);
-			if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
-				// if not blocking or not immune to attack
+		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
+			// if not blocking or not immune to attack
+			HitboxController attackingHitbox = other.GetComponent <HitboxController> ();
+			if (attackingHitbox.IsLoaded ()) {
 				if (characterMovement.state == CharacterState.Standing) {
-					HitboxController attackingHitbox = other.GetComponent <HitboxController> ();
-					//currentMoveSequence = attackingHitbox.GetCurrentMoveHitstun ();
-					currentMoveSequence = new MoveSequence(new MoveFrame[attackingHitbox.GetCurrentMoveHitStunValue()]);
+					currentMoveSequence = attackingHitbox.GetCurrentMoveHitstun ();
 					print ("Hit occurred");
 					attackingHitbox.Reset ();
 				}
 			}
+		}
 		}
 	
 	public void ExecuteInput(float horizontalInput, float verticalInput, AttackType attackType) {
