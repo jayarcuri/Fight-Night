@@ -8,8 +8,7 @@ public class HitboxController : MonoBehaviour {
 	void Start () {
 		hitbox = GetComponent<Transform> ();
 		enabled = false;
-		// Testing stuff below
-		ExecuteAttack(new HitFrame (new Vector3 (0.7f, 0f, 0f), new Vector3 (.7f, .7f, 1f), Vector3.zero, 1f, 7, 6, true));
+		Reset();
 	}
 	
 	public void ExecuteAttack (HitFrame attack) {

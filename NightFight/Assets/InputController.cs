@@ -15,29 +15,15 @@ public class InputController : MonoBehaviour {
 		characterController = GetComponent<CharacterController> ();
 	}
 
-/*	void FixedUpdate() {
-		// read inputs
-		float horizontalInput, verticalInput;
-		AttackType attack;
-		//bool jumping = Input.GetButton (jump);
-		GetInputs (out horizontalInput, out verticalInput, out attack);
-
-		characterController.ExecuteInput (horizontalInput, verticalInput, attack);
-
-		
-		if (jumping)
-			playerMovement.Jump (horizontalInput);
-
-		playerMovement.Move (horizontalInput);
-	}*/
 	public void GetInputs (out float horizontalInput, out float verticalInput, out AttackType attack) {
 		// read inputs
 		horizontalInput = Input.GetAxisRaw (horizontalAxis);
 		verticalInput = Input.GetAxisRaw (verticalAxis);
 
-		if (Input.GetButton (heavyAtack)) {
+		if (Input.GetButtonDown (heavyAtack)) {
 			attack = AttackType.Heavy;
-		} else if (Input.GetButton (lightAttack)) {
+		} // Light uses GetButton to allow for chaining jabs
+		else if (Input.GetButton (lightAttack)) {
 			attack = AttackType.Light;
 		} else
 			attack = AttackType.None;

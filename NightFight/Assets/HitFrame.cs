@@ -9,7 +9,7 @@ public class HitFrame : MoveFrame
 	public int hitStun {get; set;}
 	public int blockStun {get; set;}
 
-	public HitFrame (Vector3 offset, Vector3 size, Vector3 movementDuringFrame, float damage, int hitStun, int blockStun, bool isLit) : base (movementDuringFrame, isLit)
+	public HitFrame (Vector3 offset, Vector3 size, Vector3 movementDuringFrame, float damage, int hitStun, int blockStun, MoveType moveType) : base (movementDuringFrame, moveType)
 		{
 		this.offset = offset;
 		this.size = size;

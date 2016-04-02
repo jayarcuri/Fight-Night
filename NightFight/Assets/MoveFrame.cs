@@ -1,25 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum MoveType {
+	STARTUP,
+	RECOVERY,
+	ACTIVE,
+	AIRBORNE,
+	INVLUNERABLE
+}
+
 public class MoveFrame 
 	{
-	public Vector3 movementDuringFrame;
-	public bool isLit;
+	public MoveType moveType = MoveType.RECOVERY;
+	public Vector3 movementDuringFrame = Vector3.zero;
+	public bool isLit = true;
 
-	public MoveFrame () {
-		this.movementDuringFrame = Vector3.zero;
-		this.isLit = true;
+	public MoveFrame() {
+		return;
 	}
-	public MoveFrame (Vector3 movementDuringFrame)
-		{
-		this.movementDuringFrame = movementDuringFrame;
-		isLit = true;
-		}
-	public MoveFrame (Vector3 movementDuringFrame, bool isLit)
-		{
-		this.movementDuringFrame = movementDuringFrame;
-		this.isLit = isLit;
-		}
 
+	public MoveFrame (MoveType moveType) {
+		this.moveType = moveType;
+		this.movementDuringFrame = Vector3.zero;
+	}
+	public MoveFrame (Vector3 movementDuringFrame, MoveType moveType) {
+		this.moveType = moveType;
+		this.movementDuringFrame = movementDuringFrame;
+		}
 	}
 
