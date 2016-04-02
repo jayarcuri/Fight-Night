@@ -12,21 +12,25 @@ public class HitboxController : MonoBehaviour {
 	}
 	
 	public void ExecuteAttack (HitFrame attack) {
-		print ("Called");
 		enabled = true;
 		hitbox.localPosition = attack.offset;
 		hitbox.localScale = attack.size;
-		if (attackPayload != null) {
-			if (!attackPayload.Equals (attack)) {
-				attackPayload = attack;
-			}
-		}
+		if (attackPayload == null || !attackPayload.Equals(attack))
+			attackPayload = attack;
 	}
 
 	public void Reset () {
 		enabled = false;
 		hitbox.localPosition = hitbox.localScale = Vector3.zero;
 		attackPayload = null;
+	}
+
+	public MoveSequence GetCurrentMoveHitstun() {
+		return attackPayload.hitStunFrames;
+	}
+
+	public int GetCurrentMoveHitStunValue() {
+		return attackPayload.hitStun;
 	}
 
 }

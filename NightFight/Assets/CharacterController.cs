@@ -21,7 +21,7 @@ public class CharacterController : MonoBehaviour {
 
 	bool _isFacingRight; //{ get { return isFacingRight; } set { isFacingRight = value; Vector3 newRotation = transform.localEulerAngles; newRotation.y -= 180; transform.localEulerAngles = newRotation; } } // Orientation reversed or not
 	public CharacterController opponent;
-	CharacterMovement characterMovement;
+	public CharacterMovement characterMovement;
 	InputController inputController;
 	HitFrame jabHitbox;
 	HitFrame pokeHitbox;
@@ -73,6 +73,22 @@ public class CharacterController : MonoBehaviour {
 		}
 
 	}
+
+	void OnTriggerEnter(Collider other) {
+			print (other.tag);
+			print (other.gameObject);
+			print (hitBox.gameObject);
+			if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
+				// if not blocking or not immune to attack
+				if (characterMovement.state == CharacterState.Standing) {
+					HitboxController attackingHitbox = other.GetComponent <HitboxController> ();
+					//currentMoveSequence = attackingHitbox.GetCurrentMoveHitstun ();
+					currentMoveSequence = new MoveSequence(new MoveFrame[attackingHitbox.GetCurrentMoveHitStunValue()]);
+					print ("Hit occurred");
+					attackingHitbox.Reset ();
+				}
+			}
+		}
 	
 	public void ExecuteInput(float horizontalInput, float verticalInput, AttackType attackType) {
 		// If no action is currently being executed...
@@ -96,7 +112,7 @@ public class CharacterController : MonoBehaviour {
 		}
 	}
 
-		void ExecuteNextMoveFrame() {
+	void ExecuteNextMoveFrame() {
 		MoveFrame lastFrame = currentMoveSequence.getLast ();
 		MoveFrame frame = currentMoveSequence.getNext ();
 		if (frame.moveType == MoveType.ACTIVE)
@@ -106,6 +122,10 @@ public class CharacterController : MonoBehaviour {
 				hitBox.Reset ();
 		if (!currentMoveSequence.hasNext())
 			currentMoveSequence = null;
+	}
+
+	public void CheckCollisions() {
+
 	}
 
 	MoveSequence Jab() {
