@@ -81,7 +81,6 @@ public class CharacterController : MonoBehaviour {
 			if (attackingHitbox.IsLoaded ()) {
 				if (characterMovement.state == CharacterState.Standing) {
 					currentMoveSequence = attackingHitbox.GetCurrentMoveHitstun ();
-					print ("Hit occurred");
 					attackingHitbox.Reset ();
 				}
 			}
