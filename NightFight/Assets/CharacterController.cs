@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum AttackType{Light, Heavy, None}
 //public delegate void Move();
 
 public class CharacterController : MonoBehaviour {
@@ -51,12 +50,11 @@ public class CharacterController : MonoBehaviour {
 
 	void FixedUpdate() {
 		if (isPlayer1) {
-			float horizontalInput;
-			float verticalInput;
+			DirectionalInput rawDirInput;
 			AttackType attack;
 
-			inputController.GetInputs (out horizontalInput, out verticalInput, out attack);
-			ExecuteInput (horizontalInput, verticalInput, attack);
+			inputController.GetInputs (out rawDirInput, out attack);
+			ExecuteInput (rawDirInput, attack);
 			// if there is not a current move being executed...
 			if (isFacingRight && opponent.transform.localPosition.x < transform.localPosition.x)
 				isFacingRight = false;
@@ -79,7 +77,7 @@ public class CharacterController : MonoBehaviour {
 			// if not blocking or not immune to attack
 			HitboxController attackingHitbox = other.GetComponent <HitboxController> ();
 			if (attackingHitbox.IsLoaded ()) {
-				if (characterMovement.state == CharacterState.Standing) {
+				if (characterMovement.action == CharacterAction.Standing) {
 					currentMoveSequence = attackingHitbox.GetCurrentMoveHitstun ();
 					attackingHitbox.Reset ();
 				}
@@ -87,7 +85,7 @@ public class CharacterController : MonoBehaviour {
 		}
 		}
 	
-	public void ExecuteInput(float horizontalInput, float verticalInput, AttackType attackType) {
+	public void ExecuteInput(DirectionalInput directionalInput, AttackType attackType) {
 		// If no action is currently being executed...
 		if (currentMoveSequence == null) {
 			// Attacks take priority over movement
@@ -97,10 +95,12 @@ public class CharacterController : MonoBehaviour {
 				}
 			} // If there is no attack, jumps take priority
 			else {
-				if (verticalInput > 0 && characterMovement.state != CharacterState.Jumping) {
-					characterMovement.Jump (horizontalInput);
+				int inputAsInt = (int)directionalInput;
+				if (inputAsInt > 6 && characterMovement.action != CharacterAction.Jumping) {
+					characterMovement.Jump (inputAsInt - 8);
 				}
-				characterMovement.Move (horizontalInput);
+				print (inputAsInt);
+				characterMovement.Move (inputAsInt % 3);
 			}
 		}
 		// Execute the current move if it exists.
@@ -158,7 +158,7 @@ public class CharacterController : MonoBehaviour {
 		return new MoveSequence(poke);
 	}
 
-	MoveSequence anitAir () {
+	MoveSequence antiAir () {
 		MoveFrame[] AA = {
 			new MoveFrame (), 
 			new MoveFrame (),

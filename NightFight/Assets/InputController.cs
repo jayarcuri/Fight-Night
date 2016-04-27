@@ -7,7 +7,7 @@ public class InputController : MonoBehaviour {
 	public string jump;
 	public string lightAttack;
 	public string heavyAtack;
-	CharacterMovement playerMovement;
+	public CharacterMovement playerMovement;
 	public CharacterController characterController;
 
 	void Start () {
@@ -15,10 +15,14 @@ public class InputController : MonoBehaviour {
 		characterController = GetComponent<CharacterController> ();
 	}
 
-	public void GetInputs (out float horizontalInput, out float verticalInput, out AttackType attack) {
-		// read inputs
-		horizontalInput = Input.GetAxisRaw (horizontalAxis);
-		verticalInput = Input.GetAxisRaw (verticalAxis);
+	// Inputs are represented by an enum which corrisponds with an int 
+
+	public void GetInputs (out DirectionalInput directionalInput, out AttackType attack) {
+		// read directional inputs
+		float input = 5f;
+		input = input + Input.GetAxisRaw (horizontalAxis) + (Input.GetAxisRaw (verticalAxis) * 3);
+
+		directionalInput = (DirectionalInput)((int)input);
 
 		if (Input.GetButtonDown (heavyAtack)) {
 			attack = AttackType.Heavy;

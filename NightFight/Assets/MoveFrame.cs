@@ -1,14 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum MoveType {
-	STARTUP,
-	RECOVERY,
-	ACTIVE,
-	AIRBORNE,
-	INVLUNERABLE
-}
-
 public class MoveFrame 
 	{
 	public MoveType moveType = MoveType.RECOVERY;

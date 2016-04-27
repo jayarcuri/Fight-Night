@@ -19,6 +19,14 @@ public class MoveSequence {
 			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
 		}
 
+	public MoveFrame peek () {
+		if (hasNext()) {
+			return moveSequence [index+1];
+		}
+		else
+			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
+	}
+
 	public bool hasNext() {
 		return (index < moveSequence.Length - 1);
 	}
@@ -31,6 +39,10 @@ public class MoveSequence {
 		else
 			returnMove = moveSequence [index - 1];
 		return returnMove;
+	}
+
+	public int MoveLength () {
+		return moveSequence.Length;
 	}
 
 

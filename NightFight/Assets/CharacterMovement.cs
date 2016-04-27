@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum CharacterState{Standing, Jumping}
-public enum MovementDirection{None, Left, Right}
-
 public class CharacterMovement : MonoBehaviour {
 
 	public float speed = 2f;
@@ -15,7 +12,7 @@ public class CharacterMovement : MonoBehaviour {
 	public float terminalVelocity;
 
 	Rigidbody playerBody; 
-	public CharacterState state;
+	public CharacterAction action;
 	MovementDirection moveDirection;
 	//Transform 
 
@@ -29,21 +26,36 @@ public class CharacterMovement : MonoBehaviour {
 
 	void Start () {
 		playerBody = GetComponent<Rigidbody>();
-		state = CharacterState.Standing;
+		action = CharacterAction.Standing;
 		initialHeight = playerBody.position.y;
 		speed = speed / 60;
 	}
 
-	public void Move(float horizontal) {
-		if (horizontal != 0 || state == CharacterState.Jumping) {
+	public void Move(int horizontal) {
+		// Hacky solution to simplifying horizontal inputs
+		switch (horizontal) {
+		case 2:
+			horizontal = 0;
+			break;
+
+		case 0:
+			horizontal = 1;
+			break;
+
+		case 1:
+			horizontal = -1;
+			break;
+		}
+		if (horizontal != 0 || action == CharacterAction.Jumping) {
 			// variable which will be modified by checks for different states which impact movement
 			Vector3 moveTo = playerBody.position;
 
-			if (state != CharacterState.Jumping) {
-				if (horizontal > 0)
+			if (action != CharacterAction.Jumping) {
+				if (horizontal == 1)
 					moveDirection = MovementDirection.Right;
 				else
 					moveDirection = MovementDirection.Left;
+				
 				moveTo += Vector3.right * speed * horizontal;
 			} 
 			// If jumping...
@@ -57,24 +69,19 @@ public class CharacterMovement : MonoBehaviour {
 		} else
 			moveDirection = MovementDirection.None;
 	}
-		
-	// Jumpman, jumpman, jumpman them boys up to somethin'...
-	public void Jump(float horizontalInput) {
-		if (state == CharacterState.Standing) {
+
+	public void Jump(int horizontalInput) {
+		if (action == CharacterAction.Standing) {
 			// Set all variables for jump state
 			currentJumpVelocity = initialJumpVelocity;
-			state = CharacterState.Jumping;
-			switch ((int)horizontalInput) {
-			case 1:
+			action = CharacterAction.Jumping;
+
+			if (horizontalInput > 0)
 				moveDirection = MovementDirection.Right;
-				break;
-			case 0:
+			if (horizontalInput == 0)
 				moveDirection = MovementDirection.None;
-				break;
-			case -1:
+			if (horizontalInput < 0)
 				moveDirection = MovementDirection.Left;
-				break;
-			}
 		}
 	}
 
@@ -106,7 +113,7 @@ public class CharacterMovement : MonoBehaviour {
 		// Verify player is within bounds of level and constrain them
 		if (newPosition.y < initialHeight) {
 			newPosition.y = initialHeight;
-			state = CharacterState.Standing;
+			action = CharacterAction.Standing;
 		}
 		// Verify within horizontal bounds
 		if (newPosition.x + transform.localScale.x/2 > eastStageConstraint) {
