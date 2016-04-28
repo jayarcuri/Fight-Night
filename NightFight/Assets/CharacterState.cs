@@ -12,6 +12,9 @@ public class CharacterState : MonoBehaviour {
 	protected CharacterData characterData;
 	protected HitboxController hitBox;
 
+	void Start () {
+		characterData = new CharacterData (this);
+	}
 
 	public virtual bool CanAct() {
 		return (action != CharacterAction.BlockStunned || action != CharacterAction.HitStunned);

@@ -10,7 +10,8 @@ public class CharacterData {
 	protected MoveSequence forwardStep;
 	protected MoveSequence backwardStep;
 
-	public CharacterData () {
+	public CharacterData (CharacterState cState) {
+		characterState = cState;
 		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), 
 			new Vector3 (.7f, .25f, 1f), Vector3.zero, 1f, 7, 6, MoveType.ACTIVE);
 		jab = new MoveSequence (new MoveFrame[]{
