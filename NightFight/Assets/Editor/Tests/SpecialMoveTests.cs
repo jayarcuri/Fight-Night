@@ -36,6 +36,7 @@ public class SpecialMoveTests {
 	[Test]
 	public void BufferTest () {
 		SetUp ();
+		// Is true when input is buffer length & correct sequence is input
 		for (int i = 0; i < 5; i++) {
 			specialMoveTestObj.ReadyMove (DirectionalInput.Neutral);
 		}
@@ -46,11 +47,20 @@ public class SpecialMoveTests {
 		Assert.IsNotNull(specialMoveTestObj.GetSpecialMove (AttackType.Light));
 
 		specialMoveTestObj.Reset ();
+		// Is false when input is buffer length + 1 & correct sequence is input
+		specialMoveTestObj.ReadyMove (DirectionalInput.Down);
 		for (int i = 0; i < 6; i++) {
 			specialMoveTestObj.ReadyMove (DirectionalInput.Neutral);
 		}
-		specialMoveTestObj.ReadyMove (DirectionalInput.Down);
 		specialMoveTestObj.ReadyMove (DirectionalInput.DownRight);
+
+		Assert.IsFalse (specialMoveTestObj.ReadyMove (DirectionalInput.Right));
+
+		specialMoveTestObj.Reset ();
+		// Is False when wrong input is given
+		for (int i = 0; i < 7; i++) {
+			specialMoveTestObj.ReadyMove (DirectionalInput.Neutral);
+		}
 
 		Assert.IsFalse (specialMoveTestObj.ReadyMove (DirectionalInput.Right));
 	}

@@ -55,11 +55,13 @@ public class CharacterController : MonoBehaviour {
 
 			inputController.GetInputs (out rawDirInput, out attack);
 			ExecuteInput (rawDirInput, attack);
-			// if there is not a current move being executed...
-			if (isFacingRight && opponent.transform.localPosition.x < transform.localPosition.x)
-				isFacingRight = false;
-			else if (!isFacingRight && opponent.transform.localPosition.x > transform.localPosition.x)
-				isFacingRight = true;
+			// Only rotate character if a move isn't currently being executed.
+			if (characterMovement.action == CharacterAction.Standing) {
+				if (isFacingRight && opponent.transform.localPosition.x < transform.localPosition.x)
+					isFacingRight = false;
+				else if (!isFacingRight && opponent.transform.localPosition.x > transform.localPosition.x)
+					isFacingRight = true;
+			}
 			// } else {
 			//ExecuteNextMoveFrame ();
 			//}
