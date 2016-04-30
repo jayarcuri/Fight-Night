@@ -16,15 +16,17 @@ public class SpecialMove : BufferMove {
 		expiration = bufferLength;
 
 		moveDictionary = new Dictionary<AttackType, MoveSequence> ();
-		moveDictionary.Add (AttackType.Light, lightVersion);
-		moveDictionary.Add (AttackType.Heavy, heavyVersion);
+		moveDictionary.Add (AttackType.Light, this.move);
+		// moveDictionary.Add (AttackType.Heavy, heavyVersion);
 		}
 
 	public MoveSequence GetSpecialMove (AttackType attack) {
-		// Reset counters
-		expiration = bufferLength;
-		moveCompletionIndex = 0;
-		return moveDictionary [attack];
+		if (moveCompletionIndex == inputCommand.Length) {
+			// Reset counters
+			Reset ();
+			return moveDictionary [attack];
+		} else
+			return null;
 	}
 
 	// Returns true when the sMove could be executed
@@ -37,8 +39,7 @@ public class SpecialMove : BufferMove {
 		}
 		// Reset when the countdown has reached zero.
 		else {
-			expiration = bufferLength;
-			moveCompletionIndex = 0;
+			Reset ();
 		} 
 		// De-increment the expiration date after the first required input is found.
 		if (moveCompletionIndex > 0)
@@ -46,5 +47,12 @@ public class SpecialMove : BufferMove {
 		
 		return (moveCompletionIndex == inputCommand.Length);
 	}
+		
+	// Resets to "just-created" state
+	public void Reset () {
+		expiration = bufferLength;
+		moveCompletionIndex = 0;
+	}
+
 }
 

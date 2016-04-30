@@ -99,7 +99,6 @@ public class CharacterController : MonoBehaviour {
 				if (inputAsInt > 6 && characterMovement.action != CharacterAction.Jumping) {
 					characterMovement.Jump (inputAsInt - 8);
 				}
-				print (inputAsInt);
 				characterMovement.Move (inputAsInt % 3);
 			}
 		}

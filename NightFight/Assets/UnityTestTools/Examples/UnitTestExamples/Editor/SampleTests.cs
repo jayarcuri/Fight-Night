@@ -5,7 +5,7 @@ using NUnit.Framework;
 using UnityEngine;
 
 namespace UnityTest
-{
+{/*
     [TestFixture]
     [Category("Sample Tests")]
     internal class SampleTests
@@ -98,5 +98,5 @@ namespace UnityTest
             Assert.That(sqrt >= 0.0);
             Assert.That(sqrt * sqrt, Is.EqualTo(num).Within(0.000001));
         }
-    }
+    }*/
 }

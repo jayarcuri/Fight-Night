@@ -63,5 +63,4 @@ public class CharacterState : MonoBehaviour {
 		if (!currentMoveSequence.hasNext())
 			currentMoveSequence = null;
 	}
-		
 }

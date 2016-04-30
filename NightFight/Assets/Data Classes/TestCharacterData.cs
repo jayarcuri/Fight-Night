@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 public class TestCharacterData : CharacterData {
 
-	public TestCharacterData (CharacterState cState) {
+	public TestCharacterData (CharacterState cState) : base(cState) {
 		characterState = cState;
 	}
 	
