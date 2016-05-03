@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CharacterState : MonoBehaviour {
+public class CharacterState {
 	protected float health = 100f;
 	protected float charge = 0f;
 	public bool defaultOrientation;
@@ -12,7 +12,7 @@ public class CharacterState : MonoBehaviour {
 	protected CharacterData characterData;
 	protected HitboxController hitBox;
 
-	void Start () {
+	public CharacterState () {
 		characterData = new CharacterData (this);
 	}
 
@@ -54,8 +54,10 @@ public class CharacterState : MonoBehaviour {
 	void ExecuteNextMoveFrame() {
 		MoveFrame lastFrame = currentFrame;
 		currentFrame = currentMoveSequence.getNext ();
-		if (currentFrame.moveType == MoveType.ACTIVE)
-			hitBox.ExecuteAttack ((HitFrame)currentFrame);
+		if (currentFrame.moveType == MoveType.ACTIVE) {
+			HitFrame attackFrame = (HitFrame)currentFrame;
+			hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
+		}
 		else if (lastFrame != null) {
 			if (lastFrame.moveType == MoveType.ACTIVE && currentFrame.moveType != MoveType.ACTIVE)
 				hitBox.Reset ();

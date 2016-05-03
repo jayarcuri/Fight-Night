@@ -11,12 +11,11 @@ public class HitboxController : MonoBehaviour {
 		Reset();
 	}
 	
-	public void ExecuteAttack (HitFrame attack) {
+	public void ExecuteAttack (Vector3 offset, Vector3 size, HitFrame attackFrame) {
 		enabled = true;
-		hitbox.localPosition = attack.offset;
-		hitbox.localScale = attack.size;
-		//if (attackPayload == null || !attackPayload.Equals(attack))
-		attackPayload = attack;
+		hitbox.localPosition = offset;
+		hitbox.localScale = size;
+		attackPayload = attackFrame;
 	}
 
 	public void Reset () {

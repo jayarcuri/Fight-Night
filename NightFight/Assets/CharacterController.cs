@@ -18,7 +18,7 @@ public class CharacterController : MonoBehaviour {
 	}
 	 
 
-	bool _isFacingRight; //{ get { return isFacingRight; } set { isFacingRight = value; Vector3 newRotation = transform.localEulerAngles; newRotation.y -= 180; transform.localEulerAngles = newRotation; } } // Orientation reversed or not
+	bool _isFacingRight;
 	public CharacterController opponent;
 	public CharacterMovement characterMovement;
 	InputController inputController;
@@ -113,8 +113,10 @@ public class CharacterController : MonoBehaviour {
 	void ExecuteNextMoveFrame() {
 		MoveFrame lastFrame = currentMoveSequence.getLast ();
 		MoveFrame frame = currentMoveSequence.getNext ();
-		if (frame.moveType == MoveType.ACTIVE)
-			hitBox.ExecuteAttack ((HitFrame)frame);
+		if (frame.moveType == MoveType.ACTIVE) {
+			HitFrame attackFrame = (HitFrame)frame;
+			hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
+		}
 		else if (lastFrame != null)
 			if (lastFrame.moveType == MoveType.ACTIVE && frame.moveType != MoveType.ACTIVE)
 				hitBox.Reset ();

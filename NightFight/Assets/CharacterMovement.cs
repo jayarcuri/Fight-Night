@@ -4,17 +4,15 @@ using System.Collections;
 public class CharacterMovement : MonoBehaviour {
 
 	public float speed = 2f;
-
 	public float jumpMovementModifier;
-
 	public float initialJumpVelocity;
 	public float gravityForce;
 	public float terminalVelocity;
 
 	Rigidbody playerBody; 
-	public CharacterAction action;
+	public CharacterAction action { get; protected set; }
 	MovementDirection moveDirection;
-	//Transform 
+	Transform opponentTransform;
 
 	float initialHeight;
 	float remainingJumpTime;
@@ -29,6 +27,10 @@ public class CharacterMovement : MonoBehaviour {
 		action = CharacterAction.Standing;
 		initialHeight = playerBody.position.y;
 		speed = speed / 60;
+	}
+
+	public void SetOpponentTransform(Transform oTransform) {
+		opponentTransform = oTransform;
 	}
 
 	public void Move(int horizontal) {
