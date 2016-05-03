@@ -13,11 +13,12 @@ public class FrameManager : MonoBehaviour
 	 public Light bodyLight;
 	public CharacterController opponent; // To flip orientation if necessary. Move to CharacterMovement.
 	public CharacterMovement characterMovement;
+	CharacterState characterState;
 	InputController inputController;
 
 	void Start ()
 	{
-
+	characterState = new CharacterState ();
 	inputController = GetComponent<InputController> ();
 	characterMovement = GetComponent<CharacterMovement> ();
 	bodyLight = GetComponentInChildren<Light> ();
@@ -33,9 +34,25 @@ public class FrameManager : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
 	{
-	
+		if (isPlayer1) {
+			DirectionalInput rawDirInput;
+			AttackType attack;
+
+			inputController.GetInputs (out rawDirInput, out attack);
+			//characterState.
+			// Only rotate character if a move isn't currently being executed.
+
+			// } else {
+			//ExecuteNextMoveFrame ();
+			//}
+
+			if (attack != AttackType.None)
+				bodyLight.enabled = true;
+			else
+				bodyLight.enabled = false;
+		}
 	}
 }
 
