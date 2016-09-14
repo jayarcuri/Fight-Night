@@ -14,11 +14,13 @@ public class FrameManager : MonoBehaviour
 	public CharacterController opponent; // To flip orientation if necessary. Move to CharacterMovement.
 	public CharacterMovement characterMovement;
 	CharacterState characterState;
+	CharacterManager characterManager;
 	InputController inputController;
 
 	void Start ()
 	{
-	characterState = new CharacterState ();
+	characterState = new CharacterState (100);
+		characterManager = new CharacterManager ();
 	inputController = GetComponent<InputController> ();
 	characterMovement = GetComponent<CharacterMovement> ();
 	bodyLight = GetComponentInChildren<Light> ();
@@ -41,7 +43,13 @@ public class FrameManager : MonoBehaviour
 			AttackType attack;
 
 			inputController.GetInputs (out rawDirInput, out attack);
-			//characterState.
+			MoveFrame currentFrame = characterManager.GetCurrentFrame(rawDirInput, attack);
+			if (currentFrame != null) {
+				if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
+					characterMovement.Move (currentFrame);
+				}
+			}
+
 			// Only rotate character if a move isn't currently being executed.
 
 			// } else {
@@ -54,5 +62,6 @@ public class FrameManager : MonoBehaviour
 				bodyLight.enabled = false;
 		}
 	}
+
 }
 

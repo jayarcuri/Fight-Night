@@ -44,44 +44,34 @@ public class CharacterMovement : MonoBehaviour {
 		transform.localEulerAngles = newRotation; 
 	} */
 
-	public void Move(int horizontal) {
+	public void Move(MoveFrame stepDirection) {
 		// Hacky solution to simplifying horizontal inputs
-		switch (horizontal) {
-		case 2:
-			horizontal = 0;
-			break;
+		int horizontal = stepDirection.moveType == MoveType.STEP_FORWARD ? 1 : -1;
 
-		case 0:
-			horizontal = 1;
-			break;
-
-		case 1:
-			horizontal = -1;
-			break;
-		}
-		if (horizontal != 0 || action == CharacterAction.Jumping) {
+		if (horizontal != 0 /*|| action == CharacterAction.Jumping*/) {
 			// variable which will be modified by checks for different states which impact movement
 			Vector3 moveTo = playerBody.position;
 
-			if (action != CharacterAction.Jumping) {
-				if (horizontal == 1)
-					moveDirection = MovementDirection.Right;
-				else
-					moveDirection = MovementDirection.Left;
+			//if (action != CharacterAction.Jumping) {
+			if (horizontal == 1)
+				moveDirection = MovementDirection.Right;
+			else
+				moveDirection = MovementDirection.Left;
 				
-				moveTo += Vector3.right * speed * horizontal;
-			} 
+			moveTo += Vector3.right * speed * horizontal;
 			// If jumping...
-			else {
+			/*else {
 				moveTo += GetJumpVelocity ();
 				if (moveDirection == MovementDirection.None) // Allow "steering" in the air if the player neutral jumps
 					moveTo += Vector3.right * speed * horizontal * jumpMovementModifier * 3/5;
-			}
+			}*/
 			moveTo = ConstrainPlayerPosition (moveTo);
 			playerBody.MovePosition (moveTo);
-		} else
+		} else {
 			moveDirection = MovementDirection.None;
+		}
 	}
+
 
 	public void Jump(int horizontalInput) {
 		if (action == CharacterAction.Standing) {

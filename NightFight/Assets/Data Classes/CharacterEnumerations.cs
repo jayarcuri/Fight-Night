@@ -29,7 +29,9 @@ public enum MoveType {
 	RECOVERY,
 	ACTIVE,
 	AIRBORNE,
-	INVLUNERABLE
+	INVLUNERABLE,
+	STEP_BACK,
+	STEP_FORWARD
 }
 public enum MovementDirection {
 	None, 

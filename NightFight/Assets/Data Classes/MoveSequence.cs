@@ -6,12 +6,12 @@ public class MoveSequence {
 	MoveFrame[] moveSequence;
 
 	public MoveSequence(MoveFrame[] moveSequence) {
-		index = 0;
+		index = -1;
 		this.moveSequence = moveSequence;
 	}
 
-	public MoveFrame getNext() {
-		if(hasNext()) {
+	public MoveFrame GetNext() {
+		if(HasNext()) {
 			++index;
 			return moveSequence [index];
 			}
@@ -19,22 +19,22 @@ public class MoveSequence {
 			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
 		}
 
-	public MoveFrame peek () {
-		if (hasNext()) {
+	public MoveFrame Peek () {
+		if (HasNext()) {
 			return moveSequence [index+1];
 		}
 		else
 			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
 	}
 
-	public bool hasNext() {
+	public bool HasNext() {
 		return (index < moveSequence.Length - 1);
 	}
 
-	public MoveFrame getLast() {
+	public MoveFrame GetPrevious() {
 		MoveFrame returnMove;
 
-		if (index == 0)
+		if (index == -1)
 			returnMove = null;
 		else
 			returnMove = moveSequence [index - 1];
