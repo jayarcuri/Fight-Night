@@ -28,6 +28,7 @@ public class InputController : MonoBehaviour {
 			attack = AttackType.Heavy;
 		} // Light uses GetButton to allow for chaining jabs
 		else if (Input.GetButton (lightAttack)) {
+			Debug.Log ("Light pressed");
 			attack = AttackType.Light;
 		} else
 			attack = AttackType.None;

@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class CharacterManager: MonoBehaviour {
+public class CharacterManager {
 	CharacterState characterState;
 	CharacterData characterData;
 	public MoveSequence currentMove;
@@ -25,7 +25,6 @@ public class CharacterManager: MonoBehaviour {
 
 	void ResolveInput(DirectionalInput directionalInput, AttackType attackType) {
 		MoveFrame currentFrame;
-		Debug.Log ("Called");
 		if (currentMove != null && currentMove.HasNext ()) {
 				currentFrame = currentMove.Peek ();
 		} else {

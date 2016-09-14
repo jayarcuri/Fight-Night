@@ -33,7 +33,7 @@ public class CharacterMovement : MonoBehaviour {
 		opponentTransform = oTransform;
 	}
 
-	/*public void FlipRotation (bool isFacingRight) {
+	public void FlipRotation (bool isFacingRight) {
 		if (isFacingRight && opponentTransform.localPosition.x < transform.localPosition.x)
 				isFacingRight = false;
 		else if (!isFacingRight && opponentTransform.localPosition.x > transform.localPosition.x)
@@ -42,7 +42,7 @@ public class CharacterMovement : MonoBehaviour {
 		Vector3 newRotation = transform.localEulerAngles; 
 		newRotation.y -= 180; 
 		transform.localEulerAngles = newRotation; 
-	} */
+	}
 
 	public void Move(MoveFrame stepDirection) {
 		// Hacky solution to simplifying horizontal inputs
