@@ -44,6 +44,12 @@ public class FrameManager : MonoBehaviour
 			AttackType attack;
 
 			inputController.GetInputs (out rawDirInput, out attack);
+			// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
+			if (!characterManager.HasQueuedFrames ()) {
+				characterMovement.FlipRotation ();
+			}
+
+			// include orientation in current frame calculations
 			MoveFrame currentFrame = characterManager.GetCurrentFrame (rawDirInput, attack);
 			if (currentFrame != null) {
 				if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
@@ -52,6 +58,10 @@ public class FrameManager : MonoBehaviour
 					ExecuteNextFrame (currentFrame);
 				}
 			}
+
+//			if (currentFrame == null || currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
+//				characterMovement.FlipRotation(
+//			}
 			// Only rotate character if a move isn't currently being executed.
 
 			if (attack != AttackType.None)

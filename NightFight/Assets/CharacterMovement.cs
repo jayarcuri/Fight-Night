@@ -14,6 +14,7 @@ public class CharacterMovement : MonoBehaviour {
 	MovementDirection moveDirection;
 	Transform opponentTransform;
 
+	bool isFacingRight;
 	float initialHeight;
 	float remainingJumpTime;
 	public float currentJumpVelocity;
@@ -24,20 +25,31 @@ public class CharacterMovement : MonoBehaviour {
 
 	void Start () {
 		playerBody = GetComponent<Rigidbody>();
+		string opponentTag = gameObject.tag.Equals ("Player1") ? "Player2" : "Player1";
+		opponentTransform = GameObject.FindGameObjectWithTag (opponentTag).GetComponent<Transform> ();
+
+		if (opponentTransform == null) {
+			throw new UnityException ("Cannot find other player with tag \'" + opponentTag + "\'.");
+		}
+
 		action = CharacterAction.Standing;
 		initialHeight = playerBody.position.y;
 		speed = speed / 60;
+		isFacingRight = transform.localPosition.x < opponentTransform.transform.localPosition.x ? true : false;
 	}
 
 	public void SetOpponentTransform(Transform oTransform) {
 		opponentTransform = oTransform;
 	}
 
-	public void FlipRotation (bool isFacingRight) {
-		if (isFacingRight && opponentTransform.localPosition.x < transform.localPosition.x)
-				isFacingRight = false;
-		else if (!isFacingRight && opponentTransform.localPosition.x > transform.localPosition.x)
-				isFacingRight = true;
+	public void FlipRotation () {
+		if (!isFacingRight && transform.localPosition.x < opponentTransform.localPosition.x) {
+			isFacingRight = true;
+		} else if (isFacingRight && transform.localPosition.x > opponentTransform.localPosition.x) {
+			isFacingRight = false;
+		} else {
+			return;
+		}
 		
 		Vector3 newRotation = transform.localEulerAngles; 
 		newRotation.y -= 180; 

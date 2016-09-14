@@ -23,6 +23,10 @@ public class CharacterManager {
 		return currentMoveFrame;
 	}
 
+	public bool HasQueuedFrames() {
+		return currentMove != null && currentMove.HasNext ();
+	}
+
 	void ResolveInput(DirectionalInput directionalInput, AttackType attackType) {
 		MoveFrame currentFrame;
 		if (currentMove != null && currentMove.HasNext ()) {
