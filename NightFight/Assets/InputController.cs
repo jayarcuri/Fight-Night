@@ -15,7 +15,7 @@ public class InputController : MonoBehaviour {
 		characterController = GetComponent<CharacterController> ();
 	}
 
-	// Inputs are represented by an enum which corrisponds with an int 
+	// Inputs are represented by an enum which corresponds with an int 
 
 	public void GetInputs (out DirectionalInput directionalInput, out AttackType attack) {
 		// read directional inputs

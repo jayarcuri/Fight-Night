@@ -3,20 +3,25 @@ using System.Collections;
 
 //public delegate void Move();
 
-public class CharacterController : MonoBehaviour {
+public class CharacterController : MonoBehaviour
+{
 	//public Move move;
 	public HitboxController hitBox;
 	public Light bodyLight;
 	public bool isPlayer1;
-	public bool isFacingRight { get { 
-			return _isFacingRight; } 
+
+	public bool isFacingRight {
+		get { 
+			return _isFacingRight;
+		} 
 		set { 
+			// TODO: make this call CharacterMovement to switch sides.
 			Vector3 newRotation = transform.localEulerAngles; 
 			newRotation.y -= 180; 
 			transform.localEulerAngles = newRotation; 
-			_isFacingRight = value; } 
+			_isFacingRight = value;
+		} 
 	}
-	 
 
 	bool _isFacingRight;
 	public CharacterController opponent;
@@ -28,7 +33,8 @@ public class CharacterController : MonoBehaviour {
 
 	MoveSequence currentMoveSequence;
 
-	void Start () {
+	void Start ()
+	{
 		if (isPlayer1) {
 			opponent = GameObject.FindGameObjectWithTag ("Player2").GetComponent <CharacterController> ();
 		} else {
@@ -48,7 +54,9 @@ public class CharacterController : MonoBehaviour {
 		AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4f, 11, 7, MoveType.ACTIVE);
 	}
 
-	void FixedUpdate() {
+	void FixedUpdate ()
+	{
+		// This if() is for testing purposes.
 		if (isPlayer1) {
 			DirectionalInput rawDirInput;
 			AttackType attack;
@@ -57,14 +65,11 @@ public class CharacterController : MonoBehaviour {
 			ExecuteInput (rawDirInput, attack);
 			// Only rotate character if a move isn't currently being executed.
 			if (characterMovement.action == CharacterAction.Standing) {
-				if (isFacingRight && opponent.transform.localPosition.x < transform.localPosition.x)
-					isFacingRight = false;
-				else if (!isFacingRight && opponent.transform.localPosition.x > transform.localPosition.x)
-					isFacingRight = true;
+				if ((isFacingRight && opponent.transform.localPosition.x < transform.localPosition.x) ||
+				    (!isFacingRight && opponent.transform.localPosition.x > transform.localPosition.x)) {
+					isFacingRight = !isFacingRight;
+				}
 			}
-			// } else {
-			//ExecuteNextMoveFrame ();
-			//}
 
 			if (attack != AttackType.None)
 				bodyLight.enabled = true;
@@ -74,7 +79,8 @@ public class CharacterController : MonoBehaviour {
 
 	}
 
-	void OnTriggerEnter(Collider other) {
+	void OnTriggerEnter (Collider other)
+	{
 		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
 			// if not blocking or not immune to attack
 			HitboxController attackingHitbox = other.GetComponent <HitboxController> ();
@@ -85,14 +91,17 @@ public class CharacterController : MonoBehaviour {
 				}
 			}
 		}
-		}
-	
-	public void ExecuteInput(DirectionalInput directionalInput, AttackType attackType) {
+	}
+
+	public void ExecuteInput (DirectionalInput directionalInput, AttackType attackType)
+	{
 		// If no action is currently being executed...
 		if (currentMoveSequence == null) {
 			// Attacks take priority over movement
+			// TODO: resolve buttons which were input
 			if (attackType != AttackType.None) {
 				if (attackType == AttackType.Light) {
+					// TODO: should get moves from character data class
 					currentMoveSequence = Jab ();
 				}
 			} // If there is no attack, jumps take priority
@@ -110,25 +119,27 @@ public class CharacterController : MonoBehaviour {
 		}
 	}
 
-	void ExecuteNextMoveFrame() {
+	void ExecuteNextMoveFrame ()
+	{
 		MoveFrame lastFrame = currentMoveSequence.getLast ();
 		MoveFrame frame = currentMoveSequence.getNext ();
 		if (frame.moveType == MoveType.ACTIVE) {
 			HitFrame attackFrame = (HitFrame)frame;
 			hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
-		}
-		else if (lastFrame != null)
-			if (lastFrame.moveType == MoveType.ACTIVE && frame.moveType != MoveType.ACTIVE)
-				hitBox.Reset ();
-		if (!currentMoveSequence.hasNext())
+		} else if (lastFrame != null)
+		if (lastFrame.moveType == MoveType.ACTIVE && frame.moveType != MoveType.ACTIVE)
+			hitBox.Reset ();
+		if (!currentMoveSequence.hasNext ())
 			currentMoveSequence = null;
 	}
 
-	public void CheckCollisions() {
+	public void CheckCollisions ()
+	{
 
 	}
 
-	MoveSequence Jab() {
+	MoveSequence Jab ()
+	{
 		MoveFrame[] jab = {
 			new MoveFrame (), 
 			new MoveFrame (),
@@ -139,10 +150,11 @@ public class CharacterController : MonoBehaviour {
 			new MoveFrame (),
 			new MoveFrame ()
 		};
-		return new MoveSequence(jab);
+		return new MoveSequence (jab);
 	}
 
-	MoveSequence Poke() {
+	MoveSequence Poke ()
+	{
 		MoveFrame[] poke = {
 			new MoveFrame (MoveType.STARTUP), 
 			new MoveFrame (MoveType.STARTUP),
@@ -158,10 +170,11 @@ public class CharacterController : MonoBehaviour {
 			new MoveFrame (),
 			new MoveFrame ()
 		};
-		return new MoveSequence(poke);
+		return new MoveSequence (poke);
 	}
 
-	MoveSequence antiAir () {
+	MoveSequence antiAir ()
+	{
 		MoveFrame[] AA = {
 			new MoveFrame (), 
 			new MoveFrame (),
@@ -180,6 +193,6 @@ public class CharacterController : MonoBehaviour {
 			new MoveFrame (),
 			new MoveFrame ()
 		};
-		return new MoveSequence(AA);
+		return new MoveSequence (AA);
 	}
 }

@@ -6,6 +6,6 @@ public class CharacterStateTests {
 
 	[Test]
 	public void InputFlipTest () {
-
+		Assert.IsFalse (true);
 	}
 }
