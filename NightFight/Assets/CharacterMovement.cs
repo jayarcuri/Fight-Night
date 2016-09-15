@@ -14,7 +14,7 @@ public class CharacterMovement : MonoBehaviour {
 	MovementDirection moveDirection;
 	Transform opponentTransform;
 
-	bool isFacingRight;
+	public bool isFacingRight { get; protected set; }
 	float initialHeight;
 	float remainingJumpTime;
 	public float currentJumpVelocity;

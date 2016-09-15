@@ -11,17 +11,19 @@ public class FrameManager : MonoBehaviour
 	public bool isPlayer1;
 	public HitboxController hitBox;
 	public Light bodyLight;
-	public CharacterController opponent;
 	// To flip orientation if necessary. Move to CharacterMovement.
 	public CharacterMovement characterMovement;
 	CharacterState characterState;
 	CharacterManager characterManager;
 	InputController inputController;
+	MoveFrame previousFrame;
+	public HitboxController pendingAttackHitbox;
 
 	void Start ()
 	{
-		characterState = new CharacterState (100);
 		characterManager = new CharacterManager ();
+		characterState = new CharacterState (characterManager.GetStartingHealth());
+		pendingAttackHitbox = null;
 		inputController = GetComponent<InputController> ();
 		characterMovement = GetComponent<CharacterMovement> ();
 		bodyLight = GetComponentInChildren<Light> ();
@@ -39,47 +41,93 @@ public class FrameManager : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-		if (isPlayer1) {
-			DirectionalInput rawDirInput;
-			AttackType attack;
-
+//		if (isPlayer1) {
+		DirectionalInput rawDirInput;
+		AttackType attack;
+		if (isPlayer1)
 			inputController.GetInputs (out rawDirInput, out attack);
-			// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
-			if (!characterManager.HasQueuedFrames ()) {
-				characterMovement.FlipRotation ();
+		else {
+			rawDirInput = DirectionalInput.Neutral;
+			attack = AttackType.None;
+		}
+		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
+		if (!characterManager.HasQueuedFrames ()) {
+			characterMovement.FlipRotation ();
+		}
+
+		bool isFacingRight = characterMovement.isFacingRight;
+
+		// include orientation in current frame calculations
+		MoveFrame currentFrame = characterManager.GetCurrentFrame (rawDirInput, attack);
+
+		// AM I HIT?
+		if (pendingAttackHitbox != null) {
+			Debug.Log ("Process hit");
+			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame();
+			characterState.TakeDamage (hit.damage);
+			// TODO: assign hitstun to character
+			pendingAttackHitbox.Reset ();
+			pendingAttackHitbox = null;
+		}
+
+		if (currentFrame != null) {
+			if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
+				characterMovement.Move (currentFrame);
+			} else {
+				ExecuteNextFrame (currentFrame);
 			}
+		}
 
-			// include orientation in current frame calculations
-			MoveFrame currentFrame = characterManager.GetCurrentFrame (rawDirInput, attack);
-			if (currentFrame != null) {
-				if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
-					characterMovement.Move (currentFrame);
-				} else {
-					ExecuteNextFrame (currentFrame);
-				}
+		// TODO: implement collision checking.
+
+		if (attack != AttackType.None)
+			bodyLight.enabled = true;
+		else
+			bodyLight.enabled = false;
+
+		previousFrame = currentFrame;
+	}
+
+	void OnTriggerEnter (Collider other) {
+		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
+			ProcessHitboxCollision (other);
 			}
+	}
 
-//			if (currentFrame == null || currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
-//				characterMovement.FlipRotation(
-//			}
-			// Only rotate character if a move isn't currently being executed.
-
-			if (attack != AttackType.None)
-				bodyLight.enabled = true;
-			else
-				bodyLight.enabled = false;
+	void OnTriggerStay (Collider other) {
+		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
+			ProcessHitboxCollision (other);
 		}
 	}
 
+	void ProcessHitboxCollision(Collider hitboxObject) {
+		HitboxController attackingHitbox = hitboxObject.GetComponent <HitboxController> ();
+		if (attackingHitbox.IsLoaded ()) {
+			// if not blocking or not immune to attack
+			if (characterMovement.action != CharacterAction.Blocking || characterMovement.action != CharacterAction.BlockStunned) {
+				pendingAttackHitbox = attackingHitbox;
+			}
+		}
+	}
+
+	// If there is not a non-active frame between two active frames and a hit has already been dealt w/,
+	// this class will not allows the hitbox to be reapplied.
 	void ExecuteNextFrame (MoveFrame currentMoveFrame)
 	{
 		if (currentMoveFrame.moveType == MoveType.ACTIVE) {
-			HitFrame attackFrame = (HitFrame)currentMoveFrame;
-			Debug.Log ("Attack in progress!");
-			hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
+			if (previousFrame.moveType != MoveType.ACTIVE) {
+				HitFrame attackFrame = (HitFrame)currentMoveFrame;
+				hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
+			} 
+//			else {
+//				Debug.Log ("Move already executed and resolved.");
+//			}
+			// TODO: add movement related stuff here
 		} else if (hitBox.IsLoaded () && currentMoveFrame.moveType != MoveType.ACTIVE)
 			hitBox.Reset ();
 	}
+
+
 
 }
 

@@ -28,6 +28,10 @@ public class HitboxController : MonoBehaviour {
 		return attackPayload.hitStunFrames;
 	}
 
+	public HitFrame GetCurrentHitFrame() {
+		return attackPayload;
+	}
+
 	public int GetCurrentMoveHitStunValue() {
 		return attackPayload.hitStun;
 	}

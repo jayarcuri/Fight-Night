@@ -19,12 +19,16 @@ public class CharacterManager {
 		ResolveInput (directionalInput, attackType);
 
 		currentMoveFrame = currentMove != null && currentMove.HasNext () ? currentMove.GetNext () : null;
-			
+
 		return currentMoveFrame;
 	}
 
 	public bool HasQueuedFrames() {
 		return currentMove != null && currentMove.HasNext ();
+	}
+
+	public int GetStartingHealth() {
+		return characterData.maxHealth;
 	}
 
 	void ResolveInput(DirectionalInput directionalInput, AttackType attackType) {

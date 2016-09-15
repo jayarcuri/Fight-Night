@@ -14,7 +14,8 @@ public enum DirectionalInput {
 }
 public enum AttackType {
 	Light, 
-	Heavy, 
+	Heavy,
+	Throw,
 	None
 }
 public enum CharacterAction {

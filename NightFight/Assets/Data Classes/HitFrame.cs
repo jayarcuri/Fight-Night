@@ -5,13 +5,13 @@ public class HitFrame : MoveFrame
 {
 	public Vector3 offset {get; set;}
 	public Vector3 size {get; set;}
-	public float damage {get; set;}
+	public int damage {get; set;}
 	public int hitStun {get; set;}
 	public MoveSequence hitStunFrames;
 	public int blockStun {get; set;}
 	public MoveSequence blockStunFrames;
 
-	public HitFrame (Vector3 offset, Vector3 size, Vector3 movementDuringFrame, float damage, int hitStun, int blockStun, MoveType moveType) : base (movementDuringFrame, moveType)
+	public HitFrame (Vector3 offset, Vector3 size, Vector3 movementDuringFrame, int damage, int hitStun, int blockStun, MoveType moveType) : base (movementDuringFrame, moveType)
 		{
 		this.offset = offset;
 		this.size = size;
@@ -25,7 +25,7 @@ public class HitFrame : MoveFrame
 
 		this.isLit = true;
 		}
-	public HitFrame (Vector3 offset, Vector3 size, float damage, int hitStun, int blockStun) : base()
+	public HitFrame (Vector3 offset, Vector3 size, int damage, int hitStun, int blockStun) : base()
 	{
 		this.offset = offset;
 		this.size = size;

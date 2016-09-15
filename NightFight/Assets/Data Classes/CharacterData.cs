@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 public class CharacterData {
-	public readonly int maxHealth = 100;
+	public readonly int maxHealth = 25;
 	HitFrame jabHitbox;
 	HitFrame AAHitbox;
 	protected SpecialMove fireBall;
@@ -27,11 +27,11 @@ public class CharacterData {
 		if (CharacterAction.Standing.Equals(action) && moveFrame == null) {
 			if (attack == AttackType.Light) {
 				newMove = GetLightAttack();
-				Debug.Log ("Light attack added");
 			} else if (intInput == 4)
 				newMove = GetBackwardStep();
 			else if (intInput == 6)
 				newMove = GetForwardStep();
+			
 			// TODO: implement special moves
 			bool ready = fireBall.ReadyMove (dInput);
 			if (ready)
@@ -41,21 +41,33 @@ public class CharacterData {
 	}
 
 	protected MoveSequence GetForwardStep() {
+//		Debug.Log ("Forward step added.");
 		return new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
 	}
 
 	protected MoveSequence GetBackwardStep() {
+//		Debug.Log ("Back step added.");
 		return new MoveSequence(new MoveFrame[] {new MoveFrame(MoveType.STEP_BACK)});
 	}
 
 	protected virtual MoveSequence GetLightAttack() {
 		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), 
-			new Vector3 (.7f, .25f, 1f), Vector3.zero, 1f, 7, 6, MoveType.ACTIVE);
+			new Vector3 (.7f, .25f, 1f), Vector3.zero, 1, 7, 6, MoveType.ACTIVE);
 		jab = new MoveSequence (new MoveFrame[]{
 			new MoveFrame (), 
 			new MoveFrame (),
 			jabHitbox,
 			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
 			new MoveFrame (),
 			new MoveFrame (),
 			new MoveFrame (),
@@ -69,7 +81,7 @@ public class CharacterData {
 		return null;
 	}
 	protected virtual MoveSequence GetHeavyAttack () {
-		AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4f, 11, 7, MoveType.ACTIVE);
+		AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4, 11, 7, MoveType.ACTIVE);
 		AA = new MoveSequence (new MoveFrame[] {
 			new MoveFrame (), 
 			new MoveFrame (),
