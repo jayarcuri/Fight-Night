@@ -14,6 +14,8 @@ public class CharacterData {
 		fireBall = new SpecialMove (
 			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
 			AA);
+		forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
+		backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
 	}
 	// Fix arguments
 	public virtual MoveSequence ReadyInput(float horizontalInput, float verticalInput, AttackType attackType) {
@@ -37,17 +39,21 @@ public class CharacterData {
 			if (ready)
 				newMove = fireBall.GetSpecialMove (attack);
 	}
+		if (newMove != null) {
+			// DO NOT DELETE THIS. This line ensures that a MoveSequence can be used more than once.
+			newMove.Reset();
+		}
 		return newMove;
 	}
 
 	protected MoveSequence GetForwardStep() {
-//		Debug.Log ("Forward step added.");
-		return new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
+		Debug.Log ("Forward step added.");
+		return forwardStep;
 	}
 
 	protected MoveSequence GetBackwardStep() {
-//		Debug.Log ("Back step added.");
-		return new MoveSequence(new MoveFrame[] {new MoveFrame(MoveType.STEP_BACK)});
+		Debug.Log ("Back step added.");
+		return backwardStep;
 	}
 
 	protected virtual MoveSequence GetLightAttack() {

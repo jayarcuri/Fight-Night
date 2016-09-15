@@ -46,6 +46,8 @@ public class CharacterManager {
 
 		if (newMove != null) {
 			currentMove = newMove;
+			// DO NOT DELETE THIS. This line ensures that a move can be used more than once.
+			currentMove.Reset ();
 		}
 	}
 

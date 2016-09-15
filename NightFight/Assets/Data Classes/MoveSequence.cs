@@ -45,5 +45,9 @@ public class MoveSequence {
 		return moveSequence.Length;
 	}
 
+	public void Reset() {
+		index = -1;
+	}
+
 
 }
