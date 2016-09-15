@@ -27,6 +27,10 @@ public class CharacterManager {
 		return currentMove != null && currentMove.HasNext ();
 	}
 
+	public void QueueMove(MoveSequence newMove) {
+		currentMove = newMove;
+	}
+
 	public int GetStartingHealth() {
 		return characterData.maxHealth;
 	}

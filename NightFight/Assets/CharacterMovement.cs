@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharacterMovement : MonoBehaviour {
+public class CharacterMovement : MonoBehaviour
+{
 
 	public float speed = 2f;
 	public float jumpMovementModifier;
@@ -9,12 +10,15 @@ public class CharacterMovement : MonoBehaviour {
 	public float gravityForce;
 	public float terminalVelocity;
 
-	Rigidbody playerBody; 
+	Rigidbody playerBody;
+
 	public CharacterAction action { get; protected set; }
+
 	MovementDirection moveDirection;
 	Transform opponentTransform;
 
-	public bool isFacingRight { get; protected set; }
+	public bool isFacingRight;
+
 	float initialHeight;
 	float remainingJumpTime;
 	public float currentJumpVelocity;
@@ -23,8 +27,9 @@ public class CharacterMovement : MonoBehaviour {
 	float eastStageConstraint = 9.5f;
 
 
-	void Start () {
-		playerBody = GetComponent<Rigidbody>();
+	void Start ()
+	{
+		playerBody = GetComponent<Rigidbody> ();
 		string opponentTag = gameObject.tag.Equals ("Player1") ? "Player2" : "Player1";
 		opponentTransform = GameObject.FindGameObjectWithTag (opponentTag).GetComponent<Transform> ();
 
@@ -38,11 +43,13 @@ public class CharacterMovement : MonoBehaviour {
 		isFacingRight = transform.localPosition.x < opponentTransform.transform.localPosition.x ? true : false;
 	}
 
-	public void SetOpponentTransform(Transform oTransform) {
+	public void SetOpponentTransform (Transform oTransform)
+	{
 		opponentTransform = oTransform;
 	}
 
-	public void FlipRotation () {
+	public void FlipRotation ()
+	{
 		if (!isFacingRight && transform.localPosition.x < opponentTransform.localPosition.x) {
 			isFacingRight = true;
 		} else if (isFacingRight && transform.localPosition.x > opponentTransform.localPosition.x) {
@@ -56,7 +63,23 @@ public class CharacterMovement : MonoBehaviour {
 		transform.localEulerAngles = newRotation; 
 	}
 
-	public void Move(MoveFrame stepDirection) {
+	public void MoveByVector (Vector3 difference)
+	{
+		Debug.Log ("Before: " + difference);
+		if (!isFacingRight) {
+			difference -= new Vector3 (difference.x * 2, 0, 0);
+		}
+		Debug.Log ("After: " + difference);
+		Vector3 moveTo = playerBody.position;
+
+		moveTo += difference;
+		Debug.Log ("moveTo: " + moveTo);
+		moveTo = ConstrainPlayerPosition (moveTo);
+		playerBody.MovePosition (moveTo);
+	}
+
+	public void Move (MoveFrame stepDirection)
+	{
 		// Hacky solution to simplifying horizontal inputs
 		int horizontal = stepDirection.moveType == MoveType.STEP_FORWARD ? 1 : -1;
 
@@ -85,7 +108,8 @@ public class CharacterMovement : MonoBehaviour {
 	}
 
 
-	public void Jump(int horizontalInput) {
+	public void Jump (int horizontalInput)
+	{
 		if (action == CharacterAction.Standing) {
 			// Set all variables for jump state
 			currentJumpVelocity = initialJumpVelocity;
@@ -100,7 +124,8 @@ public class CharacterMovement : MonoBehaviour {
 		}
 	}
 
-	Vector3 GetJumpVelocity() {
+	Vector3 GetJumpVelocity ()
+	{
 		remainingJumpTime -= Time.fixedDeltaTime; 
 		Vector3 moveBy = Vector3.zero;
 
@@ -124,17 +149,18 @@ public class CharacterMovement : MonoBehaviour {
 		return moveBy;
 	}
 
-	Vector3 ConstrainPlayerPosition(Vector3 newPosition) {
+	Vector3 ConstrainPlayerPosition (Vector3 newPosition)
+	{
 		// Verify player is within bounds of level and constrain them
 		if (newPosition.y < initialHeight) {
 			newPosition.y = initialHeight;
 			action = CharacterAction.Standing;
 		}
 		// Verify within horizontal bounds
-		if (newPosition.x + transform.localScale.x/2 > eastStageConstraint) {
-			newPosition.x = eastStageConstraint - transform.localScale.x/2;
-		} else if (newPosition.x - transform.localScale.x/2 < westStageConstraint) {
-			newPosition.x = westStageConstraint + transform.localScale.x/2;
+		if (newPosition.x + transform.localScale.x / 2 > eastStageConstraint) {
+			newPosition.x = eastStageConstraint - transform.localScale.x / 2;
+		} else if (newPosition.x - transform.localScale.x / 2 < westStageConstraint) {
+			newPosition.x = westStageConstraint + transform.localScale.x / 2;
 		}
 		return newPosition;
 	}

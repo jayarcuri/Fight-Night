@@ -19,7 +19,8 @@ public class HitFrame : MoveFrame
 
 		this.damage = damage;
 		this.hitStun = hitStun;
-		hitStunFrames = new MoveSequence(new MoveFrame[hitStun]);
+		hitStunFrames = new MoveSequence(new MoveFrame[] {new MoveFrame(MoveType.IN_HITSTUN), new MoveFrame(MoveType.IN_HITSTUN), 
+			new MoveFrame(MoveType.IN_HITSTUN), new MoveFrame(MoveType.IN_HITSTUN)});
 		this.blockStun = blockStun;
 		blockStunFrames = new MoveSequence(new MoveFrame[blockStun]);
 

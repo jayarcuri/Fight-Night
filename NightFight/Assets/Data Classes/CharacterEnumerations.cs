@@ -32,7 +32,8 @@ public enum MoveType {
 	AIRBORNE,
 	INVLUNERABLE,
 	STEP_BACK,
-	STEP_FORWARD
+	STEP_FORWARD,
+	IN_HITSTUN
 }
 public enum MovementDirection {
 	None, 

@@ -62,10 +62,10 @@ public class FrameManager : MonoBehaviour
 
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {
-			Debug.Log ("Process hit");
 			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame();
 			characterState.TakeDamage (hit.damage);
 			// TODO: assign hitstun to character
+			characterManager.QueueMove(pendingAttackHitbox.GetCurrentMoveHitstun());
 			pendingAttackHitbox.Reset ();
 			pendingAttackHitbox = null;
 		}
@@ -73,7 +73,11 @@ public class FrameManager : MonoBehaviour
 		if (currentFrame != null) {
 			if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
 				characterMovement.Move (currentFrame);
-			} else {
+			} else if (MoveType.IN_HITSTUN.Equals (currentFrame.moveType)) {
+				float moveBy = -0.5f;
+				characterMovement.MoveByVector (new Vector3 (moveBy, 0f, 0f));
+			}
+			else {
 				ExecuteNextFrame (currentFrame);
 			}
 		}
