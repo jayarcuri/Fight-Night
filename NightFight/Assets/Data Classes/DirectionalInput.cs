@@ -29,7 +29,7 @@ public class DirectionalInput {
 			break;
 		}
 
-		vertical = numpadRepresentation / 3;
+		vertical = ((numpadRepresentation - 1) / 3) - 1;
 
 		horizontalInput = horizontal;
 		verticalInput = vertical;

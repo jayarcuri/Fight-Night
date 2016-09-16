@@ -91,12 +91,10 @@ public class CharacterData {
 	}
 
 	protected MoveSequence GetForwardStep() {
-		Debug.Log ("Forward step added.");
 		return forwardStep;
 	}
 
 	protected MoveSequence GetBackwardStep() {
-		Debug.Log ("Back step added.");
 		return backwardStep;
 	}
 
