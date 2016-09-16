@@ -82,13 +82,15 @@ public class CharacterMovement : MonoBehaviour
 	{
 		// Hacky solution to simplifying horizontal inputs
 		int horizontal = stepDirection.moveType == MoveType.STEP_FORWARD ? 1 : -1;
+		if (!isFacingRight)
+			horizontal *= -1;
 
 		if (horizontal != 0 /*|| action == CharacterAction.Jumping*/) {
 			// variable which will be modified by checks for different states which impact movement
 			Vector3 moveTo = playerBody.position;
 
 			//if (action != CharacterAction.Jumping) {
-			if (horizontal == 1)
+			if (horizontal == 1) 
 				moveDirection = MovementDirection.Right;
 			else
 				moveDirection = MovementDirection.Left;

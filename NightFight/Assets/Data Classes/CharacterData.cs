@@ -15,6 +15,49 @@ public class CharacterData {
 //			new SpecialMove (
 //			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
 //			AA);
+		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), 
+			new Vector3 (.7f, .25f, 1f), Vector3.zero, 1, 7, 6, MoveType.ACTIVE);
+		jab = new MoveSequence (new MoveFrame[]{
+			new MoveFrame (), 
+			new MoveFrame (),
+			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame ()
+		});
+
+		AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4, 11, 7, MoveType.ACTIVE);
+		AA = new MoveSequence (new MoveFrame[] {
+			new MoveFrame (), 
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			AAHitbox,
+			AAHitbox,
+			AAHitbox,
+			AAHitbox,
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame ()
+		});
+	
 		forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
 		backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
 	}
@@ -48,39 +91,16 @@ public class CharacterData {
 	}
 
 	protected MoveSequence GetForwardStep() {
-//		Debug.Log ("Forward step added.");
+		Debug.Log ("Forward step added.");
 		return forwardStep;
 	}
 
 	protected MoveSequence GetBackwardStep() {
-//		Debug.Log ("Back step added.");
+		Debug.Log ("Back step added.");
 		return backwardStep;
 	}
 
 	protected virtual MoveSequence GetLightAttack() {
-		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), 
-			new Vector3 (.7f, .25f, 1f), Vector3.zero, 1, 7, 6, MoveType.ACTIVE);
-		jab = new MoveSequence (new MoveFrame[]{
-			new MoveFrame (), 
-			new MoveFrame (),
-			jabHitbox,
-			jabHitbox,
-			jabHitbox,
-			jabHitbox,
-			jabHitbox,
-			jabHitbox,
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame ()
-		});
-
 		return jab;
 	}
 
@@ -88,25 +108,6 @@ public class CharacterData {
 		return null;
 	}
 	protected virtual MoveSequence GetHeavyAttack () {
-		AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4, 11, 7, MoveType.ACTIVE);
-		AA = new MoveSequence (new MoveFrame[] {
-			new MoveFrame (), 
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			AAHitbox,
-			AAHitbox,
-			AAHitbox,
-			AAHitbox,
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame ()
-		});
 		return AA;
 	}
 }

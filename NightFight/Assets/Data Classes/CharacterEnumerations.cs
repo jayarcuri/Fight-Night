@@ -1,17 +1,5 @@
 ﻿using System;
 
-
-//public enum DirectionalInput {
-//	DownLeft = 1,
-//	Down,
-//	DownRight,
-//	Left,
-//	Neutral,
-//	Right,
-//	UpLeft,
-//	Up,
-//	UpRight
-//}
 public enum AttackType {
 	Light, 
 	Heavy,
