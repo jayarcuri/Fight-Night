@@ -58,7 +58,7 @@ public class FrameManager : MonoBehaviour
 		bool isFacingRight = characterMovement.isFacingRight;
 
 		// include orientation in current frame calculations
-		MoveFrame currentFrame = characterManager.GetCurrentFrame (rawDirInput, attack);
+		MoveFrame currentFrame = characterManager.GetCurrentFrame (rawDirInput, attack, isFacingRight);
 
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {

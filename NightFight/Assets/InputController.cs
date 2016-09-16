@@ -22,7 +22,7 @@ public class InputController : MonoBehaviour {
 		float input = 5f;
 		input = input + Input.GetAxisRaw (horizontalAxis) + (Input.GetAxisRaw (verticalAxis) * 3);
 
-		directionalInput = (DirectionalInput)((int)input);
+		directionalInput = new DirectionalInput((int)input);
 
 		if (Input.GetButtonDown (heavyAtack)) {
 			attack = AttackType.Heavy;

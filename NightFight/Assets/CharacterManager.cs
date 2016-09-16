@@ -14,8 +14,11 @@ public class CharacterManager {
 		currentMove = null;
 	}
 
-	public MoveFrame GetCurrentFrame(DirectionalInput directionalInput, AttackType attackType) {
+	public MoveFrame GetCurrentFrame(DirectionalInput directionalInput, AttackType attackType, bool isFacingRight) {
 		MoveFrame currentMoveFrame;
+//		if (!isFacingRight) {
+//			(int)directionalInput
+//		}
 		ResolveInput (directionalInput, attackType);
 
 		currentMoveFrame = currentMove != null && currentMove.HasNext () ? currentMove.GetNext () : null;
@@ -46,8 +49,6 @@ public class CharacterManager {
 
 		if (newMove != null) {
 			currentMove = newMove;
-			// DO NOT DELETE THIS. This line ensures that a move can be used more than once.
-			currentMove.Reset ();
 		}
 	}
 

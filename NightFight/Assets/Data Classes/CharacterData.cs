@@ -4,16 +4,17 @@ public class CharacterData {
 	public readonly int maxHealth = 25;
 	HitFrame jabHitbox;
 	HitFrame AAHitbox;
-	protected SpecialMove fireBall;
+//	protected SpecialMove fireBall;
 	protected MoveSequence jab;
 	protected MoveSequence AA;
 	protected MoveSequence forwardStep;
 	protected MoveSequence backwardStep;
 
 	public CharacterData () {
-		fireBall = new SpecialMove (
-			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
-			AA);
+//		fireBall = null;
+//			new SpecialMove (
+//			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
+//			AA);
 		forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
 		backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
 	}
@@ -23,7 +24,7 @@ public class CharacterData {
 	}
 
 	public virtual MoveSequence GetNewMove (CharacterAction action, MoveFrame moveFrame, DirectionalInput dInput, AttackType attack) {
-		int intInput = (int)dInput;
+		int intInput = dInput.GetNumpadNotation();
 		MoveSequence newMove = null;
 		 // TODO: set up assignment which makes sense in context of current architecture
 		if (CharacterAction.Standing.Equals(action) && moveFrame == null) {
@@ -34,10 +35,10 @@ public class CharacterData {
 			else if (intInput == 6)
 				newMove = GetForwardStep();
 			
-			// TODO: implement special moves
-			bool ready = fireBall.ReadyMove (dInput);
-			if (ready)
-				newMove = fireBall.GetSpecialMove (attack);
+//			// TODO: implement special moves
+//			bool ready = fireBall.ReadyMove (dInput);
+//			if (ready)
+//				newMove = fireBall.GetSpecialMove (attack);
 	}
 		if (newMove != null) {
 			// DO NOT DELETE THIS. This line ensures that a MoveSequence can be used more than once.
@@ -47,12 +48,12 @@ public class CharacterData {
 	}
 
 	protected MoveSequence GetForwardStep() {
-		Debug.Log ("Forward step added.");
+//		Debug.Log ("Forward step added.");
 		return forwardStep;
 	}
 
 	protected MoveSequence GetBackwardStep() {
-		Debug.Log ("Back step added.");
+//		Debug.Log ("Back step added.");
 		return backwardStep;
 	}
 
