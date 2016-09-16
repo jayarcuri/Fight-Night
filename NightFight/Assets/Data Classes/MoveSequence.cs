@@ -10,7 +10,7 @@ public class MoveSequence {
 		this.moveSequence = moveSequence;
 	}
 
-	public MoveFrame GetNext() {
+	public virtual MoveFrame GetNext() {
 		if(HasNext()) {
 			++index;
 			return moveSequence [index];
@@ -19,7 +19,7 @@ public class MoveSequence {
 			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
 		}
 
-	public MoveFrame Peek () {
+	public virtual MoveFrame Peek () {
 		if (HasNext()) {
 			return moveSequence [index+1];
 		}
@@ -27,11 +27,11 @@ public class MoveSequence {
 			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
 	}
 
-	public bool HasNext() {
+	public virtual bool HasNext() {
 		return (index < moveSequence.Length - 1);
 	}
 
-	public MoveFrame GetPrevious() {
+	public virtual MoveFrame GetPrevious() {
 		MoveFrame returnMove;
 
 		if (index == -1)
@@ -41,11 +41,11 @@ public class MoveSequence {
 		return returnMove;
 	}
 
-	public int MoveLength () {
+	public virtual int MoveLength () {
 		return moveSequence.Length;
 	}
 
-	public void Reset() {
+	public virtual void Reset() {
 		index = -1;
 	}
 

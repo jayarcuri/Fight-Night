@@ -22,6 +22,7 @@ public class DirectionalInput
 	{
 		int horizontal = 0;
 		int vertical;
+
 		switch (numpadRepresentation % 3) {
 		case 1:
 			horizontal = -1;

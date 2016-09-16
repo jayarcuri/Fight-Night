@@ -40,7 +40,7 @@ public class CharacterMovement : MonoBehaviour
 		action = CharacterAction.Standing;
 		initialHeight = playerBody.position.y;
 		speed = speed / 60;
-		isFacingRight = transform.localPosition.x < opponentTransform.transform.localPosition.x ? true : false;
+		isFacingRight = transform.localPosition.x < opponentTransform.transform.localPosition.x;
 	}
 
 	public void SetOpponentTransform (Transform oTransform)

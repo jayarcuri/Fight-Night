@@ -8,7 +8,7 @@ public class CharacterManagerTests {
 	public void BackwardStepTest () {
 		CharacterManager tester = new CharacterManager ();
 		tester.GetCurrentFrame (DirectionalInput.Right, AttackType.None, true);
-		Assert.IsNotNull (tester.currentMove);
+	Assert.IsNotNull (tester.currentMove);
 	}
 
 	[Test]

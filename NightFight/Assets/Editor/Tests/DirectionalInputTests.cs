@@ -107,5 +107,6 @@ public class DirectionalInputTests {
 		Assert.IsTrue (nine.horizontalInput == 1);
 		Console.WriteLine (nine.verticalInput);
 		Assert.IsTrue (nine.verticalInput == 1);
+
 	}
 }
