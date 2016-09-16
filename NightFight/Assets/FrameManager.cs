@@ -42,12 +42,12 @@ public class FrameManager : MonoBehaviour
 	void FixedUpdate ()
 	{
 //		if (isPlayer1) {
-		DirectionalInput rawDirInput;
+		DirectionalInput directionalInput;
 		AttackType attack;
 		if (isPlayer1)
-			inputController.GetInputs (out rawDirInput, out attack);
+			inputController.GetInputs (out directionalInput, out attack);
 		else {
-			rawDirInput = DirectionalInput.Neutral;
+			directionalInput = DirectionalInput.Neutral;
 			attack = AttackType.None;
 		}
 		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
@@ -57,8 +57,7 @@ public class FrameManager : MonoBehaviour
 
 		bool isFacingRight = characterMovement.isFacingRight;
 
-		// include orientation in current frame calculations
-		MoveFrame currentFrame = characterManager.GetCurrentFrame (rawDirInput, attack, isFacingRight);
+		MoveFrame currentFrame = characterManager.GetCurrentFrame (directionalInput, attack, isFacingRight);
 
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {

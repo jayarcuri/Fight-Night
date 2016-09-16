@@ -19,10 +19,10 @@ public class InputController : MonoBehaviour {
 
 	public void GetInputs (out DirectionalInput directionalInput, out AttackType attack) {
 		// read directional inputs
-		float input = 5f;
-		input = input + Input.GetAxisRaw (horizontalAxis) + (Input.GetAxisRaw (verticalAxis) * 3);
+		int horizontal =  (int)Input.GetAxisRaw (horizontalAxis);
+		int vertical = (int)Input.GetAxisRaw (verticalAxis);
 
-		directionalInput = new DirectionalInput((int)input);
+		directionalInput = new DirectionalInput(horizontal, vertical);
 
 		if (Input.GetButtonDown (heavyAtack)) {
 			attack = AttackType.Heavy;

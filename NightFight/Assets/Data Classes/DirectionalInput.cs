@@ -43,7 +43,7 @@ public class DirectionalInput {
 		return numpadInt;
 	}
 
-	public void ReverseHorizontalInput() {
+	public void FlipHorizontalInput() {
 		horizontalInput *= -1;
 	}
 }

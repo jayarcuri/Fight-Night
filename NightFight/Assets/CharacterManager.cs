@@ -16,9 +16,11 @@ public class CharacterManager {
 
 	public MoveFrame GetCurrentFrame(DirectionalInput directionalInput, AttackType attackType, bool isFacingRight) {
 		MoveFrame currentMoveFrame;
-//		if (!isFacingRight) {
-//			(int)directionalInput
-//		}
+
+		if (!isFacingRight) {
+			directionalInput.FlipHorizontalInput ();
+		}
+
 		ResolveInput (directionalInput, attackType);
 
 		currentMoveFrame = currentMove != null && currentMove.HasNext () ? currentMove.GetNext () : null;
