@@ -16,6 +16,11 @@ public class JumpSequenceTests {
 
 	[Test]
 	public void TestVelocityChangesCorrectlyWithAddedMove() {
+		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f);
+		for (int i = 0; i < 10; i++) {
+			
+			testRunner.GetNext ();
+		}
 		Assert.IsTrue (false);
 	}
 
