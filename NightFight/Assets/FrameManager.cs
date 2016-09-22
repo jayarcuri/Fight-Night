@@ -41,7 +41,6 @@ public class FrameManager : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-//		if (isPlayer1) {
 		DirectionalInput directionalInput;
 		AttackType attack;
 		if (isPlayer1)

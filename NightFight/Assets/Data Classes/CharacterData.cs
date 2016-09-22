@@ -5,13 +5,13 @@ public class CharacterData {
 	HitFrame jabHitbox;
 	HitFrame AAHitbox;
 //	protected SpecialMove fireBall;
-	protected FrameSequence jab;
-	protected FrameSequence AA;
-	protected FrameSequence forwardStep;
-	protected FrameSequence backwardStep;
-	FrameSequence verticalJump;
-	FrameSequence forwardJump;
-	FrameSequence backwardJump;
+	protected IFrameSequence jab;
+	protected IFrameSequence AA;
+	protected IFrameSequence forwardStep;
+	protected IFrameSequence backwardStep;
+	IFrameSequence verticalJump;
+	IFrameSequence forwardJump;
+	IFrameSequence backwardJump;
 
 	public CharacterData () {
 //		fireBall = null;
@@ -74,11 +74,11 @@ public class CharacterData {
 	}
 
 	// TODO: replace with check against hashmap implementation of a FSM
-	public virtual FrameSequence GetNewMove (CharacterAction action, MoveFrame moveFrame, DirectionalInput dInput, AttackType attack) {
+	public virtual IFrameSequence GetNewMove (CharacterAction action, DirectionalInput dInput, AttackType attack) {
 		int intInput = dInput.GetNumpadNotation();
-		FrameSequence newMove = null;
+		IFrameSequence newMove = null;
 		 // TODO: set up assignment which makes sense in context of current architecture
-		if (CharacterAction.Standing.Equals(action) && moveFrame == null) {
+		if (CharacterAction.Standing.Equals(action)) {
 			if (attack == AttackType.Light) {
 				newMove = GetLightAttack ();
 			} else if (intInput == 4)
@@ -105,22 +105,22 @@ public class CharacterData {
 		return newMove;
 	}
 
-	protected FrameSequence GetForwardStep() {
+	protected IFrameSequence GetForwardStep() {
 		return forwardStep;
 	}
 
-	protected FrameSequence GetBackwardStep() {
+	protected IFrameSequence GetBackwardStep() {
 		return backwardStep;
 	}
 
-	protected virtual FrameSequence GetLightAttack() {
+	protected virtual IFrameSequence GetLightAttack() {
 		return jab;
 	}
 
-	protected virtual FrameSequence GetMidAttack () {
+	protected virtual IFrameSequence GetMidAttack () {
 		return null;
 	}
-	protected virtual FrameSequence GetHeavyAttack () {
+	protected virtual IFrameSequence GetHeavyAttack () {
 		return AA;
 	}
 }

@@ -5,7 +5,7 @@ using System;
 public class CharacterManager {
 	CharacterState characterState;
 	CharacterData characterData;
-	public FrameSequence currentMove {get; private set;}
+	public IFrameSequence currentMove {get; private set;}
 
 	public CharacterManager() {
 		characterData = new CharacterData ();
@@ -36,7 +36,7 @@ public class CharacterManager {
 		return currentMove != null && currentMove.HasNext ();
 	}
 
-	public void QueueMove(FrameSequence newMove) {
+	public void QueueMove(IFrameSequence newMove) {
 		currentMove = newMove;
 		currentMove.Reset ();
 	}
@@ -47,13 +47,10 @@ public class CharacterManager {
 
 	void ResolveInput(DirectionalInput directionalInput, AttackType attackType) {
 		MoveFrame currentFrame;
-		if (currentMove != null && currentMove.HasNext ()) {
-				currentFrame = currentMove.Peek ();
-		} else {
-			currentFrame = null;
+		IFrameSequence newMove = null;
+		if (currentMove == null || !currentMove.HasNext ()) {
+			newMove = characterData.GetNewMove (characterState.GetCurrentAction (), directionalInput, attackType);
 		}
-		FrameSequence newMove = characterData.GetNewMove (characterState.GetCurrentAction(), currentFrame, directionalInput, attackType);
-
 		if (newMove != null) {
 			QueueMove (newMove);
 		}

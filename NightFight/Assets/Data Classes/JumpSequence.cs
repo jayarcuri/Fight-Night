@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class JumpSequence : FrameSequence {
+public class JumpSequence : IFrameSequence {
 	MoveSequence[] supplementaryMove;
 	Vector2 velocity;
 	double maxJumpHeight;
@@ -34,7 +34,7 @@ public class JumpSequence : FrameSequence {
 		return (!isFalling || currentHeight > 0);
 	}
 
-	public MoveFrame Peek () {
+	public MoveFrame GetPreviousFrame () {
 		MoveFrame peekFrame;
 
 		peekFrame = HasNext () ? new MoveFrame (velocity, MoveType.AIRBORNE) : null;
@@ -53,7 +53,7 @@ public class JumpSequence : FrameSequence {
 		SetUp ();
 	}
 
-	public void AddSupplimentaryFrameSequence (FrameSequence newSequence) {
+	public void AddSupplimentaryFrameSequence (IFrameSequence newSequence) {
 		return;
 	}
 
