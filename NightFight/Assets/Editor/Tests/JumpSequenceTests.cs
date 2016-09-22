@@ -8,13 +8,10 @@ public class JumpSequenceTests {
 	[Test]
 	public void TestResolvesInExpectedTime() {
 		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f);
-		for (int i = 0; i < 10; i++) {
-			testRunner.GetNext ();
-		}
-		Assert.IsTrue (testRunner.HasNext());
+		TestAppropriateResolution (testRunner, 10);
 	}
 
-	[Test]
+/*	[Test]
 	public void TestVelocityChangesCorrectlyWithAddedMove() {
 		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f);
 		for (int i = 0; i < 10; i++) {
@@ -22,11 +19,27 @@ public class JumpSequenceTests {
 			testRunner.GetNext ();
 		}
 		Assert.IsTrue (false);
-	}
+	}*/
 
 	[Test]
 	public void TestJumpSequenceReset() {
-		Assert.IsTrue (false);
+		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f);
+		for (int i = 0; i < 10; i++) {
+			testRunner.GetNext ();
+		}
+		testRunner.Reset ();
+		Assert.IsTrue (testRunner.HasNext());
+
+		TestAppropriateResolution (testRunner, 10);
+	}
+
+	void TestAppropriateResolution(JumpSequence tester, int length) {
+		for (int i = 0; i < length; i++) {
+			tester.GetNext ();
+			//Console.WriteLine (testRunner.currentHeight);
+			//Console.WriteLine (i);
+		}
+		Assert.IsTrue (!tester.HasNext());
 	}
 
 }

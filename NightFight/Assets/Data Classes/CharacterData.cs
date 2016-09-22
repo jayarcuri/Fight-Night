@@ -9,12 +9,15 @@ public class CharacterData {
 	protected MoveSequence AA;
 	protected MoveSequence forwardStep;
 	protected MoveSequence backwardStep;
+	FrameSequence verticalJump;
 
 	public CharacterData () {
 //		fireBall = null;
 //			new SpecialMove (
 //			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
 //			AA);
+
+		verticalJump = new JumpSequence (32, 3.5, 0.0);
 		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), 
 			new Vector3 (.7f, .25f, 1f), Vector3.zero, 1, 7, 6, MoveType.ACTIVE);
 		jab = new MoveSequence (new MoveFrame[]{
@@ -66,17 +69,21 @@ public class CharacterData {
 		return null;
 	}
 
+	// TODO: replace with check against hashmap implementation of a FSM
 	public virtual MoveSequence GetNewMove (CharacterAction action, MoveFrame moveFrame, DirectionalInput dInput, AttackType attack) {
 		int intInput = dInput.GetNumpadNotation();
 		MoveSequence newMove = null;
 		 // TODO: set up assignment which makes sense in context of current architecture
 		if (CharacterAction.Standing.Equals(action) && moveFrame == null) {
 			if (attack == AttackType.Light) {
-				newMove = GetLightAttack();
+				newMove = GetLightAttack ();
 			} else if (intInput == 4)
-				newMove = GetBackwardStep();
+				newMove = GetBackwardStep ();
 			else if (intInput == 6)
-				newMove = GetForwardStep();
+				newMove = GetForwardStep ();
+			else if (intInput == 8) {
+				newMove = 
+			}
 			
 //			// TODO: implement special moves
 //			bool ready = fireBall.ReadyMove (dInput);
