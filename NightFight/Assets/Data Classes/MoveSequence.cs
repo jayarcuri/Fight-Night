@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MoveSequence {
+public class MoveSequence : FrameSequence {
 	int index;
 	MoveFrame[] moveSequence;
 
 	public MoveSequence(MoveFrame[] moveSequence) {
-		index = 0;
+		index = -1;
 		this.moveSequence = moveSequence;
 	}
 
-	public MoveFrame getNext() {
-		if(hasNext()) {
+	public virtual MoveFrame GetNext() {
+		if(HasNext()) {
 			++index;
 			return moveSequence [index];
 			}
@@ -19,30 +19,34 @@ public class MoveSequence {
 			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
 		}
 
-	public MoveFrame peek () {
-		if (hasNext()) {
+	public virtual MoveFrame Peek () {
+		if (HasNext()) {
 			return moveSequence [index+1];
 		}
 		else
 			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
 	}
 
-	public bool hasNext() {
+	public virtual bool HasNext() {
 		return (index < moveSequence.Length - 1);
 	}
 
-	public MoveFrame getLast() {
+	public virtual MoveFrame GetPrevious() {
 		MoveFrame returnMove;
 
-		if (index == 0)
+		if (index == -1)
 			returnMove = null;
 		else
 			returnMove = moveSequence [index - 1];
 		return returnMove;
 	}
-
-	public int MoveLength () {
+	// appears to exist only to test; consider deleting
+	public virtual int MoveLength () {
 		return moveSequence.Length;
+	}
+
+	public virtual void Reset() {
+		index = -1;
 	}
 
 

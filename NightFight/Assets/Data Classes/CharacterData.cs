@@ -1,30 +1,51 @@
 ﻿using UnityEngine;
 
 public class CharacterData {
-	protected CharacterState characterState;
+	public readonly int maxHealth = 25;
 	HitFrame jabHitbox;
 	HitFrame AAHitbox;
-	protected SpecialMove fireBall;
-	protected MoveSequence jab;
-	protected MoveSequence AA;
-	protected MoveSequence forwardStep;
-	protected MoveSequence backwardStep;
+//	protected SpecialMove fireBall;
+	protected FrameSequence jab;
+	protected FrameSequence AA;
+	protected FrameSequence forwardStep;
+	protected FrameSequence backwardStep;
+	FrameSequence verticalJump;
+	FrameSequence forwardJump;
+	FrameSequence backwardJump;
 
-	public CharacterData (CharacterState cState) {
-		characterState = cState;
-		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), 
-			new Vector3 (.7f, .25f, 1f), Vector3.zero, 1f, 7, 6, MoveType.ACTIVE);
+	public CharacterData () {
+//		fireBall = null;
+//			new SpecialMove (
+//			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
+//			AA);
+		verticalJump = new JumpSequence (40, 3.5, 0.0);
+		forwardJump = new JumpSequence (40, 3.5, 2.5);
+		backwardJump = new JumpSequence (40, 3.5, -2.5);
+
+		jabHitbox = new HitFrame (new Vector2 (0.8f, 0.2f), 
+			new Vector3 (.7f, .25f, 1f), Vector2.zero, 1, 7, 6, MoveType.ACTIVE);
 		jab = new MoveSequence (new MoveFrame[]{
 			new MoveFrame (), 
 			new MoveFrame (),
 			jabHitbox,
 			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			jabHitbox,
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
+			new MoveFrame (),
 			new MoveFrame (),
 			new MoveFrame (),
 			new MoveFrame (),
 			new MoveFrame ()
 		});
-		AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4f, 11, 7, MoveType.ACTIVE);
+
+		AAHitbox = new HitFrame (new Vector2 (0.6f, 0.4f), new Vector3 (.7f, .5f, 1f), Vector2.zero, 4, 11, 7, MoveType.ACTIVE);
 		AA = new MoveSequence (new MoveFrame[] {
 			new MoveFrame (), 
 			new MoveFrame (),
@@ -43,40 +64,63 @@ public class CharacterData {
 			new MoveFrame (),
 			new MoveFrame ()
 		});
-		fireBall = new SpecialMove (
-			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
-			AA);
-	}
-	public virtual MoveSequence GetMidAttack () {
-		return null;
-	}
-	public virtual MoveSequence GetHeavyAttack () {
-		return null;
+	
+		forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
+		backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
 	}
 	// Fix arguments
 	public virtual MoveSequence ReadyInput(float horizontalInput, float verticalInput, AttackType attackType) {
 		return null;
 	}
 
-	public virtual void ReadInput (CharacterAction action, MoveFrame moveFrame, DirectionalInput dInput, AttackType attack) {
-		int intInput = (int)dInput;
-		switch (action) {
-		case CharacterAction.Standing:
+	// TODO: replace with check against hashmap implementation of a FSM
+	public virtual FrameSequence GetNewMove (CharacterAction action, MoveFrame moveFrame, DirectionalInput dInput, AttackType attack) {
+		int intInput = dInput.GetNumpadNotation();
+		FrameSequence newMove = null;
+		 // TODO: set up assignment which makes sense in context of current architecture
+		if (CharacterAction.Standing.Equals(action) && moveFrame == null) {
 			if (attack == AttackType.Light) {
-				characterState.SetCurrentMove (jab);
+				newMove = GetLightAttack ();
 			} else if (intInput == 4)
-				characterState.SetCurrentMove (backwardStep);
+				newMove = GetBackwardStep ();
 			else if (intInput == 6)
-				characterState.SetCurrentMove (forwardStep);
-			// Add to appropriate move buffers
-			bool ready = fireBall.ReadyMove (dInput);
-			if (ready)
-				characterState.SetCurrentMove (fireBall.GetSpecialMove (attack));
-			break;
-		case CharacterAction.Jumping:
-			// Get jumping frames
-			// Add hitboxes and hitframes to the frames for which it matters.
-			break;
+				newMove = GetForwardStep ();
+			else if (intInput == 7) {
+				newMove = backwardJump;
+			} else if (intInput == 8) {
+				newMove = verticalJump;
+			} else if (intInput == 9) {
+				newMove = forwardJump;
+			}
+			
+//			// TODO: implement special moves
+//			bool ready = fireBall.ReadyMove (dInput);
+//			if (ready)
+//				newMove = fireBall.GetSpecialMove (attack);
+	}
+		if (newMove != null) {
+			// DO NOT DELETE THIS. This line ensures that a MoveSequence can be used more than once.
+			newMove.Reset();
 		}
+		return newMove;
+	}
+
+	protected FrameSequence GetForwardStep() {
+		return forwardStep;
+	}
+
+	protected FrameSequence GetBackwardStep() {
+		return backwardStep;
+	}
+
+	protected virtual FrameSequence GetLightAttack() {
+		return jab;
+	}
+
+	protected virtual FrameSequence GetMidAttack () {
+		return null;
+	}
+	protected virtual FrameSequence GetHeavyAttack () {
+		return AA;
 	}
 }

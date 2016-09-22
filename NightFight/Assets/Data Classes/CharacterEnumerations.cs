@@ -1,20 +1,9 @@
 ﻿using System;
 
-
-public enum DirectionalInput {
-	DownLeft = 1,
-	Down,
-	DownRight,
-	Left,
-	Neutral,
-	Right,
-	UpLeft,
-	Up,
-	UpRight
-}
 public enum AttackType {
 	Light, 
-	Heavy, 
+	Heavy,
+	Throw,
 	None
 }
 public enum CharacterAction {
@@ -29,7 +18,10 @@ public enum MoveType {
 	RECOVERY,
 	ACTIVE,
 	AIRBORNE,
-	INVLUNERABLE
+	INVLUNERABLE,
+	STEP_BACK,
+	STEP_FORWARD,
+	IN_HITSTUN
 }
 public enum MovementDirection {
 	None, 
