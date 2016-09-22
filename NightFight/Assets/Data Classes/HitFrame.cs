@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HitFrame : MoveFrame
 {
-	public Vector3 offset {get; set;}
+	public Vector2 offset {get; set;}
 	public Vector3 size {get; set;}
 	public int damage {get; set;}
 	public int hitStun {get; set;}
@@ -11,7 +11,7 @@ public class HitFrame : MoveFrame
 	public int blockStun {get; set;}
 	public MoveSequence blockStunFrames;
 
-	public HitFrame (Vector3 offset, Vector3 size, Vector3 movementDuringFrame, int damage, int hitStun, int blockStun, MoveType moveType) : base (movementDuringFrame, moveType)
+	public HitFrame (Vector2 offset, Vector3 size, Vector2 movementDuringFrame, int damage, int hitStun, int blockStun, MoveType moveType) : base (movementDuringFrame, moveType)
 		{
 		this.offset = offset;
 		this.size = size;
@@ -26,11 +26,11 @@ public class HitFrame : MoveFrame
 
 		this.isLit = true;
 		}
-	public HitFrame (Vector3 offset, Vector3 size, int damage, int hitStun, int blockStun) : base()
+	public HitFrame (Vector2 offset, Vector2 size, int damage, int hitStun, int blockStun) : base()
 	{
 		this.offset = offset;
 		this.size = size;
-		this.movementDuringFrame = Vector3.zero;
+		this.movementDuringFrame = Vector2.zero;
 
 		this.damage = damage;
 		this.hitStun = hitStun;

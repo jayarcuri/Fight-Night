@@ -58,19 +58,19 @@ public class CharacterMovement : MonoBehaviour
 			return;
 		}
 		
-		Vector3 newRotation = transform.localEulerAngles; 
+		Vector2 newRotation = transform.localEulerAngles; 
 		newRotation.y -= 180; 
 		transform.localEulerAngles = newRotation; 
 	}
 
-	public void MoveByVector (Vector3 difference)
+	public void MoveByVector (Vector2 difference)
 	{
 		Debug.Log ("Before: " + difference);
 		if (!isFacingRight) {
-			difference -= new Vector3 (difference.x * 2, 0, 0);
+			difference -= new Vector2 (difference.x * 2, 0);
 		}
 		Debug.Log ("After: " + difference);
-		Vector3 moveTo = playerBody.position;
+		Vector2 moveTo = playerBody.position;
 
 		moveTo += difference;
 		Debug.Log ("moveTo: " + moveTo);
@@ -87,7 +87,7 @@ public class CharacterMovement : MonoBehaviour
 
 		if (horizontal != 0 /*|| action == CharacterAction.Jumping*/) {
 			// variable which will be modified by checks for different states which impact movement
-			Vector3 moveTo = playerBody.position;
+			Vector2 moveTo = playerBody.position;
 
 			//if (action != CharacterAction.Jumping) {
 			if (horizontal == 1) 
@@ -95,12 +95,12 @@ public class CharacterMovement : MonoBehaviour
 			else
 				moveDirection = MovementDirection.Left;
 				
-			moveTo += Vector3.right * speed * horizontal;
+			moveTo += Vector2.right * speed * horizontal;
 			// If jumping...
 			/*else {
 				moveTo += GetJumpVelocity ();
 				if (moveDirection == MovementDirection.None) // Allow "steering" in the air if the player neutral jumps
-					moveTo += Vector3.right * speed * horizontal * jumpMovementModifier * 3/5;
+					moveTo += Vector2.right * speed * horizontal * jumpMovementModifier * 3/5;
 			}*/
 			moveTo = ConstrainPlayerPosition (moveTo);
 			playerBody.MovePosition (moveTo);
@@ -126,10 +126,10 @@ public class CharacterMovement : MonoBehaviour
 		}
 	}
 
-	Vector3 GetJumpVelocity ()
+	Vector2 GetJumpVelocity ()
 	{
 		remainingJumpTime -= Time.fixedDeltaTime; 
-		Vector3 moveBy = Vector3.zero;
+		Vector2 moveBy = Vector2.zero;
 
 		moveBy.y += currentJumpVelocity;
  
@@ -141,17 +141,17 @@ public class CharacterMovement : MonoBehaviour
 		// Move horizontal
 		switch (moveDirection) {
 		case MovementDirection.Left:
-			moveBy += Vector3.right * -speed * jumpMovementModifier;
+			moveBy += Vector2.right * -speed * jumpMovementModifier;
 			break;
 		case MovementDirection.Right:
-			moveBy += Vector3.right * speed * jumpMovementModifier;
+			moveBy += Vector2.right * speed * jumpMovementModifier;
 			break;
 		} 
 
 		return moveBy;
 	}
 
-	Vector3 ConstrainPlayerPosition (Vector3 newPosition)
+	Vector2 ConstrainPlayerPosition (Vector2 newPosition)
 	{
 		// Verify player is within bounds of level and constrain them
 		if (newPosition.y < initialHeight) {
