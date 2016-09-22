@@ -5,10 +5,10 @@ public class CharacterData {
 	HitFrame jabHitbox;
 	HitFrame AAHitbox;
 //	protected SpecialMove fireBall;
-	protected MoveSequence jab;
-	protected MoveSequence AA;
-	protected MoveSequence forwardStep;
-	protected MoveSequence backwardStep;
+	protected FrameSequence jab;
+	protected FrameSequence AA;
+	protected FrameSequence forwardStep;
+	protected FrameSequence backwardStep;
 	FrameSequence verticalJump;
 
 	public CharacterData () {
@@ -70,9 +70,9 @@ public class CharacterData {
 	}
 
 	// TODO: replace with check against hashmap implementation of a FSM
-	public virtual MoveSequence GetNewMove (CharacterAction action, MoveFrame moveFrame, DirectionalInput dInput, AttackType attack) {
+	public virtual FrameSequence GetNewMove (CharacterAction action, MoveFrame moveFrame, DirectionalInput dInput, AttackType attack) {
 		int intInput = dInput.GetNumpadNotation();
-		MoveSequence newMove = null;
+		FrameSequence newMove = null;
 		 // TODO: set up assignment which makes sense in context of current architecture
 		if (CharacterAction.Standing.Equals(action) && moveFrame == null) {
 			if (attack == AttackType.Light) {
@@ -82,7 +82,7 @@ public class CharacterData {
 			else if (intInput == 6)
 				newMove = GetForwardStep ();
 			else if (intInput == 8) {
-				newMove = 
+				//newMove = 
 			}
 			
 //			// TODO: implement special moves
@@ -97,22 +97,22 @@ public class CharacterData {
 		return newMove;
 	}
 
-	protected MoveSequence GetForwardStep() {
+	protected FrameSequence GetForwardStep() {
 		return forwardStep;
 	}
 
-	protected MoveSequence GetBackwardStep() {
+	protected FrameSequence GetBackwardStep() {
 		return backwardStep;
 	}
 
-	protected virtual MoveSequence GetLightAttack() {
+	protected virtual FrameSequence GetLightAttack() {
 		return jab;
 	}
 
-	protected virtual MoveSequence GetMidAttack () {
+	protected virtual FrameSequence GetMidAttack () {
 		return null;
 	}
-	protected virtual MoveSequence GetHeavyAttack () {
+	protected virtual FrameSequence GetHeavyAttack () {
 		return AA;
 	}
 }

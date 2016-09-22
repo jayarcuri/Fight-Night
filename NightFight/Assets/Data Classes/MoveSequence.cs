@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MoveSequence {
+public class MoveSequence : FrameSequence {
 	int index;
 	MoveFrame[] moveSequence;
 
