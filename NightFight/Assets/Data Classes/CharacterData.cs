@@ -17,7 +17,7 @@ public class CharacterData {
 //			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
 //			AA);
 
-		verticalJump = new JumpSequence (32, 3.5, 0.0);
+		verticalJump = new JumpSequence (40, 3.5, 0.0);
 		jabHitbox = new HitFrame (new Vector3 (0.8f, 0.2f, 0f), 
 			new Vector3 (.7f, .25f, 1f), Vector3.zero, 1, 7, 6, MoveType.ACTIVE);
 		jab = new MoveSequence (new MoveFrame[]{
@@ -82,7 +82,8 @@ public class CharacterData {
 			else if (intInput == 6)
 				newMove = GetForwardStep ();
 			else if (intInput == 8) {
-				//newMove = 
+				Debug.Log ("Wavves");
+				newMove = verticalJump;
 			}
 			
 //			// TODO: implement special moves

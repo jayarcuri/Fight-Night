@@ -75,6 +75,8 @@ public class FrameManager : MonoBehaviour
 			} else if (MoveType.IN_HITSTUN.Equals (currentFrame.moveType)) {
 				float moveBy = -0.5f;
 				characterMovement.MoveByVector (new Vector3 (moveBy, 0f, 0f));
+			} else if (currentFrame.movementDuringFrame != Vector3.zero) {
+				characterMovement.MoveByVector (currentFrame.movementDuringFrame);
 			}
 			else {
 				ExecuteNextFrame (currentFrame);

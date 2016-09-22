@@ -12,16 +12,16 @@ public class JumpSequence : FrameSequence {
 	public JumpSequence(int jumpLengthInFrames, double jumpHeight, double horizontalDistanceCovered) {
 		SetUp ();
 		this.maxJumpHeight = jumpHeight;
-		this.velocity = new Vector2 ((float) jumpHeight * 2 / jumpLengthInFrames, (float) horizontalDistanceCovered / jumpLengthInFrames);
+		this.velocity = new Vector2 ((float) horizontalDistanceCovered / jumpLengthInFrames, (float) jumpHeight * 2 / jumpLengthInFrames);
 	}
 
 	public MoveFrame GetNext() {
 		if (HasNext ()) {
-			currentHeight += velocity.x;
+			currentHeight += velocity.y;
 
 			if (currentHeight >= maxJumpHeight) {
 				isFalling = true;
-				velocity = new Vector2 (-velocity.x, velocity.y);
+				velocity = new Vector2 (velocity.x, -velocity.y);
 			}
 
 			return new MoveFrame (velocity, MoveType.AIRBORNE);
@@ -48,7 +48,7 @@ public class JumpSequence : FrameSequence {
 
 	public void Reset () {
 		if (isFalling) {
-			velocity = new Vector2 (-velocity.x, velocity.y);
+			velocity = new Vector2 (velocity.x, -velocity.y);
 		}
 		SetUp ();
 	}
