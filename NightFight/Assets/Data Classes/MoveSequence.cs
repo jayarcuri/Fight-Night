@@ -40,7 +40,7 @@ public class MoveSequence {
 			returnMove = moveSequence [index - 1];
 		return returnMove;
 	}
-
+	// appears to exist only to test; consider deleting
 	public virtual int MoveLength () {
 		return moveSequence.Length;
 	}
