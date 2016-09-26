@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 /*	
@@ -13,6 +14,8 @@ public class FrameManager : MonoBehaviour
 	public Light bodyLight;
 	// To flip orientation if necessary. Move to CharacterMovement.
 	public CharacterMovement characterMovement;
+	public Text healthText;
+	string defaultHealthText;
 	CharacterState characterState;
 	CharacterManager characterManager;
 	InputManager InputManager;
@@ -29,6 +32,7 @@ public class FrameManager : MonoBehaviour
 		bodyLight = GetComponentInChildren<Light> ();
 		hitBox = GetComponentInChildren<HitboxController> ();
 		bodyLight.enabled = false;
+		defaultHealthText = healthText.text;
 
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
@@ -62,6 +66,7 @@ public class FrameManager : MonoBehaviour
 		if (pendingAttackHitbox != null) {
 			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame();
 			characterState.TakeDamage (hit.damage);
+			healthText.text = defaultHealthText + characterState.health;
 			// TODO: assign hitstun to character
 			characterManager.QueueMove(pendingAttackHitbox.GetCurrentMoveHitstun());
 			pendingAttackHitbox.Reset ();

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 public class CharacterState {
-	protected int health;
-	protected float charge = 0f;
+	public int health { get; private set; }
+	public float charge { get; private set; }
 	public bool defaultOrientation;
 	public CharacterAction action = CharacterAction.Standing;
 	public MovementDirection moveDirection = MovementDirection.None;
@@ -11,6 +11,7 @@ public class CharacterState {
 
 	public CharacterState (int maxHealth) {
 		health = maxHealth;
+		charge = 0f;
 	}
 
 	public virtual bool CanAct() {
@@ -24,5 +25,9 @@ public class CharacterState {
 	public void TakeDamage(int damage) {
 		health -= damage;
 		// TODO: if health <= 0, win game.
+	}
+
+	public int GetCurrentHealth () {
+		return health;
 	}
 }
