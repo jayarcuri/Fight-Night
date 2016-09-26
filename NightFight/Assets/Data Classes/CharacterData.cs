@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 public class CharacterData {
-	public readonly int maxHealth = 25;
+	public readonly int maxHealth = 3;
 	HitFrame jabHitbox;
 	HitFrame AAHitbox;
 //	protected SpecialMove fireBall;

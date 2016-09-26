@@ -26,7 +26,7 @@ public class CharacterManager {
 		currentMoveFrame = currentMove != null && currentMove.HasNext () ? currentMove.GetNext () : null;
 
 		if (currentMoveFrame != null) {
-			Debug.Log(currentMoveFrame.moveType);
+		//	Debug.Log(currentMoveFrame.moveType);
 		}
 
 		return currentMoveFrame;

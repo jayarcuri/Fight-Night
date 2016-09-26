@@ -15,6 +15,7 @@ public class FrameManager : MonoBehaviour
 	// To flip orientation if necessary. Move to CharacterMovement.
 	public CharacterMovement characterMovement;
 	public Text healthText;
+	public GameObject victoryWindow;
 	string defaultHealthText;
 	CharacterState characterState;
 	CharacterManager characterManager;
@@ -33,6 +34,9 @@ public class FrameManager : MonoBehaviour
 		hitBox = GetComponentInChildren<HitboxController> ();
 		bodyLight.enabled = false;
 		defaultHealthText = healthText.text;
+		healthText.text = defaultHealthText + characterState.health;
+
+		//victoryWindow = GameObject.FindGameObjectWithTag ("VictoryWindow");
 
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
@@ -67,6 +71,11 @@ public class FrameManager : MonoBehaviour
 			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame();
 			characterState.TakeDamage (hit.damage);
 			healthText.text = defaultHealthText + characterState.health;
+			// TODO: remove horrid temporary win code from here
+			if (characterState.health <= 0) {
+				victoryWindow.SetActive (true);
+				Time.timeScale = 0;
+			}
 			// TODO: assign hitstun to character
 			characterManager.QueueMove(pendingAttackHitbox.GetCurrentMoveHitstun());
 			pendingAttackHitbox.Reset ();
