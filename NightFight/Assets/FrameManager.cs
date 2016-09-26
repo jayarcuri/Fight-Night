@@ -15,7 +15,7 @@ public class FrameManager : MonoBehaviour
 	public CharacterMovement characterMovement;
 	CharacterState characterState;
 	CharacterManager characterManager;
-	InputController inputController;
+	InputManager InputManager;
 	MoveFrame previousFrame;
 	public HitboxController pendingAttackHitbox;
 
@@ -24,7 +24,7 @@ public class FrameManager : MonoBehaviour
 		characterManager = new CharacterManager ();
 		characterState = new CharacterState (characterManager.GetStartingHealth());
 		pendingAttackHitbox = null;
-		inputController = GetComponent<InputController> ();
+		InputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
 		bodyLight = GetComponentInChildren<Light> ();
 		hitBox = GetComponentInChildren<HitboxController> ();
@@ -44,7 +44,7 @@ public class FrameManager : MonoBehaviour
 		DirectionalInput directionalInput;
 		AttackType attack;
 		if (isPlayer1)
-			inputController.GetInputs (out directionalInput, out attack);
+			InputManager.GetInputs (out directionalInput, out attack);
 		else {
 			directionalInput = DirectionalInput.Neutral;
 			attack = AttackType.None;

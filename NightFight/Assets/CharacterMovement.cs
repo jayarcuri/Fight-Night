@@ -65,15 +65,12 @@ public class CharacterMovement : MonoBehaviour
 
 	public void MoveByVector (Vector2 difference)
 	{
-		Debug.Log ("Before: " + difference);
 		if (!isFacingRight) {
 			difference -= new Vector2 (difference.x * 2, 0);
 		}
-		Debug.Log ("After: " + difference);
 		Vector2 moveTo = playerBody.position;
 
 		moveTo += difference;
-		Debug.Log ("moveTo: " + moveTo);
 		moveTo = ConstrainPlayerPosition (moveTo);
 		playerBody.MovePosition (moveTo);
 	}

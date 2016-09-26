@@ -28,18 +28,11 @@ public class JumpSequence : IFrameSequence {
 		} else {
 			throw new System.IndexOutOfRangeException("Current sequence does not have a next move!");
 		}
+
 	}
 
 	public bool HasNext() {
 		return (!isFalling || currentHeight > 0);
-	}
-
-	public MoveFrame GetPreviousFrame () {
-		MoveFrame peekFrame;
-
-		peekFrame = HasNext () ? new MoveFrame (velocity, MoveType.AIRBORNE) : null;
-
-		return peekFrame; 
 	}
 
 	public int MoveLength () {

@@ -92,6 +92,7 @@ public class CharacterData {
 			} else if (intInput == 9) {
 				newMove = forwardJump;
 			}
+				
 			
 //			// TODO: implement special moves
 //			bool ready = fireBall.ReadyMove (dInput);

@@ -1,19 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InputController : MonoBehaviour {
+public class InputManager : MonoBehaviour {
 	public string horizontalAxis;
 	public string verticalAxis;
-	public string jump;
 	public string lightAttack;
 	public string heavyAtack;
-	public CharacterMovement playerMovement;
-	public CharacterController characterController;
-
-	void Start () {
-		playerMovement = GetComponent<CharacterMovement> ();
-		characterController = GetComponent<CharacterController> ();
-	}
 
 	// Inputs are represented by an enum which corresponds with an int 
 

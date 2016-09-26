@@ -23,7 +23,6 @@ public class CharacterState {
 
 	public void TakeDamage(int damage) {
 		health -= damage;
-		Debug.Log("New health total is " + health);
 		// TODO: if health <= 0, win game.
 	}
 }
