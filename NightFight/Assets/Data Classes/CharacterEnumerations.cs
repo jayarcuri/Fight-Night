@@ -1,6 +1,7 @@
 ﻿using System;
 
 public enum AttackType {
+	Block,
 	Light, 
 	Heavy,
 	Throw,
@@ -17,6 +18,7 @@ public enum MoveType {
 	STARTUP,
 	RECOVERY,
 	ACTIVE,
+	BLOCKING,
 	AIRBORNE,
 	INVLUNERABLE,
 	STEP_BACK,

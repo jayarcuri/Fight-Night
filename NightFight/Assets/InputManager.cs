@@ -6,6 +6,7 @@ public class InputManager : MonoBehaviour {
 	public string verticalAxis;
 	public string lightAttack;
 	public string heavyAtack;
+	public string block;
 
 	// Inputs are represented by an enum which corresponds with an int 
 
@@ -21,6 +22,9 @@ public class InputManager : MonoBehaviour {
 		} // Light uses GetButton to allow for chaining jabs
 		else if (Input.GetButton (lightAttack)) {
 			attack = AttackType.Light;
+		} else if (Input.GetButton (block)) {
+			attack = AttackType.Block;
+			Debug.Log ("Block Button pressed.");
 		} else
 			attack = AttackType.None;
 	}

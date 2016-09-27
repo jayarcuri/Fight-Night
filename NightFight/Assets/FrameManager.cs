@@ -36,8 +36,6 @@ public class FrameManager : MonoBehaviour
 		defaultHealthText = healthText.text;
 		healthText.text = defaultHealthText + characterState.health;
 
-		//victoryWindow = GameObject.FindGameObjectWithTag ("VictoryWindow");
-
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
 		
@@ -55,7 +53,7 @@ public class FrameManager : MonoBehaviour
 			InputManager.GetInputs (out directionalInput, out attack);
 		else {
 			directionalInput = DirectionalInput.Neutral;
-			attack = AttackType.None;
+			attack = AttackType.Block;
 		}
 		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
 		if (!characterManager.HasQueuedFrames ()) {
@@ -69,8 +67,15 @@ public class FrameManager : MonoBehaviour
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {
 			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame();
-			characterState.TakeDamage (hit.damage);
-			healthText.text = defaultHealthText + characterState.health;
+			MoveSequence inducedMoveSequence;
+			if (currentFrame.moveType != MoveType.BLOCKING) {
+				characterState.TakeDamage (hit.damage);
+				healthText.text = defaultHealthText + characterState.health;
+				inducedMoveSequence = pendingAttackHitbox.GetCurrentMoveHitstun ();
+			} else {
+				// TODO: would normally get blockstun frames
+				inducedMoveSequence = pendingAttackHitbox.GetCurrentMoveHitstun ();
+			}
 			// TODO: remove horrid temporary win code from here
 			if (characterState.health <= 0) {
 				victoryWindow.SetActive (true);
@@ -83,6 +88,11 @@ public class FrameManager : MonoBehaviour
 		}
 
 		if (currentFrame != null) {
+			
+			/*if (currentFrame.moveType == MoveType.BLOCKING) {
+				Debug.Log ("Character is blocking.");
+			}*/
+
 			if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
 				characterMovement.Move (currentFrame);
 			} else if (MoveType.IN_HITSTUN.Equals (currentFrame.moveType)) {

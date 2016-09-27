@@ -9,6 +9,7 @@ public class CharacterData {
 	protected IFrameSequence AA;
 	protected IFrameSequence forwardStep;
 	protected IFrameSequence backwardStep;
+	protected IFrameSequence block;
 	IFrameSequence verticalJump;
 	IFrameSequence forwardJump;
 	IFrameSequence backwardJump;
@@ -64,6 +65,11 @@ public class CharacterData {
 			new MoveFrame (),
 			new MoveFrame ()
 		});
+
+		block = new MoveSequence (new MoveFrame[] {
+			new MoveFrame(MoveType.BLOCKING)
+			}
+		);
 	
 		forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
 		backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
@@ -81,9 +87,11 @@ public class CharacterData {
 		if (CharacterAction.Standing.Equals(action)) {
 			if (attack == AttackType.Light) {
 				newMove = GetLightAttack ();
-			} else if (intInput == 4)
+			} else if (attack == AttackType.Block) {
+				newMove = block;
+			} else if (intInput == 4) {
 				newMove = GetBackwardStep ();
-			else if (intInput == 6)
+			} else if (intInput == 6)
 				newMove = GetForwardStep ();
 			else if (intInput == 7) {
 				newMove = backwardJump;
