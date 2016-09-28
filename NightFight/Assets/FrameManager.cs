@@ -53,7 +53,8 @@ public class FrameManager : MonoBehaviour
 			InputManager.GetInputs (out directionalInput, out attack);
 		else {
 			directionalInput = DirectionalInput.Neutral;
-			attack = AttackType.Block;
+			//attack = AttackType.Block;
+			attack = AttackType.None;
 		}
 		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
 		if (!characterManager.HasQueuedFrames ()) {
@@ -68,7 +69,7 @@ public class FrameManager : MonoBehaviour
 		if (pendingAttackHitbox != null) {
 			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame();
 			MoveSequence inducedMoveSequence;
-			if (currentFrame.moveType != MoveType.BLOCKING) {
+			if (currentFrame == null || currentFrame.moveType != MoveType.BLOCKING) {
 				characterState.TakeDamage (hit.damage);
 				healthText.text = defaultHealthText + characterState.health;
 				inducedMoveSequence = pendingAttackHitbox.GetCurrentMoveHitstun ();
