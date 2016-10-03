@@ -82,23 +82,16 @@ public class CharacterMovement : MonoBehaviour
 		if (!isFacingRight)
 			horizontal *= -1;
 
-		if (horizontal != 0 /*|| action == CharacterAction.Jumping*/) {
+		if (horizontal != 0) {
 			// variable which will be modified by checks for different states which impact movement
 			Vector2 moveTo = playerBody.position;
 
-			//if (action != CharacterAction.Jumping) {
 			if (horizontal == 1) 
 				moveDirection = MovementDirection.Right;
 			else
 				moveDirection = MovementDirection.Left;
 				
 			moveTo += Vector2.right * speed * horizontal;
-			// If jumping...
-			/*else {
-				moveTo += GetJumpVelocity ();
-				if (moveDirection == MovementDirection.None) // Allow "steering" in the air if the player neutral jumps
-					moveTo += Vector2.right * speed * horizontal * jumpMovementModifier * 3/5;
-			}*/
 			moveTo = ConstrainPlayerPosition (moveTo);
 			playerBody.MovePosition (moveTo);
 		} else {

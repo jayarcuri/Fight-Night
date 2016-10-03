@@ -60,7 +60,7 @@ public class FrameManager : MonoBehaviour
 		if (!characterManager.HasQueuedFrames ()) {
 			characterMovement.FlipRotation ();
 		}
-
+		// unneccesary unless orientation has flipped
 		bool isFacingRight = characterMovement.isFacingRight;
 
 		if (!isFacingRight) {
