@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 public class CharacterData {
-	public readonly int maxHealth = 3;
+	public readonly int maxHealth = 25;
 	HitFrame jabHitbox;
 	HitFrame AAHitbox;
 //	protected SpecialMove fireBall;
@@ -25,45 +25,46 @@ public class CharacterData {
 
 		jabHitbox = new HitFrame (new Vector2 (0.8f, 0.2f), 
 			new Vector3 (.7f, .25f, 1f), Vector2.zero, 1, 7, 6, MoveType.ACTIVE);
+		MoveFrame neutralFrame = MoveFrame.GetLitMoveFrame ();
 		jab = new MoveSequence (new MoveFrame[]{
-			new MoveFrame (), 
-			new MoveFrame (),
+			neutralFrame, 
+			neutralFrame,
 			jabHitbox,
 			jabHitbox,
 			jabHitbox,
 			jabHitbox,
 			jabHitbox,
 			jabHitbox,
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame ()
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame
 		});
 
 		AAHitbox = new HitFrame (new Vector2 (0.6f, 0.6f), new Vector3 (.7f, .8f, 1f), Vector2.zero, 4, 11, 7, MoveType.ACTIVE);
 		AA = new MoveSequence (new MoveFrame[] {
-			new MoveFrame (), 
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
+			neutralFrame, 
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
 			AAHitbox,
 			AAHitbox,
 			AAHitbox,
 			AAHitbox,
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame (),
-			new MoveFrame ()
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame
 		});
 
 		block = new MoveSequence (new MoveFrame[] {

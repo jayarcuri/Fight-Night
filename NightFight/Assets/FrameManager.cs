@@ -111,12 +111,13 @@ public class FrameManager : MonoBehaviour
 			}
 		}
 
-		// TODO: implement collision checking.
-
-		if (attack != AttackType.None)
-			bodyLight.enabled = true;
-		else
+		if (currentFrame == null || !currentFrame.isLit) {
 			bodyLight.enabled = false;
+		} else {
+			bodyLight.enabled = true;
+		}
+
+		// TODO: implement collision checking here
 
 		previousFrame = currentFrame;
 	}
