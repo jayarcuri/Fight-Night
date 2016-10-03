@@ -18,4 +18,8 @@ public class DashSequence : IFrameSequence {
 	public void Reset () {
 		return;
 	}
+
+	public MoveFrame Peek () {
+		return null;
+	}
 }

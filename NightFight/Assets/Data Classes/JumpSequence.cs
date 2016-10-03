@@ -19,7 +19,7 @@ public class JumpSequence : IFrameSequence {
 		if (HasNext ()) {
 			currentHeight += velocity.y;
 
-			if (currentHeight >= maxJumpHeight) {
+			if (currentHeight >= maxJumpHeight && !isFalling) {
 				isFalling = true;
 				velocity = new Vector2 (velocity.x, -velocity.y);
 			}
@@ -44,6 +44,18 @@ public class JumpSequence : IFrameSequence {
 			velocity = new Vector2 (velocity.x, -velocity.y);
 		}
 		SetUp ();
+	}
+
+	public MoveFrame Peek () {
+		Vector2 nextFrame;
+
+		if (isFalling || currentHeight + velocity.y >= maxJumpHeight) {
+			nextFrame = new Vector2 (velocity.x, -velocity.y);
+		} else {
+			nextFrame = new Vector2 (velocity.x, velocity.y);
+		}
+
+		return new MoveFrame (nextFrame, MoveType.AIRBORNE);
 	}
 
 	public void AddSupplimentaryFrameSequence (IFrameSequence newSequence) {

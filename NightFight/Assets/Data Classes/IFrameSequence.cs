@@ -20,5 +20,7 @@ public interface IFrameSequence
 	/// </summary>
 	void Reset ();
 
+	MoveFrame Peek ();
+
 }
 

@@ -95,7 +95,7 @@ public class FrameManager : MonoBehaviour
 				Time.timeScale = 0;
 			}
 			// TODO: assign hitstun to character
-			characterManager.QueueMove(pendingAttackHitbox.GetCurrentMoveHitstun());
+			characterManager.QueueMove(inducedMoveSequence);
 			pendingAttackHitbox.Reset ();
 			pendingAttackHitbox = null;
 		}

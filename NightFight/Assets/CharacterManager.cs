@@ -46,6 +46,11 @@ public class CharacterManager {
 		if (this.currentMove == null || !this.currentMove.HasNext ()) {
 			newMove = characterData.GetNewMove (characterState.GetCurrentAction (), directionalInput, attackType);
 		}
+		if (this.currentMove.HasNext ()) {
+			MoveFrame nextFrameToExecute = this.currentMove.Peek ();
+			newMove = characterData.GetNewMove (nextFrameToExecute, directionalInput, attackType);
+		}
+		
 		if (newMove != null) {
 			QueueMove (newMove);
 		}

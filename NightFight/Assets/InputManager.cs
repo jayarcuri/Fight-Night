@@ -24,7 +24,6 @@ public class InputManager : MonoBehaviour {
 			attack = AttackType.Light;
 		} else if (Input.GetButton (block)) {
 			attack = AttackType.Block;
-			Debug.Log ("Block Button pressed.");
 		} else
 			attack = AttackType.None;
 	}
