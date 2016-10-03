@@ -46,7 +46,7 @@ public class CharacterData {
 			new MoveFrame ()
 		});
 
-		AAHitbox = new HitFrame (new Vector2 (0.6f, 0.4f), new Vector3 (.7f, .5f, 1f), Vector2.zero, 4, 11, 7, MoveType.ACTIVE);
+		AAHitbox = new HitFrame (new Vector2 (0.6f, 0.6f), new Vector3 (.7f, .8f, 1f), Vector2.zero, 4, 11, 7, MoveType.ACTIVE);
 		AA = new MoveSequence (new MoveFrame[] {
 			new MoveFrame (), 
 			new MoveFrame (),
@@ -87,6 +87,8 @@ public class CharacterData {
 		if (CharacterAction.Standing.Equals(action)) {
 			if (attack == AttackType.Light) {
 				newMove = GetLightAttack ();
+			} else if (attack == AttackType.Block) {
+				newMove = GetHeavyAttack ();
 			} else if (attack == AttackType.Block) {
 				newMove = block;
 			} else if (intInput == 4) {
