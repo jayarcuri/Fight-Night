@@ -7,40 +7,40 @@ public class DirectionalInputTests {
 	[Test]
 	public void TestAllDeclaringConfigurations() {
 		DirectionalInput one = new DirectionalInput (-1, -1);
-		//Console.WriteLine (one.GetNumpadNotation ());
-		Assert.IsTrue (one.GetNumpadNotation () == 1);
+		//Console.WriteLine (one.numpadValue);
+		Assert.IsTrue (one.numpadValue == 1);
 
 		DirectionalInput two = new DirectionalInput (0, -1);
-		//Console.WriteLine (two.GetNumpadNotation ());
-		Assert.IsTrue (two.GetNumpadNotation () == 2);
+		//Console.WriteLine (two.numpadValue);
+		Assert.IsTrue (two.numpadValue == 2);
 
 		DirectionalInput three = new DirectionalInput (1, -1);
-		//Console.WriteLine (three.GetNumpadNotation ());
-		Assert.IsTrue (three.GetNumpadNotation () == 3);
+		//Console.WriteLine (three.numpadValue);
+		Assert.IsTrue (three.numpadValue == 3);
 
 		DirectionalInput four = new DirectionalInput (-1, 0);
-		//Console.WriteLine (four.GetNumpadNotation ());
-		Assert.IsTrue (four.GetNumpadNotation () == 4);
+		//Console.WriteLine (four.numpadValue);
+		Assert.IsTrue (four.numpadValue == 4);
 
 		DirectionalInput five = new DirectionalInput (0, 0);
-		//Console.WriteLine (five.GetNumpadNotation ());
-		Assert.IsTrue (five.GetNumpadNotation () == 5);
+		//Console.WriteLine (five.numpadValue);
+		Assert.IsTrue (five.numpadValue == 5);
 
 		DirectionalInput six = new DirectionalInput (1, 0);
-		//Console.WriteLine (six.GetNumpadNotation ());
-		Assert.IsTrue (six.GetNumpadNotation () == 6);
+		//Console.WriteLine (six.numpadValue);
+		Assert.IsTrue (six.numpadValue == 6);
 
 		DirectionalInput seven = new DirectionalInput (-1, 1);
-		//Console.WriteLine (seven.GetNumpadNotation ());
-		Assert.IsTrue (seven.GetNumpadNotation () == 7);
+		//Console.WriteLine (seven.numpadValue);
+		Assert.IsTrue (seven.numpadValue == 7);
 
 		DirectionalInput eight = new DirectionalInput (0, 1);
-		//Console.WriteLine (eight.GetNumpadNotation ());
-		Assert.IsTrue (eight.GetNumpadNotation () == 8);
+		//Console.WriteLine (eight.numpadValue);
+		Assert.IsTrue (eight.numpadValue == 8);
 
 		DirectionalInput nine = new DirectionalInput (1, 1);
-		//Console.WriteLine (nine.GetNumpadNotation ());
-		Assert.IsTrue (nine.GetNumpadNotation () == 9);
+		//Console.WriteLine (nine.numpadValue);
+		Assert.IsTrue (nine.numpadValue == 9);
 	}
 
 	[Test]

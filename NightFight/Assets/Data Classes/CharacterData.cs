@@ -82,10 +82,36 @@ public class CharacterData {
 
 	// TODO: replace with check against hashmap implementation of a FSM
 	public virtual IFrameSequence GetNewMove (CharacterAction action, DirectionalInput dInput, AttackType attack) {
-		int intInput = dInput.GetNumpadNotation();
+		int intInput = dInput.numpadValue;
 		IFrameSequence newMove = null;
-		 // TODO: set up assignment which makes sense in context of current architecture
-		if (CharacterAction.Standing.Equals(action)) {
+		 
+		// 1. feed input into special move camp; see if anything sticks
+		//		i. if a special move is able to be executed & a button is being pressed, get that special move 
+
+		//			TODO: implement special moves
+		//			bool ready = fireBall.ReadyMove (dInput);
+		//			if (ready) {
+		//				newMove = fireBall.GetSpecialMove (attack);
+		// 			}
+
+		// 2. proceed thru remaining order and attempt to grab a value
+		if (intInput >= 7) {
+			// newMove = hashmap.Get(intInput)
+			// if newMove != null
+			// 		goto end
+		}
+		if (!AttackType.None.Equals (attack)) {
+			// newMove = hashmap.Get(attack);
+			// if newMove != null
+			// 		goto end
+		}
+		// newMove = hashmap.Get(intInput);
+		// if newMove != null
+		// 		goto end
+
+
+
+		if (CharacterAction.Standing.Equals (action)) {
 			if (attack == AttackType.Light) {
 				newMove = GetLightAttack ();
 			} else if (attack == AttackType.Block) {
@@ -93,9 +119,12 @@ public class CharacterData {
 			} else if (attack == AttackType.Block) {
 				newMove = block;
 			} else if (intInput == 4) {
+				Debug.Log ("backwards");
 				newMove = GetBackwardStep ();
-			} else if (intInput == 6)
+			} else if (intInput == 6) {
+				Debug.Log ("forwards");
 				newMove = GetForwardStep ();
+			}
 			else if (intInput == 7) {
 				newMove = backwardJump;
 			} else if (intInput == 8) {
@@ -103,13 +132,8 @@ public class CharacterData {
 			} else if (intInput == 9) {
 				newMove = forwardJump;
 			}
+		}
 				
-			
-//			// TODO: implement special moves
-//			bool ready = fireBall.ReadyMove (dInput);
-//			if (ready)
-//				newMove = fireBall.GetSpecialMove (attack);
-	}
 		if (newMove != null) {
 			// DO NOT DELETE THIS. This line ensures that a MoveSequence can be used more than once.
 			newMove.Reset();

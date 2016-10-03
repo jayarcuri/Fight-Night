@@ -12,10 +12,13 @@ public class DirectionalInput
 
 	public int verticalInput { get; protected set; }
 
+	public int numpadValue { get; protected set; }
+
 	public DirectionalInput (int horizontalInput, int verticalInput)
 	{
 		this.horizontalInput = horizontalInput;
 		this.verticalInput = verticalInput;
+		numpadValue = GetNumpadNotation (verticalInput, horizontalInput);
 	}
 
 	public DirectionalInput (int numpadRepresentation)
@@ -39,9 +42,10 @@ public class DirectionalInput
 
 		horizontalInput = horizontal;
 		verticalInput = vertical;
+		numpadValue = numpadRepresentation;
 	}
 
-	public int GetNumpadNotation ()
+	private int GetNumpadNotation (int verticalInput, int horizontalInput)
 	{
 		int numpadInt = 5;
 		numpadInt += verticalInput * 3;
@@ -53,6 +57,7 @@ public class DirectionalInput
 	public void FlipHorizontalInput ()
 	{
 		horizontalInput *= -1;
+		numpadValue = GetNumpadNotation (verticalInput, horizontalInput);
 	}
 
 	public bool Equals(DirectionalInput p)

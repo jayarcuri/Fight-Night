@@ -42,7 +42,6 @@ public class CharacterManager {
 	}
 
 	void ResolveInput(DirectionalInput directionalInput, AttackType attackType) {
-		MoveFrame currentFrame;
 		IFrameSequence newMove = null;
 		if (this.currentMove == null || !this.currentMove.HasNext ()) {
 			newMove = characterData.GetNewMove (characterState.GetCurrentAction (), directionalInput, attackType);

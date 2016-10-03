@@ -23,6 +23,10 @@ public class FrameManager : MonoBehaviour
 	MoveFrame previousFrame;
 	public HitboxController pendingAttackHitbox;
 
+	public bool isBot;
+	public int botDirectionalInputRaw;
+	public AttackType botAttackInput;
+
 	void Start ()
 	{
 		characterManager = new CharacterManager ();
@@ -51,6 +55,10 @@ public class FrameManager : MonoBehaviour
 		AttackType attack;
 		if (isPlayer1)
 			InputManager.GetInputs (out directionalInput, out attack);
+		else if (isBot) {
+			directionalInput = new DirectionalInput(botDirectionalInputRaw);
+			attack = botAttackInput;
+		}
 		else {
 			directionalInput = DirectionalInput.Neutral;
 			//attack = AttackType.Block;
@@ -93,10 +101,6 @@ public class FrameManager : MonoBehaviour
 		}
 
 		if (currentFrame != null) {
-			
-			/*if (currentFrame.moveType == MoveType.BLOCKING) {
-				Debug.Log ("Character is blocking.");
-			}*/
 
 			if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
 				characterMovement.Move (currentFrame);
