@@ -14,6 +14,19 @@ public class CharacterManager {
 		currentMove = null;
 	}
 
+	public void QueueMove(IFrameSequence newMove) {
+		currentMove = newMove;
+		currentMove.Reset ();
+	}
+
+	public bool HasQueuedFrames() {
+		return currentMove != null && currentMove.HasNext ();
+	}
+
+	public int GetStartingHealth() {
+		return characterData.maxHealth;
+	}
+
 	public MoveFrame GetCurrentFrame(DirectionalInput directionalInput, AttackType attackType) {
 		MoveFrame currentMoveFrame;
 
@@ -21,24 +34,7 @@ public class CharacterManager {
 
 		currentMoveFrame = currentMove != null && currentMove.HasNext () ? currentMove.GetNext () : null;
 
-		if (currentMoveFrame != null) {
-		//	Debug.Log(currentMoveFrame.moveType);
-		}
-
 		return currentMoveFrame;
-	}
-
-	public bool HasQueuedFrames() {
-		return currentMove != null && currentMove.HasNext ();
-	}
-
-	public void QueueMove(IFrameSequence newMove) {
-		currentMove = newMove;
-		currentMove.Reset ();
-	}
-
-	public int GetStartingHealth() {
-		return characterData.maxHealth;
 	}
 
 	void ResolveInput(DirectionalInput directionalInput, AttackType attackType) {

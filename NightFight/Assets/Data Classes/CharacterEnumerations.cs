@@ -1,11 +1,11 @@
 ﻿using System;
 
 public enum AttackType {
-	Block,
-	Light, 
-	Heavy,
-	Throw,
-	None
+	Light = 'A', 
+	Heavy = 'C',
+	Throw = 'T',
+	Block = 'X',
+	None = 'Z'
 }
 public enum CharacterAction {
 	Standing, 

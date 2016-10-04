@@ -32,7 +32,7 @@ public class CharacterManagerTests {
 		// Make jump get enqueued
 		// test that jump is currently occurring.
 		tester.GetCurrentFrame (DirectionalInput.Neutral, AttackType.Light);
-
+		Console.WriteLine ((char)AttackType.Light);
 		// Make jump attack become enqueued
 		// test that attack is actually enqueued (hit frame on appropriate frame)
 	}
