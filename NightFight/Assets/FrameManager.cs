@@ -74,8 +74,9 @@ public class FrameManager : MonoBehaviour
 		if (!isFacingRight) {
 			directionalInput.FlipHorizontalInput ();
 		}
-
-		MoveFrame currentFrame = characterManager.GetCurrentFrame (directionalInput, attack);
+		MoveFrame currentFrame = null;
+		if (isPlayer1)
+			currentFrame = characterManager.GetCurrentFrame (directionalInput, attack);
 
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {

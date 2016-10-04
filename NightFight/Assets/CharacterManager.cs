@@ -37,7 +37,7 @@ public class CharacterManager
 	{
 		IFrameSequence newMove = null;
 		IFrameSequence currentMoveSequence = this.currentMove;
-		MoveFrame nextFrameToExecute = currentMoveSequence.HasNext () ? currentMoveSequence.Peek () : null;
+		MoveFrame nextFrameToExecute = currentMoveSequence != null && currentMoveSequence.HasNext () ? currentMoveSequence.Peek () : null;
 		// ---Attempt to enqueue a new move using input---
 		//
 		// If there is no current Sequence or it would resolve, give input to neutral state to get new Sequence
