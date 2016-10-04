@@ -7,13 +7,13 @@ public class JumpSequenceTests {
 
 	[Test]
 	public void TestResolvesInExpectedTime() {
-		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f);
+		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null);
 		TestAppropriateResolution (testRunner, 10);
 	}
 
 	[Test]
 	public void TestJumpSequenceReset() {
-		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f);
+		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null);
 		for (int i = 0; i < 10; i++) {
 			testRunner.GetNext ();
 		}

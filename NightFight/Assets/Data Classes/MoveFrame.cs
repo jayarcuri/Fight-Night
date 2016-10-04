@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MoveFrame {
 	public MoveType moveType = MoveType.RECOVERY;
 	public Vector2 movementDuringFrame;
+	public Dictionary<string, IFrameSequence> cancellableTo = new Dictionary<string, IFrameSequence> ();
 	public bool isLit;
 
 	public MoveFrame() {

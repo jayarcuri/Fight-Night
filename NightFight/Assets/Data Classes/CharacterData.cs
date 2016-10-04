@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class CharacterData {
 	public readonly int maxHealth = 25;
@@ -19,13 +20,18 @@ public class CharacterData {
 //			new SpecialMove (
 //			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
 //			AA);
-		verticalJump = new JumpSequence (40, 3.5, 0.0);
-		forwardJump = new JumpSequence (40, 3.5, 2.5);
-		backwardJump = new JumpSequence (40, 3.5, -2.5);
+		MoveFrame neutralFrame = MoveFrame.GetLitMoveFrame ();
+		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
+		MoveSequence jumpAttack = new MoveSequence (new MoveFrame[] {
+			neutralFrame
+		});
+		cancelsForJump.Add ("L", jumpAttack);
+		verticalJump = new JumpSequence (40, 3.5, 0.0, cancelsForJump);
+		forwardJump = new JumpSequence (40, 3.5, 2.5, cancelsForJump);
+		backwardJump = new JumpSequence (40, 3.5, -2.5, cancelsForJump);
 
 		jabHitbox = new HitFrame (new Vector2 (0.8f, 0.2f), 
 			new Vector3 (.7f, .25f, 1f), Vector2.zero, 1, 7, 6, MoveType.ACTIVE);
-		MoveFrame neutralFrame = MoveFrame.GetLitMoveFrame ();
 		jab = new MoveSequence (new MoveFrame[]{
 			neutralFrame, 
 			neutralFrame,
@@ -121,10 +127,8 @@ public class CharacterData {
 			} else if (attack == AttackType.Block) {
 				newMove = block;
 			} else if (intInput == 4) {
-				Debug.Log ("backwards");
 				newMove = GetBackwardStep ();
 			} else if (intInput == 6) {
-				Debug.Log ("forwards");
 				newMove = GetForwardStep ();
 			}
 			else if (intInput == 7) {

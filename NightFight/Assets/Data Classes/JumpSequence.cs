@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class JumpSequence : IFrameSequence {
 	MoveSequence[] supplementaryMove;
 	Vector2 velocity;
 	double maxJumpHeight;
+	Dictionary<string, IFrameSequence> cancellableToDict;
 
 	public double currentHeight { get; private set; }
 	public bool isFalling { get; private set; }
 
-	public JumpSequence(int jumpLengthInFrames, double jumpHeight, double horizontalDistanceCovered) {
+	public JumpSequence(int jumpLengthInFrames, double jumpHeight, double horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancellableToDict) {
 		SetUp ();
 		this.maxJumpHeight = jumpHeight;
 		this.velocity = new Vector2 ((float) horizontalDistanceCovered / jumpLengthInFrames, (float) jumpHeight * 2 / jumpLengthInFrames);
+		this.cancellableToDict = cancellableToDict;
 	}
 
 	public MoveFrame GetNext() {
@@ -23,8 +26,9 @@ public class JumpSequence : IFrameSequence {
 				isFalling = true;
 				velocity = new Vector2 (velocity.x, -velocity.y);
 			}
-
-			return new MoveFrame (velocity, MoveType.AIRBORNE);
+			MoveFrame returnFrame = new MoveFrame (velocity, MoveType.AIRBORNE);
+			returnFrame.cancellableTo = cancellableToDict;
+			return returnFrame;
 		} else {
 			throw new System.IndexOutOfRangeException("Current sequence does not have a next move!");
 		}
