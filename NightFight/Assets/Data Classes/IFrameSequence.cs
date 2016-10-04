@@ -20,6 +20,11 @@ public interface IFrameSequence
 	/// </summary>
 	void Reset ();
 
+	/// <summary>
+	/// Restores the sequence object to the state it was in when it was created. This is extremely important due 
+	/// to the persistance and re-use of the same specific frame sequence throughout a given game session; if not
+	/// reset, the move will essentially be usable once.
+	/// </summary>
 	MoveFrame Peek ();
 
 }

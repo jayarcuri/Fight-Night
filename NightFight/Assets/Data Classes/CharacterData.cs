@@ -82,59 +82,30 @@ public class CharacterData {
 		forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
 		backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
 	}
-	// Fix arguments
+
 	public virtual MoveSequence ReadyInput(float horizontalInput, float verticalInput, AttackType attackType) {
 		return null;
 	}
-
-	// TODO: replace with check against hashmap implementation of a FSM
-	public virtual IFrameSequence GetNewMove (CharacterAction action, DirectionalInput dInput, AttackType attack) {
-		int intInput = dInput.numpadValue;
-		IFrameSequence newMove = null;
-
-		if (CharacterAction.Standing.Equals (action)) {
-			if (attack == AttackType.Light) {
-				newMove = GetLightAttack ();
-			} else if (attack == AttackType.Block) {
-				newMove = GetHeavyAttack ();
-			} else if (attack == AttackType.Block) {
-				newMove = block;
-			} else if (intInput == 4) {
-				newMove = GetBackwardStep ();
-			} else if (intInput == 6) {
-				newMove = GetForwardStep ();
-			}
-			else if (intInput == 7) {
-				newMove = backwardJump;
-			} else if (intInput == 8) {
-				newMove = verticalJump;
-			} else if (intInput == 9) {
-				newMove = forwardJump;
-			}
-		}
-				
-		if (newMove != null) {
-			// DO NOT DELETE THIS. This line ensures that a MoveSequence can be used more than once.
-			newMove.Reset();
-		}
+		
+	public virtual IFrameSequence TryToCancelCurrentMove (MoveFrame currentFrame, DirectionalInput directionalInput, AttackType attack) {
+		IFrameSequence newMove = GetSequenceFromDictionary (currentFrame.cancellableTo, directionalInput, attack);
 		return newMove;
 	}
 
-	public virtual IFrameSequence GetNewMove (MoveFrame nextFrame, DirectionalInput dInput, AttackType attack) {
-		int intInput = dInput.numpadValue;
+	public virtual IFrameSequence GetNewMove (DirectionalInput directionalInput, AttackType attack) 
+	{
+		IFrameSequence newMove = GetSequenceFromDictionary (neutralMoveOptions, directionalInput, attack);
+		return newMove;
+	}
+
+	IFrameSequence GetSequenceFromDictionary(Dictionary<string, IFrameSequence> optionDictionary,
+		DirectionalInput directionalInput, AttackType attack) 
+	{
+		int intInput = directionalInput.numpadValue;
 		IFrameSequence newMove = null;
-		// 1. feed input into special move camp; see if anything sticks
-		//		i. if a special move is able to be executed & a button is being pressed, get that special move 
-
-		//			TODO: implement special moves
-		//			bool ready = fireBall.ReadyMove (dInput);
-		//			if (ready) {
-		//				newMove = fireBall.GetSpecialMove (attack);
-		// 			}
 		bool hasValue = false;
-		Dictionary<string, IFrameSequence> optionDictionary = nextFrame != null ? nextFrame.cancellableTo : neutralMoveOptions;
-
-		// Can I jump?
+		// Test input in order of what we've defined to be the "priority" of input
+		// 1. Can I jump?
 		if (intInput >= 7) {
 			hasValue = optionDictionary.TryGetValue (intInput.ToString (), out newMove);
 			if (hasValue) {
@@ -142,7 +113,7 @@ public class CharacterData {
 				return newMove;
 			}
 		}
-		// Can I attack?
+		// 2. Can I attack?
 		if (!AttackType.None.Equals (attack)) {
 			hasValue = optionDictionary.TryGetValue (attack.ToString (), out newMove);
 			if (hasValue) {
@@ -150,7 +121,7 @@ public class CharacterData {
 				return newMove;
 			}
 		}
-		// (Lowest priority) Can I move?
+		// 3. Lowest priority) Can I move?
 		hasValue = optionDictionary.TryGetValue (attack.ToString (), out newMove);
 		if (hasValue) {
 			newMove.Reset ();
