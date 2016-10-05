@@ -59,7 +59,7 @@ public class CharacterData
 		});
 			
 		HitFrame throwHitbox = new HitFrame (new Vector2 (0.9f, -0.25f), 
-			new Vector3 (.8f, .5f, 1f), Vector2.zero, 1, 7, 6, MoveType.ACTIVE);
+			new Vector3 (.8f, .5f, 1f), Vector2.zero, 1, 7, 6, MoveType.THROW);
 		MoveSequence _throw = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
 			neutralFrame,

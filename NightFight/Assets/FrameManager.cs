@@ -41,7 +41,7 @@ public class FrameManager : MonoBehaviour
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
 		
-		} else  {
+		} else {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player1").GetComponent <Transform> ());
 		}
 	}
@@ -51,6 +51,7 @@ public class FrameManager : MonoBehaviour
 	{
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {
+			Debug.Log ("was hit");
 			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame ();
 			bool characterWasHit = characterManager.ProcessHitFrame (hit, previousFrame);
 			if (characterWasHit) {
@@ -73,7 +74,7 @@ public class FrameManager : MonoBehaviour
 		else if (isBot) {
 			directionalInput = new DirectionalInput (botDirectionalInputRaw);
 			attack = botAttackInput;
-		} else  {
+		} else {
 			directionalInput = DirectionalInput.Neutral;
 			//attack = AttackType.Block;
 			attack = AttackType.None;
@@ -106,14 +107,14 @@ public class FrameManager : MonoBehaviour
 				characterMovement.MoveByVector (new Vector2 (moveBy, 0f));
 			} else if (currentFrame.movementDuringFrame != Vector2.zero) {
 				characterMovement.MoveByVector (currentFrame.movementDuringFrame);
-			} else  {
+			} else {
 				ExecuteFrame (currentFrame);
 			}
 		}
 
 		if (currentFrame == null || !currentFrame.isLit) {
 			bodyLight.enabled = false;
-		} else  {
+		} else {
 			bodyLight.enabled = true;
 		}
 
@@ -152,17 +153,16 @@ public class FrameManager : MonoBehaviour
 	// this class will not allows the hitbox to be reapplied.
 	void ExecuteFrame (MoveFrame currentMoveFrame)
 	{
-		if (currentMoveFrame.moveType == MoveType.ACTIVE) {
-			if (previousFrame.moveType != MoveType.ACTIVE) {
+		if (currentMoveFrame.moveType == MoveType.ACTIVE || currentMoveFrame.moveType == MoveType.THROW) {
+			if (previousFrame.moveType != MoveType.ACTIVE || previousFrame.moveType != MoveType.THROW) {
 				HitFrame attackFrame = (HitFrame)currentMoveFrame;
 				hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
 			}
 			// TODO: add movement related stuff here
-		} else if (hitBox.IsLoaded () && currentMoveFrame.moveType != MoveType.ACTIVE)
+		} else if (hitBox.IsLoaded () && (currentMoveFrame.moveType != MoveType.ACTIVE || currentMoveFrame.moveType != MoveType.THROW)) {
 			hitBox.Reset ();
+		}
 	}
-
-
 
 }
 

@@ -76,23 +76,23 @@ public class CharacterManager
 			nextFrameToExecute.cancellableTo : 
 			characterData.neutralMoveOptions;
 
-		if (optionDictionary.ContainsKey ("HIT")) {
+		if (MoveType.ACTIVE.Equals(hit.moveType) && optionDictionary.ContainsKey ("HIT")) {
 			if (currentMoveType == MoveType.AIRBORNE) {
 				JumpSequence currentJumpSequence = (JumpSequence)currentMoveSequence;
 				JumpSequence recoverySequence = currentJumpSequence.GetAirRecoverySequence ();
 				QueueMoveWithoutReset (recoverySequence);
 				characterState.TakeDamage (hit.damage);
-			} else if (currentMoveType == MoveType.BLOCKING) {				
-				Debug.Log ("should be flashing here.");
+			} else if (currentMoveType == MoveType.BLOCKING) {
 				QueueMove (hit.blockStunFrames);
 			} else  {
 				QueueMove (hit.hitStunFrames);
 				characterState.TakeDamage (hit.damage);
 			}
 			return true;
-		} else if (optionDictionary.ContainsKey ("THROW")) {
+		} else if (MoveType.THROW.Equals(hit.moveType) && optionDictionary.ContainsKey ("THROW")) {
 			Debug.Log ("Throw triggered");
 			QueueMove (hit.hitStunFrames);
+			characterState.TakeDamage (hit.damage);
 			return true;
 		} else {
 			return false;
