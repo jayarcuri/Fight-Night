@@ -154,12 +154,12 @@ public class FrameManager : MonoBehaviour
 	void ExecuteFrame (MoveFrame currentMoveFrame)
 	{
 		if (currentMoveFrame.moveType == MoveType.ACTIVE || currentMoveFrame.moveType == MoveType.THROW) {
-			if (previousFrame.moveType != MoveType.ACTIVE || previousFrame.moveType != MoveType.THROW) {
+			if ((previousFrame.moveType != MoveType.ACTIVE && previousFrame.moveType != MoveType.THROW)) {
 				HitFrame attackFrame = (HitFrame)currentMoveFrame;
 				hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
 			}
 			// TODO: add movement related stuff here
-		} else if (hitBox.IsLoaded () && (currentMoveFrame.moveType != MoveType.ACTIVE || currentMoveFrame.moveType != MoveType.THROW)) {
+		} else if (hitBox.IsLoaded () && !(currentMoveFrame.moveType == MoveType.ACTIVE || currentMoveFrame.moveType == MoveType.THROW)) {
 			hitBox.Reset ();
 		}
 	}
