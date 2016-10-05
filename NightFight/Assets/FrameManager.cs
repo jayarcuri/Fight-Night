@@ -17,7 +17,6 @@ public class FrameManager : MonoBehaviour
 	public Text healthText;
 	public GameObject victoryWindow;
 	string defaultHealthText;
-	CharacterState characterState;
 	CharacterManager characterManager;
 	InputManager InputManager;
 	MoveFrame previousFrame;
@@ -30,7 +29,6 @@ public class FrameManager : MonoBehaviour
 	void Start ()
 	{
 		characterManager = new CharacterManager ();
-		characterState = new CharacterState (characterManager.GetStartingHealth());
 		pendingAttackHitbox = null;
 		InputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
@@ -38,12 +36,12 @@ public class FrameManager : MonoBehaviour
 		hitBox = GetComponentInChildren<HitboxController> ();
 		bodyLight.enabled = false;
 		defaultHealthText = healthText.text;
-		healthText.text = defaultHealthText + characterState.health;
+		healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
 
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
 		
-		} else {
+		} else  {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player1").GetComponent <Transform> ());
 		}
 	}
@@ -56,10 +54,9 @@ public class FrameManager : MonoBehaviour
 		if (isPlayer1)
 			InputManager.GetInputs (out directionalInput, out attack);
 		else if (isBot) {
-			directionalInput = new DirectionalInput(botDirectionalInputRaw);
+			directionalInput = new DirectionalInput (botDirectionalInputRaw);
 			attack = botAttackInput;
-		}
-		else {
+		} else  {
 			directionalInput = DirectionalInput.Neutral;
 			//attack = AttackType.Block;
 			attack = AttackType.None;
@@ -75,32 +72,26 @@ public class FrameManager : MonoBehaviour
 			directionalInput.FlipHorizontalInput ();
 		}
 		MoveFrame currentFrame = null;
-		if (isPlayer1)
-			currentFrame = characterManager.GetCurrentFrame (directionalInput, attack);
+
+		currentFrame = characterManager.GetCurrentFrame (directionalInput, attack);
 
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {
-			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame();
-			MoveSequence inducedMoveSequence;
-			if (currentFrame == null || currentFrame.moveType != MoveType.BLOCKING) {
-				characterState.TakeDamage (hit.damage);
-				healthText.text = defaultHealthText + characterState.health;
-				inducedMoveSequence = pendingAttackHitbox.GetCurrentMoveHitstun ();
-			} else {
-				// TODO: would normally get blockstun frames
-				inducedMoveSequence = pendingAttackHitbox.GetCurrentMoveHitstun ();
-			}
-			// TODO: remove horrid temporary win code from here
-			if (characterState.health <= 0) {
-				victoryWindow.SetActive (true);
-				Time.timeScale = 0;
-			}
-			// TODO: assign hitstun to character
-			characterManager.QueueMove(inducedMoveSequence);
-			pendingAttackHitbox.Reset ();
-			pendingAttackHitbox = null;
-		}
+			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame ();
+			bool characterWasHit = characterManager.ProcessHitFrame (hit);
+			if (characterWasHit) {
+				healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
+				pendingAttackHitbox.Reset ();
+				// TODO: remove horrid temporary win code from here
+				if (characterManager.GetCurrentHealth () <= 0) {
+					victoryWindow.SetActive (true);
+					Time.timeScale = 0;
+				}
 
+				pendingAttackHitbox = null;
+			}
+		}
+		// Attempt to move (should be put into ExecuteFrame()
 		if (currentFrame != null) {
 
 			if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
@@ -110,15 +101,14 @@ public class FrameManager : MonoBehaviour
 				characterMovement.MoveByVector (new Vector2 (moveBy, 0f));
 			} else if (currentFrame.movementDuringFrame != Vector2.zero) {
 				characterMovement.MoveByVector (currentFrame.movementDuringFrame);
-			}
-			else {
-				ExecuteNextFrame (currentFrame);
+			} else  {
+				ExecuteFrame (currentFrame);
 			}
 		}
 
 		if (currentFrame == null || !currentFrame.isLit) {
 			bodyLight.enabled = false;
-		} else {
+		} else  {
 			bodyLight.enabled = true;
 		}
 
@@ -127,22 +117,26 @@ public class FrameManager : MonoBehaviour
 		previousFrame = currentFrame;
 	}
 
-	void OnTriggerEnter (Collider other) {
-		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
-			ProcessHitboxCollision (other);
-			}
-	}
-
-	void OnTriggerStay (Collider other) {
+	void OnTriggerEnter (Collider other)
+	{
 		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
 			ProcessHitboxCollision (other);
 		}
 	}
 
-	void ProcessHitboxCollision(Collider hitboxObject) {
+	void OnTriggerStay (Collider other)
+	{
+		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
+			ProcessHitboxCollision (other);
+		}
+	}
+
+	void ProcessHitboxCollision (Collider hitboxObject)
+	{
 		HitboxController attackingHitbox = hitboxObject.GetComponent <HitboxController> ();
 		if (attackingHitbox.IsLoaded ()) {
-			// if not blocking or not immune to attack
+			// TODO: hand hit frame to CharacterManager, let it deal with logic re: am I hit or not, &
+			// then queuing up the hitframes if necessary.
 			if (characterMovement.action != CharacterAction.Blocking || characterMovement.action != CharacterAction.BlockStunned) {
 				pendingAttackHitbox = attackingHitbox;
 			}
@@ -151,16 +145,13 @@ public class FrameManager : MonoBehaviour
 
 	// If there is not a non-active frame between two active frames and a hit has already been dealt w/,
 	// this class will not allows the hitbox to be reapplied.
-	void ExecuteNextFrame (MoveFrame currentMoveFrame)
+	void ExecuteFrame (MoveFrame currentMoveFrame)
 	{
 		if (currentMoveFrame.moveType == MoveType.ACTIVE) {
 			if (previousFrame.moveType != MoveType.ACTIVE) {
 				HitFrame attackFrame = (HitFrame)currentMoveFrame;
 				hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
-			} 
-//			else {
-//				Debug.Log ("Move already executed and resolved.");
-//			}
+			}
 			// TODO: add movement related stuff here
 		} else if (hitBox.IsLoaded () && currentMoveFrame.moveType != MoveType.ACTIVE)
 			hitBox.Reset ();

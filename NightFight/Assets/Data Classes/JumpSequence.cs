@@ -2,23 +2,54 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class JumpSequence : IFrameSequence {
+public class JumpSequence : IFrameSequence
+{
 	MoveSequence[] supplementaryMove;
 	Vector2 velocity;
 	double maxJumpHeight;
 	Dictionary<string, IFrameSequence> cancellableToDict;
 
 	public double currentHeight { get; private set; }
+
 	public bool isFalling { get; private set; }
 
-	public JumpSequence(int jumpLengthInFrames, double jumpHeight, double horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancellableToDict) {
+	public JumpSequence (int jumpLengthInFrames, double jumpHeight, double horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancellableToDict)
+	{
 		SetUp ();
 		this.maxJumpHeight = jumpHeight;
-		this.velocity = new Vector2 ((float) horizontalDistanceCovered / jumpLengthInFrames, (float) jumpHeight * 2 / jumpLengthInFrames);
+		this.velocity = new Vector2 ((float)horizontalDistanceCovered / jumpLengthInFrames, (float)jumpHeight * 2 / jumpLengthInFrames);
 		this.cancellableToDict = cancellableToDict;
 	}
 
-	public MoveFrame GetNext() {
+	public JumpSequence (double maxHeight, double currentHeight, Vector2 velocity, Dictionary<string, IFrameSequence> cancellableToDict)
+	{
+		SetUp ();
+		this.maxJumpHeight = maxHeight;
+		this.currentHeight = currentHeight;
+		this.velocity = velocity;
+		this.cancellableToDict = cancellableToDict;
+	}
+
+	public bool HasNext ()
+	{
+		return (!isFalling || currentHeight > 0);
+	}
+
+	public int MoveLength ()
+	{
+		return -1;
+	}
+
+	public void Reset ()
+	{
+		if (isFalling) {
+			velocity = new Vector2 (velocity.x, -velocity.y);
+		}
+		SetUp ();
+	}
+		
+	public MoveFrame GetNext ()
+	{
 		if (HasNext ()) {
 			currentHeight += velocity.y;
 
@@ -26,47 +57,48 @@ public class JumpSequence : IFrameSequence {
 				isFalling = true;
 				velocity = new Vector2 (velocity.x, -velocity.y);
 			}
-			MoveFrame returnFrame = new MoveFrame (velocity, MoveType.AIRBORNE);
-			returnFrame.cancellableTo = cancellableToDict;
+			MoveFrame returnFrame = GetNextMoveFrame (velocity);
 			return returnFrame;
-		} else {
-			throw new System.IndexOutOfRangeException("Current sequence does not have a next move!");
+		} else  {
+			throw new System.IndexOutOfRangeException ("Current sequence does not have a next move!");
 		}
 
 	}
 
-	public bool HasNext() {
-		return (!isFalling || currentHeight > 0);
-	}
-
-	public int MoveLength () {
-		return -1;
-	}
-
-	public void Reset () {
-		if (isFalling) {
-			velocity = new Vector2 (velocity.x, -velocity.y);
-		}
-		SetUp ();
-	}
-
-	public MoveFrame Peek () {
-		Vector2 nextFrame;
+	public MoveFrame Peek ()
+	{
+		MoveFrame nextFrame;
 
 		if (isFalling || currentHeight + velocity.y >= maxJumpHeight) {
-			nextFrame = new Vector2 (velocity.x, -velocity.y);
-		} else {
-			nextFrame = new Vector2 (velocity.x, velocity.y);
+			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, -velocity.y));
+		} else  {
+			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, velocity.y));
 		}
-
-		return new MoveFrame (nextFrame, MoveType.AIRBORNE);
+		return nextFrame;
 	}
 
-	public void AddSupplimentaryFrameSequence (IFrameSequence newSequence) {
-		return;
+	public void AddSupplimentaryFrameSequence (IFrameSequence newSequence)
+	{
 	}
 
-	void SetUp () {
+	public JumpSequence GetAirRecoverySequence() {
+		float verticalVelocity = isFalling ? -velocity.y : velocity.y;
+		float horizontalVelocity = velocity.x != 0 ? -Mathf.Abs(velocity.x/2) : -0.1f;
+		Vector2 recoveryVelocity = new Vector2 (horizontalVelocity, verticalVelocity);
+		return new JumpSequence (currentHeight + (verticalVelocity * 10), currentHeight, recoveryVelocity, new Dictionary<string, IFrameSequence> ());
+	}
+
+	MoveFrame GetNextMoveFrame (Vector2 nextVelocity)
+	{
+		MoveFrame returnFrame = new MoveFrame (nextVelocity, MoveType.AIRBORNE);
+		if (supplementaryMove == null) {
+			returnFrame.cancellableTo = cancellableToDict;
+		}
+		return returnFrame;
+	}
+
+	void SetUp ()
+	{
 		supplementaryMove = null;
 		isFalling = false;
 		currentHeight = 0;

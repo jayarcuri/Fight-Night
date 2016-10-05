@@ -26,8 +26,4 @@ public class CharacterState {
 		health -= damage;
 		// TODO: if health <= 0, win game.
 	}
-
-	public int GetCurrentHealth () {
-		return health;
-	}
 }

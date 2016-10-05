@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class CharacterManager
@@ -17,12 +18,6 @@ public class CharacterManager
 		currentMove = null;
 	}
 
-	public void QueueMove (IFrameSequence newMove)
-	{
-		currentMove = newMove;
-		currentMove.Reset ();
-	}
-
 	public bool HasQueuedFrames ()
 	{
 		return currentMove != null && currentMove.HasNext ();
@@ -31,6 +26,11 @@ public class CharacterManager
 	public int GetStartingHealth ()
 	{
 		return characterData.maxHealth;
+	}
+
+	public int GetCurrentHealth ()
+	{
+		return characterState.health;
 	}
 
 	public MoveFrame GetCurrentFrame (DirectionalInput directionalInput, AttackType attackType)
@@ -42,19 +42,19 @@ public class CharacterManager
 		//
 		// If there is no current Sequence or it would resolve, give input to neutral state to get new Sequence
 		if (currentMoveSequence == null || nextFrameToExecute == null) {
-			newMove = characterData.GetNewMove (directionalInput, attackType);
+			newMove = GetNewMove (directionalInput, attackType);
 		} 
 		// Otherwise, if we currently have a move that will not resolve next frame & exists, try to cancel that 
 		// frame to a new Sequence.currentMoveSequence
 		else if (currentMoveSequence != null && nextFrameToExecute.cancellableTo != null) {
-			newMove = characterData.TryToCancelCurrentMove (nextFrameToExecute, directionalInput, attackType);
+			newMove = TryToCancelCurrentMove (nextFrameToExecute, directionalInput, attackType);
 		}
 
 		if (newMove != null) {
 			if (nextFrameToExecute != null && MoveType.AIRBORNE.Equals (nextFrameToExecute.moveType)) {
 				JumpSequence currentJump = (JumpSequence)currentMoveSequence;
 				currentJump.AddSupplimentaryFrameSequence (newMove);
-			} else {
+			} else  {
 				QueueMove (newMove);
 			}
 		}
@@ -63,5 +63,98 @@ public class CharacterManager
 		MoveFrame currentMoveFrame = currentMove != null && currentMove.HasNext () ? currentMove.GetNext () : null;
 
 		return currentMoveFrame;
+	}
+
+	public bool ProcessHitFrame (HitFrame hit)
+	{
+		IFrameSequence currentMoveSequence = this.currentMove;
+		MoveFrame nextFrameToExecute = currentMoveSequence != null && currentMoveSequence.HasNext () ? currentMoveSequence.Peek () : null;
+		Debug.Log ("next frame is null: " + nextFrameToExecute == null);
+		MoveType currentMoveType = nextFrameToExecute != null ? nextFrameToExecute.moveType : MoveType.NONE;
+		Debug.Log ("next frame is of type: " + currentMoveType);
+		Dictionary<string, IFrameSequence> optionDictionary = nextFrameToExecute != null ? 
+			nextFrameToExecute.cancellableTo : 
+			characterData.neutralMoveOptions;
+
+		foreach(string key in optionDictionary.Keys) {
+			Debug.Log (key);
+		}
+
+		if (optionDictionary.ContainsKey ("HIT")) {
+			if (currentMoveType == MoveType.AIRBORNE) {
+				JumpSequence currentJumpSequence = (JumpSequence)currentMoveSequence;
+				JumpSequence recoverySequence = currentJumpSequence.GetAirRecoverySequence ();
+				Debug.Log ("Recovery type: " + recoverySequence.Peek ().moveType);
+				QueueMoveWithoutReset (recoverySequence);
+			} else if (currentMoveType == MoveType.BLOCKING) {				
+				QueueMove (hit.blockStunFrames);
+			} else  {
+				QueueMove (hit.hitStunFrames);
+			}
+			return true;
+		} else  {
+			return false;
+		}
+	}
+
+	public IFrameSequence TryToCancelCurrentMove (MoveFrame currentFrame, DirectionalInput directionalInput, AttackType attack)
+	{
+		IFrameSequence newMove = GetSequenceFromDictionary (currentFrame.cancellableTo, directionalInput, attack);
+		return newMove;
+	}
+
+	public IFrameSequence GetNewMove (DirectionalInput directionalInput, AttackType attack)
+	{
+		IFrameSequence newMove = GetSequenceFromDictionary (characterData.neutralMoveOptions, directionalInput, attack);
+		return newMove;
+	}
+
+	IFrameSequence GetSequenceFromDictionary (Dictionary<string, IFrameSequence> optionDictionary,
+	                                          DirectionalInput directionalInput, AttackType attack)
+	{
+		int intInput = directionalInput.numpadValue;
+		IFrameSequence newMove = null;
+		bool hasValue = false;
+		if (intInput != 5 || AttackType.None != attack)
+			//Debug.Log ("Directional input: " + intInput + "\nAttack input: " + (char)attack);
+		// Test input in order of what we've defined to be the "priority" of input
+		// 1. Can I jump?
+		if (intInput >= 7) {
+			//Debug.Log ("Should jump.");
+			hasValue = optionDictionary.TryGetValue (intInput.ToString (), out newMove);
+			if (hasValue) {
+				newMove.Reset ();
+				return newMove;
+			}
+		}
+		// 2. Can I attack?
+		if (!AttackType.None.Equals (attack)) {
+			string attackEnumString = ((char)attack).ToString ();
+			//Debug.Log ("Should attack with " + attackEnumString);
+			hasValue = optionDictionary.TryGetValue (attackEnumString, out newMove);
+			if (hasValue) {
+				//Debug.Log ("has value");
+				newMove.Reset ();
+				return newMove;
+			}
+		}
+		// 3. Lowest priority) Can I move?
+		hasValue = optionDictionary.TryGetValue (intInput.ToString (), out newMove);
+		if (hasValue) {
+			newMove.Reset ();
+			return newMove;
+		}
+
+		return newMove;
+	}
+
+	void QueueMove (IFrameSequence newMove)
+	{
+		currentMove = newMove;
+		currentMove.Reset ();
+	}
+
+	void QueueMoveWithoutReset(IFrameSequence newMove) {
+		currentMove = newMove;
 	}
 }

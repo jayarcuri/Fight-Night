@@ -15,11 +15,13 @@ public enum CharacterAction {
 	HitStunned
 }
 public enum MoveType {
+	NONE,
 	STARTUP,
 	RECOVERY,
 	ACTIVE,
 	BLOCKING,
 	AIRBORNE,
+	AIR_INVULUNERABLE,
 	INVLUNERABLE,
 	STEP_BACK,
 	STEP_FORWARD,

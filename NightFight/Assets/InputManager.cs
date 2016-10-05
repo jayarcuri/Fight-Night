@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour {
 
 		directionalInput = new DirectionalInput(horizontal, vertical);
 
-		if (Input.GetButtonDown (heavyAtack)) {
+		if (Input.GetButton (heavyAtack)) {
 			attack = AttackType.Heavy;
 		} // Light uses GetButton to allow for chaining jabs
 		else if (Input.GetButton (lightAttack)) {

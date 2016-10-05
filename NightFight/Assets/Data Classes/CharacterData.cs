@@ -6,7 +6,7 @@ public class CharacterData {
 	HitFrame jabHitbox;
 	HitFrame AAHitbox;
 	//	protected SpecialMove fireBall;
-	protected Dictionary<string, IFrameSequence> neutralMoveOptions;
+	public Dictionary<string, IFrameSequence> neutralMoveOptions {get; private set;}
 	protected IFrameSequence jab;
 	protected IFrameSequence AA;
 	protected IFrameSequence forwardStep;
@@ -23,6 +23,7 @@ public class CharacterData {
 		//			AA);
 		MoveFrame neutralFrame = MoveFrame.GetLitMoveFrame ();
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
+		cancelsForJump.Add ("HIT", null);
 		MoveSequence jumpAttack = new MoveSequence (new MoveFrame[] {
 			neutralFrame
 		});
@@ -93,55 +94,7 @@ public class CharacterData {
 		neutralMoveOptions.Add("A", jab);
 		neutralMoveOptions.Add("C", AA);
 		neutralMoveOptions.Add("X", block);
-	}
-
-	public virtual IFrameSequence TryToCancelCurrentMove (MoveFrame currentFrame, DirectionalInput directionalInput, AttackType attack) {
-		IFrameSequence newMove = GetSequenceFromDictionary (currentFrame.cancellableTo, directionalInput, attack);
-		return newMove;
-	}
-
-	public virtual IFrameSequence GetNewMove (DirectionalInput directionalInput, AttackType attack) 
-	{
-		IFrameSequence newMove = GetSequenceFromDictionary (neutralMoveOptions, directionalInput, attack);
-		return newMove;
-	}
-
-	IFrameSequence GetSequenceFromDictionary(Dictionary<string, IFrameSequence> optionDictionary,
-		DirectionalInput directionalInput, AttackType attack) 
-	{
-		int intInput = directionalInput.numpadValue;
-		IFrameSequence newMove = null;
-		bool hasValue = false;
-		if (intInput != 5 || AttackType.None != attack)
-			Debug.Log ("Directional input: " + intInput + "\nAttack input: " + (char)attack);
-		// Test input in order of what we've defined to be the "priority" of input
-		// 1. Can I jump?
-		if (intInput >= 7) {
-			Debug.Log ("Should jump.");
-			hasValue = optionDictionary.TryGetValue (intInput.ToString (), out newMove);
-			if (hasValue) {
-				newMove.Reset ();
-				return newMove;
-			}
-		}
-		// 2. Can I attack?
-		if (!AttackType.None.Equals (attack)) {
-			string attackEnumString = ((char)attack).ToString();
-			Debug.Log ("Should attack with " + attackEnumString);
-			hasValue = optionDictionary.TryGetValue (attackEnumString, out newMove);
-			if (hasValue) {
-				newMove.Reset ();
-				return newMove;
-			}
-		}
-		// 3. Lowest priority) Can I move?
-		hasValue = optionDictionary.TryGetValue (intInput.ToString (), out newMove);
-		if (hasValue) {
-			newMove.Reset ();
-			return newMove;
-		}
-
-		return newMove;
+		neutralMoveOptions.Add("HIT", null);
 	}
 
 }
