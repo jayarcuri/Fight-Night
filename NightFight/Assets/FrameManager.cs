@@ -49,36 +49,10 @@ public class FrameManager : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-		DirectionalInput directionalInput;
-		AttackType attack;
-		if (isPlayer1)
-			InputManager.GetInputs (out directionalInput, out attack);
-		else if (isBot) {
-			directionalInput = new DirectionalInput (botDirectionalInputRaw);
-			attack = botAttackInput;
-		} else  {
-			directionalInput = DirectionalInput.Neutral;
-			//attack = AttackType.Block;
-			attack = AttackType.None;
-		}
-		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
-		if (!characterManager.HasQueuedFrames ()) {
-			characterMovement.FlipRotation ();
-		}
-		// unneccesary unless orientation has flipped
-		bool isFacingRight = characterMovement.isFacingRight;
-
-		if (!isFacingRight) {
-			directionalInput.FlipHorizontalInput ();
-		}
-		MoveFrame currentFrame = null;
-
-		currentFrame = characterManager.GetCurrentFrame (directionalInput, attack);
-
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {
 			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame ();
-			bool characterWasHit = characterManager.ProcessHitFrame (hit);
+			bool characterWasHit = characterManager.ProcessHitFrame (hit, previousFrame);
 			if (characterWasHit) {
 				healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
 				pendingAttackHitbox.Reset ();
@@ -91,6 +65,37 @@ public class FrameManager : MonoBehaviour
 				pendingAttackHitbox = null;
 			}
 		}
+
+		DirectionalInput directionalInput;
+		AttackType attack;
+		if (isPlayer1)
+			InputManager.GetInputs (out directionalInput, out attack);
+		else if (isBot) {
+			directionalInput = new DirectionalInput (botDirectionalInputRaw);
+			attack = botAttackInput;
+		} else  {
+			directionalInput = DirectionalInput.Neutral;
+			//attack = AttackType.Block;
+			attack = AttackType.None;
+		}
+
+		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
+		if (!characterManager.HasQueuedFrames ()) {
+			characterMovement.FlipRotation ();
+		}
+		// unneccesary unless orientation has flipped
+		bool isFacingRight = characterMovement.isFacingRight;
+
+		if (!isFacingRight) {
+			directionalInput.FlipHorizontalInput ();
+		}
+
+
+		MoveFrame currentFrame = null;
+
+		currentFrame = characterManager.GetCurrentFrame (directionalInput, attack);
+
+
 		// Attempt to move (should be put into ExecuteFrame()
 		if (currentFrame != null) {
 

@@ -19,8 +19,10 @@ public class InputManager : MonoBehaviour {
 
 		if (Input.GetButton (heavyAtack)) {
 			attack = AttackType.Heavy;
-		} // Light uses GetButton to allow for chaining jabs
-		else if (Input.GetButton (lightAttack)) {
+		} else if (Input.GetButton (lightAttack) && Input.GetButton (block)) {
+			Debug.Log ("Throw input detected!");
+			attack = AttackType.Throw;
+		} else if (Input.GetButton (lightAttack)) {
 			attack = AttackType.Light;
 		} else if (Input.GetButton (block)) {
 			attack = AttackType.Block;

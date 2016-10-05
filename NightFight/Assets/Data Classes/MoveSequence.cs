@@ -1,13 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MoveSequence : IFrameSequence {
 	int index;
 	MoveFrame[] moveSequence;
+	Dictionary<string, IFrameSequence> cancelsTo;
 
 	public MoveSequence(MoveFrame[] moveSequence) {
 		index = -1;
 		this.moveSequence = moveSequence;
+		cancelsTo = null;
+	}
+
+	public MoveSequence(MoveFrame[] moveSequence, Dictionary<string, IFrameSequence> cancelsTo) {
+		index = -1;
+		this.moveSequence = moveSequence;
+		this.cancelsTo = cancelsTo;
 	}
 
 	public virtual MoveFrame GetNext() {
@@ -49,5 +58,7 @@ public class MoveSequence : IFrameSequence {
 		index = -1;
 	}
 
-
+	public Dictionary<string, IFrameSequence> GetCancellableDictionary () {
+		return cancelsTo;
+	}
 }

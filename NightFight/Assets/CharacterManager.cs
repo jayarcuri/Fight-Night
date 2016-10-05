@@ -65,34 +65,36 @@ public class CharacterManager
 		return currentMoveFrame;
 	}
 
-	public bool ProcessHitFrame (HitFrame hit)
+	public bool ProcessHitFrame (HitFrame hit, MoveFrame previousFrame)
 	{
 		IFrameSequence currentMoveSequence = this.currentMove;
-		MoveFrame nextFrameToExecute = currentMoveSequence != null && currentMoveSequence.HasNext () ? currentMoveSequence.Peek () : null;
-		Debug.Log ("next frame is null: " + nextFrameToExecute == null);
+		MoveFrame nextFrameToExecute = previousFrame;
+		Debug.Log ("next frame is null: " + previousFrame == null);
 		MoveType currentMoveType = nextFrameToExecute != null ? nextFrameToExecute.moveType : MoveType.NONE;
 		Debug.Log ("next frame is of type: " + currentMoveType);
 		Dictionary<string, IFrameSequence> optionDictionary = nextFrameToExecute != null ? 
 			nextFrameToExecute.cancellableTo : 
 			characterData.neutralMoveOptions;
 
-		foreach(string key in optionDictionary.Keys) {
-			Debug.Log (key);
-		}
-
 		if (optionDictionary.ContainsKey ("HIT")) {
 			if (currentMoveType == MoveType.AIRBORNE) {
 				JumpSequence currentJumpSequence = (JumpSequence)currentMoveSequence;
 				JumpSequence recoverySequence = currentJumpSequence.GetAirRecoverySequence ();
-				Debug.Log ("Recovery type: " + recoverySequence.Peek ().moveType);
 				QueueMoveWithoutReset (recoverySequence);
+				characterState.TakeDamage (hit.damage);
 			} else if (currentMoveType == MoveType.BLOCKING) {				
+				Debug.Log ("should be flashing here.");
 				QueueMove (hit.blockStunFrames);
 			} else  {
 				QueueMove (hit.hitStunFrames);
+				characterState.TakeDamage (hit.damage);
 			}
 			return true;
-		} else  {
+		} else if (optionDictionary.ContainsKey ("THROW")) {
+			Debug.Log ("Throw triggered");
+			QueueMove (hit.hitStunFrames);
+			return true;
+		} else {
 			return false;
 		}
 	}

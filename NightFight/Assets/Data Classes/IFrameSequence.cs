@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 public interface IFrameSequence
 {
@@ -26,6 +27,8 @@ public interface IFrameSequence
 	/// reset, the move will essentially be usable once.
 	/// </summary>
 	MoveFrame Peek ();
+
+	Dictionary<string, IFrameSequence> GetCancellableDictionary ();
 
 }
 

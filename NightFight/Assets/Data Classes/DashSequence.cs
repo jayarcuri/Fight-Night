@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DashSequence : IFrameSequence {
 
@@ -20,6 +21,10 @@ public class DashSequence : IFrameSequence {
 	}
 
 	public MoveFrame Peek () {
+		return null;
+	}
+
+	public Dictionary<string, IFrameSequence> GetCancellableDictionary () {
 		return null;
 	}
 }

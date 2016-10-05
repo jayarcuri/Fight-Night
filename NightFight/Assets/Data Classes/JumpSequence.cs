@@ -7,27 +7,27 @@ public class JumpSequence : IFrameSequence
 	MoveSequence[] supplementaryMove;
 	Vector2 velocity;
 	double maxJumpHeight;
-	Dictionary<string, IFrameSequence> cancellableToDict;
+	Dictionary<string, IFrameSequence> cancelsTo;
 
 	public double currentHeight { get; private set; }
 
 	public bool isFalling { get; private set; }
 
-	public JumpSequence (int jumpLengthInFrames, double jumpHeight, double horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancellableToDict)
+	public JumpSequence (int jumpLengthInFrames, double jumpHeight, double horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancelsTo)
 	{
 		SetUp ();
 		this.maxJumpHeight = jumpHeight;
 		this.velocity = new Vector2 ((float)horizontalDistanceCovered / jumpLengthInFrames, (float)jumpHeight * 2 / jumpLengthInFrames);
-		this.cancellableToDict = cancellableToDict;
+		this.cancelsTo = cancelsTo;
 	}
 
-	public JumpSequence (double maxHeight, double currentHeight, Vector2 velocity, Dictionary<string, IFrameSequence> cancellableToDict)
+	public JumpSequence (double maxHeight, double currentHeight, Vector2 velocity, Dictionary<string, IFrameSequence> cancelsTo)
 	{
 		SetUp ();
 		this.maxJumpHeight = maxHeight;
 		this.currentHeight = currentHeight;
 		this.velocity = velocity;
-		this.cancellableToDict = cancellableToDict;
+		this.cancelsTo = cancelsTo;
 	}
 
 	public bool HasNext ()
@@ -88,11 +88,17 @@ public class JumpSequence : IFrameSequence
 		return new JumpSequence (currentHeight + (verticalVelocity * 10), currentHeight, recoveryVelocity, new Dictionary<string, IFrameSequence> ());
 	}
 
+	public Dictionary<string, IFrameSequence> GetCancellableDictionary () {
+		return cancelsTo;
+	}
+
+
+
 	MoveFrame GetNextMoveFrame (Vector2 nextVelocity)
 	{
 		MoveFrame returnFrame = new MoveFrame (nextVelocity, MoveType.AIRBORNE);
 		if (supplementaryMove == null) {
-			returnFrame.cancellableTo = cancellableToDict;
+			returnFrame.cancellableTo = cancelsTo;
 		}
 		return returnFrame;
 	}
