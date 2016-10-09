@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class JumpSequence : IFrameSequence
 {
-	MoveSequence[] supplementaryMove;
+	IFrameSequence supplementaryMove;
 	Vector2 velocity;
 	double maxJumpHeight;
 	Dictionary<string, IFrameSequence> cancelsTo;
@@ -77,8 +77,9 @@ public class JumpSequence : IFrameSequence
 		return nextFrame;
 	}
 
-	public void AddSupplimentaryFrameSequence (IFrameSequence newSequence)
+	public void AddSupplementaryFrameSequence (IFrameSequence newSequence)
 	{
+		supplementaryMove = newSequence;
 	}
 
 	public JumpSequence GetAirRecoverySequence() {

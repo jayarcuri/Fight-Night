@@ -53,7 +53,7 @@ public class CharacterManager
 		if (newMove != null) {
 			if (nextFrameToExecute != null && MoveType.AIRBORNE.Equals (nextFrameToExecute.moveType)) {
 				JumpSequence currentJump = (JumpSequence)currentMoveSequence;
-				currentJump.AddSupplimentaryFrameSequence (newMove);
+				currentJump.AddSupplementaryFrameSequence (newMove);
 			} else  {
 				QueueMove (newMove);
 			}
