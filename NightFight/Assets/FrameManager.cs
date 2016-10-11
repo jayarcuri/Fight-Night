@@ -69,16 +69,12 @@ public class FrameManager : MonoBehaviour
 
 		DirectionalInput directionalInput;
 		AttackType attack;
-		if (isPlayer1) {
-			InputManager.GetInputs (out directionalInput, out attack);
-		}
-		else if (isBot) {
+
+		if (isBot) {
 			directionalInput = new DirectionalInput (botDirectionalInputRaw);
 			attack = botAttackInput;
 		} else {
-			directionalInput = DirectionalInput.Neutral;
-			//attack = AttackType.Block;
-			attack = AttackType.None;
+			InputManager.GetInputs (out directionalInput, out attack);
 		}
 
 		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
