@@ -57,7 +57,13 @@ public class JumpSequence : IFrameSequence
 				isFalling = true;
 				velocity = new Vector2 (velocity.x, -velocity.y);
 			}
-			MoveFrame returnFrame = GetNextMoveFrame (velocity);
+
+			MoveFrame supplementalFrame = null;
+			if (supplementaryMove != null && supplementaryMove.HasNext ()) {
+				supplementalFrame = supplementaryMove.GetNext ();
+			}
+
+			MoveFrame returnFrame = GetNextMoveFrame (velocity, supplementalFrame);
 			return returnFrame;
 		} else  {
 			throw new System.IndexOutOfRangeException ("Current sequence does not have a next move!");
@@ -69,10 +75,15 @@ public class JumpSequence : IFrameSequence
 	{
 		MoveFrame nextFrame;
 
+		MoveFrame supplementalFrame = null;
+		if (supplementaryMove != null && supplementaryMove.HasNext ()) {
+			supplementaryMove.Peek ();
+		}
+
 		if (isFalling || currentHeight + velocity.y >= maxJumpHeight) {
-			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, -velocity.y));
+			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, -velocity.y), supplementalFrame);
 		} else  {
-			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, velocity.y));
+			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, velocity.y), supplementalFrame);
 		}
 		return nextFrame;
 	}
@@ -95,10 +106,20 @@ public class JumpSequence : IFrameSequence
 
 
 
-	MoveFrame GetNextMoveFrame (Vector2 nextVelocity)
+	MoveFrame GetNextMoveFrame (Vector2 nextVelocity, MoveFrame supplementalFrame)
 	{
-		MoveFrame returnFrame = new MoveFrame (nextVelocity, MoveType.AIRBORNE);
-		if (supplementaryMove == null) {
+		MoveFrame returnFrame;
+		if (supplementalFrame != null) {
+			if (supplementalFrame.moveType == MoveType.ACTIVE) {
+				HitFrame hit = (HitFrame)supplementalFrame;
+				returnFrame = new HitFrame(hit.offset, hit.size, nextVelocity + supplementalFrame.movementDuringFrame, 
+					hit.damage, hit.hitStun, hit.blockStun, MoveType.ACTIVE);
+				returnFrame.cancellableTo = hit.cancellableTo;
+			} else {
+				returnFrame = new MoveFrame (nextVelocity + supplementalFrame.movementDuringFrame, supplementalFrame.moveType);
+			}
+		} else {
+			returnFrame = new MoveFrame (nextVelocity, MoveType.AIRBORNE);
 			returnFrame.cancellableTo = cancelsTo;
 		}
 		return returnFrame;

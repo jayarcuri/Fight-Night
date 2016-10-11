@@ -60,6 +60,7 @@ public class CharacterManager
 		}
 			
 		// Finally, get the next MoveFrame if it exists
+		// Return nextFrameToExecute if no newMove exists & it does exist.
 		MoveFrame currentMoveFrame = currentMove != null && currentMove.HasNext () ? currentMove.GetNext () : null;
 
 		return currentMoveFrame;

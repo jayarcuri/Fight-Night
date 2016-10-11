@@ -105,11 +105,12 @@ public class FrameManager : MonoBehaviour
 			} else if (MoveType.IN_HITSTUN.Equals (currentFrame.moveType)) {
 				float moveBy = -0.5f;
 				characterMovement.MoveByVector (new Vector2 (moveBy, 0f));
-			} else if (currentFrame.movementDuringFrame != Vector2.zero) {
-				characterMovement.MoveByVector (currentFrame.movementDuringFrame);
-			} else {
-				ExecuteFrame (currentFrame);
-			}
+			} 
+			ExecuteFrame (currentFrame);
+
+			if (currentFrame.movementDuringFrame != Vector2.zero) {
+					characterMovement.MoveByVector (currentFrame.movementDuringFrame);
+				} 
 		}
 
 		if (currentFrame == null || !currentFrame.isLit) {

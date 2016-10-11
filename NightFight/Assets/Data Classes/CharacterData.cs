@@ -27,10 +27,19 @@ public class CharacterData
 		MoveFrame neutralFrame = MoveFrame.GetLitMoveFrame ();
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
+		HitFrame jumpAttackHitbox = new HitFrame (new Vector2 (0.25f, -0.625f), 
+			new Vector3 (1.2f, .25f, 1f), Vector2.zero, 1, 7, 6, MoveType.ACTIVE);
 		MoveSequence jumpAttack = new MoveSequence (new MoveFrame[] {
+			neutralFrame,
+			neutralFrame,
+			jumpAttackHitbox,
+			jumpAttackHitbox,
+			jumpAttackHitbox,
+			jumpAttackHitbox,
+			jumpAttackHitbox,
 			neutralFrame
 		});
-		cancelsForJump.Add ("L", jumpAttack);
+		cancelsForJump.Add ("A", jumpAttack);
 		verticalJump = new JumpSequence (40, 3.5, 0.0, cancelsForJump);
 		forwardJump = new JumpSequence (40, 3.5, 2.5, cancelsForJump);
 		backwardJump = new JumpSequence (40, 3.5, -2.5, cancelsForJump);
