@@ -28,6 +28,13 @@ public enum MoveType {
 	STEP_FORWARD,
 	IN_HITSTUN
 }
+
+public enum ActiveMoveType {
+	HIT,
+	THROW,
+	PROJECTILE
+}
+
 public enum MovementDirection {
 	None, 
 	Left, 
