@@ -51,6 +51,7 @@ public class JumpSequence : IFrameSequence
 	public MoveFrame GetNext ()
 	{
 		if (HasNext ()) {
+
 			currentHeight += velocity.y;
 
 			if (currentHeight >= maxJumpHeight && !isFalling) {
@@ -74,16 +75,16 @@ public class JumpSequence : IFrameSequence
 	public MoveFrame Peek ()
 	{
 		MoveFrame nextFrame;
-
 		MoveFrame supplementalFrame = null;
-		if (supplementaryMove != null && supplementaryMove.HasNext ()) {
-			supplementaryMove.Peek ();
-		}
 
-		if (isFalling || currentHeight + velocity.y >= maxJumpHeight) {
+		if (supplementaryMove != null && supplementaryMove.HasNext ()) {
+			supplementalFrame = supplementaryMove.Peek ();
+		}
+			
+		if (!isFalling && currentHeight + velocity.y >= maxJumpHeight) {
 			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, -velocity.y), supplementalFrame);
-		} else  {
-			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, velocity.y), supplementalFrame);
+		} else {
+			nextFrame = GetNextMoveFrame(velocity, supplementalFrame);
 		}
 		return nextFrame;
 	}
@@ -104,7 +105,19 @@ public class JumpSequence : IFrameSequence
 		return cancelsTo;
 	}
 
+	public void IncrementIndex () {
 
+		currentHeight += velocity.y;
+
+		if (currentHeight >= maxJumpHeight && !isFalling) {
+			isFalling = true;
+			velocity = new Vector2 (velocity.x, -velocity.y);
+		}
+
+		if (supplementaryMove != null && supplementaryMove.HasNext ()) {
+			supplementaryMove.IncrementIndex ();
+		}
+	}
 
 	MoveFrame GetNextMoveFrame (Vector2 nextVelocity, MoveFrame supplementalFrame)
 	{

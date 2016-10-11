@@ -54,16 +54,18 @@ public class CharacterManager
 			if (nextFrameToExecute != null && MoveType.AIRBORNE.Equals (nextFrameToExecute.moveType)) {
 				JumpSequence currentJump = (JumpSequence)currentMoveSequence;
 				currentJump.AddSupplementaryFrameSequence (newMove);
-			} else  {
+			} else {
 				QueueMove (newMove);
 			}
+			return currentMove.GetNext ();
 		}
-			
-		// Finally, get the next MoveFrame if it exists
-		// Return nextFrameToExecute if no newMove exists & it does exist.
-		MoveFrame currentMoveFrame = currentMove != null && currentMove.HasNext () ? currentMove.GetNext () : null;
 
-		return currentMoveFrame;
+		if (nextFrameToExecute != null) {
+			this.currentMove.IncrementIndex ();
+			return nextFrameToExecute;
+		}
+
+		return null;
 	}
 
 	public bool ProcessHitFrame (HitFrame hit, MoveFrame previousFrame)

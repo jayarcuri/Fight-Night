@@ -26,7 +26,8 @@ public class InputManager : MonoBehaviour {
 			attack = AttackType.Light;
 		} else if (Input.GetButton (block)) {
 			attack = AttackType.Block;
-		} else
+		} else {
 			attack = AttackType.None;
+		}
 	}
 }

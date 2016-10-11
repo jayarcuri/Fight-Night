@@ -58,6 +58,10 @@ public class MoveSequence : IFrameSequence {
 		index = -1;
 	}
 
+	public void IncrementIndex () {
+		index++;
+	}
+
 	public Dictionary<string, IFrameSequence> GetCancellableDictionary () {
 		return cancelsTo;
 	}

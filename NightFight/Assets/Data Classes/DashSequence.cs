@@ -27,4 +27,7 @@ public class DashSequence : IFrameSequence {
 	public Dictionary<string, IFrameSequence> GetCancellableDictionary () {
 		return null;
 	}
+
+	public void IncrementIndex () {
+	}
 }

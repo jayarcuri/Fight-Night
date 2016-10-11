@@ -30,5 +30,7 @@ public interface IFrameSequence
 
 	Dictionary<string, IFrameSequence> GetCancellableDictionary ();
 
+	void IncrementIndex ();
+
 }
 

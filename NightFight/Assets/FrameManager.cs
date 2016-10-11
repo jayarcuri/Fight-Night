@@ -69,8 +69,9 @@ public class FrameManager : MonoBehaviour
 
 		DirectionalInput directionalInput;
 		AttackType attack;
-		if (isPlayer1)
+		if (isPlayer1) {
 			InputManager.GetInputs (out directionalInput, out attack);
+		}
 		else if (isBot) {
 			directionalInput = new DirectionalInput (botDirectionalInputRaw);
 			attack = botAttackInput;
@@ -90,7 +91,6 @@ public class FrameManager : MonoBehaviour
 		if (!isFacingRight) {
 			directionalInput.FlipHorizontalInput ();
 		}
-
 
 		MoveFrame currentFrame = null;
 
