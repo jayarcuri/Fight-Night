@@ -29,7 +29,7 @@ public enum MoveType {
 	IN_HITSTUN
 }
 
-public enum ActiveMoveType {
+public enum HitType {
 	HIT,
 	THROW,
 	PROJECTILE

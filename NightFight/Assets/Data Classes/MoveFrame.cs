@@ -6,6 +6,7 @@ public class MoveFrame {
 	public MoveType moveType = MoveType.RECOVERY;
 	public Vector2 movementDuringFrame;
 	public Dictionary<string, IFrameSequence> cancellableTo;
+	public AttackFrameData attackData = null;
 	public bool isLit;
 
 	public MoveFrame() {
@@ -20,6 +21,7 @@ public class MoveFrame {
 		isLit = false;
 		cancellableTo = GetDefaultCancellables ();
 	}
+
 	public MoveFrame (Vector2 movementDuringFrame, MoveType moveType) {
 		this.moveType = moveType;
 		this.movementDuringFrame = movementDuringFrame;
@@ -27,18 +29,12 @@ public class MoveFrame {
 		cancellableTo = GetDefaultCancellables ();
 	}
 
-	public static MoveFrame GetLitMoveFrame () {
-		MoveFrame frame = new MoveFrame ();
-		frame.isLit = true;
-		frame.cancellableTo = GetDefaultCancellables ();
-		return frame;
-	}
-
-	public static MoveFrame GetLitMoveFrame (Vector2 movementDuringFrame, MoveType moveType) {
-		MoveFrame frame = new MoveFrame (movementDuringFrame, moveType);
-		frame.isLit = true;
-		frame.cancellableTo =  GetDefaultCancellables ();
-		return frame;
+	public MoveFrame (Vector2 movementDuringFrame, MoveType moveType, AttackFrameData attackData) {
+		this.moveType = moveType;
+		this.movementDuringFrame = movementDuringFrame;
+		isLit = true;
+		cancellableTo = GetDefaultCancellables ();
+		this.attackData = attackData;
 	}
 
 	static Dictionary<string, IFrameSequence> GetDefaultCancellables () {

@@ -8,7 +8,8 @@ public class SpecialMoveTests {
 
 	public void SetUp ()
 	{
-		HitFrame AAHitbox = new HitFrame (new Vector3 (0.6f, 0.4f, 0f), new Vector3 (.7f, .5f, 1f), Vector3.zero, 4, 11, 7, MoveType.ACTIVE);
+		AttackFrameData AAAttackData = new AttackFrameData (new Vector2 (0.6f, 0.6f), new Vector3 (.7f, .8f, 1f), 4, 11, 2, HitType.HIT);
+		MoveFrame AAHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, AAAttackData);
 		MoveSequence AA = new MoveSequence (new MoveFrame[] {
 			new MoveFrame (), 
 			new MoveFrame (),

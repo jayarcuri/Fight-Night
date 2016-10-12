@@ -36,9 +36,10 @@ public class JumpSequenceTests {
 	[Test]
 	public void TestJumpKick() {
 		// Correct length
-		MoveFrame neutralFrame = MoveFrame.GetLitMoveFrame ();
-		MoveFrame jabHitbox = new HitFrame (new Vector2 (0.8f, 0.2f), 
-			new Vector3 (.7f, .25f, 1f), Vector2.zero, 1, 7, 6, MoveType.ACTIVE);
+		MoveFrame neutralFrame = new MoveFrame ();
+		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (0.8f, 0.2f), 
+			new Vector3 (.7f, .25f, 1f), 1, 7, 6, HitType.HIT);
+		MoveFrame jabHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, jabAttackData);
 		MoveSequence flyingJumpKick = new MoveSequence(new MoveFrame[] {
 			neutralFrame,
 			jabHitbox,

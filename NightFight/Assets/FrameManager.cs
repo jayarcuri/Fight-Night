@@ -52,7 +52,7 @@ public class FrameManager : MonoBehaviour
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {
 			Debug.Log ("was hit");
-			HitFrame hit = pendingAttackHitbox.GetCurrentHitFrame ();
+			AttackFrameData hit = pendingAttackHitbox.GetCurrentHitFrame ();
 			bool characterWasHit = characterManager.ProcessHitFrame (hit, previousFrame);
 			if (characterWasHit) {
 				healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
@@ -91,7 +91,6 @@ public class FrameManager : MonoBehaviour
 		MoveFrame currentFrame = null;
 
 		currentFrame = characterManager.GetCurrentFrame (directionalInput, attack);
-
 
 		// Attempt to move (should be put into ExecuteFrame()
 		if (currentFrame != null) {
@@ -150,13 +149,13 @@ public class FrameManager : MonoBehaviour
 	// this class will not allows the hitbox to be reapplied.
 	void ExecuteFrame (MoveFrame currentMoveFrame)
 	{
-		if (currentMoveFrame.moveType == MoveType.ACTIVE || currentMoveFrame.moveType == MoveType.THROW) {
-			if ((previousFrame.moveType != MoveType.ACTIVE && previousFrame.moveType != MoveType.THROW)) {
-				HitFrame attackFrame = (HitFrame)currentMoveFrame;
-				hitBox.ExecuteAttack (attackFrame.offset, attackFrame.size, attackFrame);
+		if (currentMoveFrame.attackData != null) {
+			if (previousFrame.attackData == null) {
+				AttackFrameData attackFrameData = currentMoveFrame.attackData;
+				hitBox.ExecuteAttack (attackFrameData);
 			}
 			// TODO: add movement related stuff here
-		} else if (hitBox.IsLoaded () && !(currentMoveFrame.moveType == MoveType.ACTIVE || currentMoveFrame.moveType == MoveType.THROW)) {
+		} else if (hitBox.IsLoaded () && currentMoveFrame.attackData == null) {
 			hitBox.Reset ();
 		}
 	}

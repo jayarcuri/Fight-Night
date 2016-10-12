@@ -68,7 +68,7 @@ public class CharacterManager
 		return null;
 	}
 
-	public bool ProcessHitFrame (HitFrame hit, MoveFrame previousFrame)
+	public bool ProcessHitFrame (AttackFrameData hit, MoveFrame previousFrame)
 	{
 		IFrameSequence currentMoveSequence = this.currentMove;
 		MoveFrame nextFrameToExecute = previousFrame;
@@ -79,7 +79,7 @@ public class CharacterManager
 			nextFrameToExecute.cancellableTo : 
 			characterData.neutralMoveOptions;
 
-		if (MoveType.ACTIVE.Equals(hit.moveType) && optionDictionary.ContainsKey ("HIT")) {
+		if (HitType.HIT == hit.hitType && optionDictionary.ContainsKey ("HIT")) {
 			if (currentMoveType == MoveType.AIRBORNE) {
 				JumpSequence currentJumpSequence = (JumpSequence)currentMoveSequence;
 				JumpSequence recoverySequence = currentJumpSequence.GetAirRecoverySequence ();
@@ -92,7 +92,7 @@ public class CharacterManager
 				characterState.TakeDamage (hit.damage);
 			}
 			return true;
-		} else if (MoveType.THROW.Equals(hit.moveType) && optionDictionary.ContainsKey ("THROW")) {
+		} else if (HitType.THROW == hit.hitType && optionDictionary.ContainsKey ("THROW")) {
 			Debug.Log ("Throw triggered");
 			QueueMove (hit.hitStunFrames);
 			characterState.TakeDamage (hit.damage);

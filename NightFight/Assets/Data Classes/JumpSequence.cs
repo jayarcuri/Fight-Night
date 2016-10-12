@@ -123,11 +123,12 @@ public class JumpSequence : IFrameSequence
 	{
 		MoveFrame returnFrame;
 		if (supplementalFrame != null) {
-			if (supplementalFrame.moveType == MoveType.ACTIVE) {
-				HitFrame hit = (HitFrame)supplementalFrame;
-				returnFrame = new HitFrame(hit.offset, hit.size, nextVelocity + supplementalFrame.movementDuringFrame, 
-					hit.damage, hit.hitStun, hit.blockStun, MoveType.ACTIVE);
-				returnFrame.cancellableTo = hit.cancellableTo;
+			if (supplementalFrame.attackData != null) {
+				AttackFrameData hit = supplementalFrame.attackData;
+				// Remove HitFrame construction
+				returnFrame = new MoveFrame(nextVelocity + supplementalFrame.movementDuringFrame, 
+					MoveType.AIRBORNE, hit);
+				returnFrame.cancellableTo = cancelsTo;
 			} else {
 				returnFrame = new MoveFrame (nextVelocity + supplementalFrame.movementDuringFrame, supplementalFrame.moveType);
 			}
