@@ -53,17 +53,20 @@ public class FrameManager : MonoBehaviour
 		if (pendingAttackHitbox != null) {
 			Debug.Log ("was hit");
 			AttackFrameData hit = pendingAttackHitbox.GetCurrentHitFrame ();
-			bool characterWasHit = characterManager.ProcessHitFrame (hit, previousFrame);
-			if (characterWasHit) {
-				healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
-				pendingAttackHitbox.Reset ();
-				// TODO: remove horrid temporary win code from here
-				if (characterManager.GetCurrentHealth () <= 0) {
-					victoryWindow.SetActive (true);
-					Time.timeScale = 0;
-				}
+			// TODO: make sure to look into this; hitbox should not have return a null frame.
+			if (hit != null) {
+				bool characterWasHit = characterManager.ProcessHitFrame (hit, previousFrame);
+				if (characterWasHit) {
+					healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
+					pendingAttackHitbox.Reset ();
+					// TODO: remove horrid temporary win code from here
+					if (characterManager.GetCurrentHealth () <= 0) {
+						victoryWindow.SetActive (true);
+						Time.timeScale = 0;
+					}
 
-				pendingAttackHitbox = null;
+					pendingAttackHitbox = null;
+				}
 			}
 		}
 

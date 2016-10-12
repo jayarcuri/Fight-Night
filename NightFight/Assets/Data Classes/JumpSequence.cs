@@ -128,9 +128,9 @@ public class JumpSequence : IFrameSequence
 				// Remove HitFrame construction
 				returnFrame = new MoveFrame(nextVelocity + supplementalFrame.movementDuringFrame, 
 					MoveType.AIRBORNE, hit);
-				returnFrame.cancellableTo = cancelsTo;
+				returnFrame.cancellableTo = supplementalFrame.cancellableTo;
 			} else {
-				returnFrame = new MoveFrame (nextVelocity + supplementalFrame.movementDuringFrame, supplementalFrame.moveType);
+				returnFrame = new MoveFrame (nextVelocity + supplementalFrame.movementDuringFrame, MoveType.AIRBORNE);
 			}
 		} else {
 			returnFrame = new MoveFrame (nextVelocity, MoveType.AIRBORNE);
