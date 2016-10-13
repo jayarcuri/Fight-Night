@@ -54,7 +54,7 @@ public class JumpSequenceTests {
 				testRunner.AddSupplementaryFrameSequence (flyingJumpKick);
 			}
 			if (i > 4 && i < 8) {
-				Assert.IsTrue (MoveType.ACTIVE.Equals(frame.moveType));
+				Assert.IsTrue (frame.attackData != null);
 			}
 		}
 

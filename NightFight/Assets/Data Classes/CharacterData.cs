@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class CharacterData
 {
-	public readonly int maxHealth = 25;
+	public readonly int maxHealth = 15;
 	//	protected SpecialMove fireBall;
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
 
@@ -18,26 +18,29 @@ public class CharacterData
 
 	public CharacterData ()
 	{
-		//		fireBall = null;
-		//			new SpecialMove (
-		//			new DirectionalInput[] { DirectionalInput.Down, DirectionalInput.DownRight, DirectionalInput.Right },
-		//			AA);
 		MoveFrame neutralFrame = new MoveFrame ();
 		neutralFrame.isLit = true;
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
 		AttackFrameData jumpAttackData = new AttackFrameData (new Vector2 (0.25f, -0.625f), 
-			new Vector3 (1.2f, .25f, 1f), 1, 7, 6, HitType.HIT);
+			new Vector3 (1.2f, .25f, 1f), 5, 6, 6, HitType.HIT);
 		MoveFrame jumpAttackHitbox = new MoveFrame (Vector2.zero, MoveType.AIRBORNE, jumpAttackData);
 		
 		MoveSequence jumpAttack = new MoveSequence (new MoveFrame[] {
 			neutralFrame,
 			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
 			jumpAttackHitbox,
 			jumpAttackHitbox,
 			jumpAttackHitbox,
 			jumpAttackHitbox,
 			jumpAttackHitbox,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
 			neutralFrame
 		});
 		cancelsForJump.Add ("A", jumpAttack);
@@ -54,13 +57,6 @@ public class CharacterData
 			jabHitbox,
 			jabHitbox,
 			jabHitbox,
-			jabHitbox,
-			jabHitbox,
-			jabHitbox,
-			neutralFrame,
-			neutralFrame,
-			neutralFrame,
-			neutralFrame,
 			neutralFrame,
 			neutralFrame,
 			neutralFrame,
@@ -70,7 +66,7 @@ public class CharacterData
 		});
 			
 		AttackFrameData throwAttackData = new AttackFrameData (new Vector2 (0.9f, -0.25f), 
-			new Vector3 (.8f, .5f, 1f), 1, 7, 6, HitType.THROW);
+			new Vector3 (.8f, .5f, 1f), 3, 14, 0, HitType.THROW);
 		MoveFrame throwHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, throwAttackData);
 		MoveSequence _throw = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
@@ -88,13 +84,14 @@ public class CharacterData
 			neutralFrame
 		});
 
-		AttackFrameData AAAttackData = new AttackFrameData (new Vector2 (0.6f, 0.6f), new Vector3 (.7f, .8f, 1f), 4, 11, 2, HitType.HIT);
+		AttackFrameData AAAttackData = new AttackFrameData (new Vector2 (0.6f, 0.6f), new Vector3 (.7f, .8f, 1f), 4, 10, 8, HitType.HIT);
 		MoveFrame AAHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, AAAttackData);
 		AA = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
 			neutralFrame,
 			neutralFrame,
 			neutralFrame,
+			AAHitbox,
 			AAHitbox,
 			AAHitbox,
 			AAHitbox,
