@@ -20,7 +20,6 @@ public class InputManager : MonoBehaviour {
 		if (Input.GetButton (heavyAtack)) {
 			attack = AttackType.Heavy;
 		} else if (Input.GetButton (lightAttack) && Input.GetButton (block)) {
-			Debug.Log ("Throw input detected!");
 			attack = AttackType.Throw;
 		} else if (Input.GetButton (lightAttack)) {
 			attack = AttackType.Light;

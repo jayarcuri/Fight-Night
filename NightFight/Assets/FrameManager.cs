@@ -51,7 +51,6 @@ public class FrameManager : MonoBehaviour
 	{
 		// AM I HIT?
 		if (pendingAttackHitbox != null) {
-			Debug.Log ("was hit");
 			AttackFrameData hit = pendingAttackHitbox.GetCurrentHitFrame ();
 			// TODO: make sure to look into this; hitbox should not have return a null frame.
 			if (hit != null) {
@@ -59,13 +58,12 @@ public class FrameManager : MonoBehaviour
 				if (characterWasHit) {
 					healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
 					pendingAttackHitbox.Reset ();
+					pendingAttackHitbox = null;
 					// TODO: remove horrid temporary win code from here
 					if (characterManager.GetCurrentHealth () <= 0) {
 						victoryWindow.SetActive (true);
 						Time.timeScale = 0;
 					}
-
-					pendingAttackHitbox = null;
 				}
 			}
 		}
@@ -97,18 +95,16 @@ public class FrameManager : MonoBehaviour
 
 		// Attempt to move (should be put into ExecuteFrame()
 		if (currentFrame != null) {
-
+			// TODO: remove this garbage for walking
 			if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
 				characterMovement.Move (currentFrame);
-			} else if (MoveType.IN_HITSTUN.Equals (currentFrame.moveType)) {
-				float moveBy = -0.5f;
-				characterMovement.MoveByVector (new Vector2 (moveBy, 0f));
+			} else if (currentFrame.movementDuringFrame != Vector2.zero) {
+				characterMovement.MoveByVector (currentFrame.movementDuringFrame);
 			} 
+
 			ExecuteFrame (currentFrame);
 
-			if (currentFrame.movementDuringFrame != Vector2.zero) {
-					characterMovement.MoveByVector (currentFrame.movementDuringFrame);
-				} 
+
 		}
 
 		if (currentFrame == null || !currentFrame.isLit) {
@@ -142,9 +138,8 @@ public class FrameManager : MonoBehaviour
 		if (attackingHitbox.IsLoaded ()) {
 			// TODO: hand hit frame to CharacterManager, let it deal with logic re: am I hit or not, &
 			// then queuing up the hitframes if necessary.
-			if (characterMovement.action != CharacterAction.Blocking || characterMovement.action != CharacterAction.BlockStunned) {
+
 				pendingAttackHitbox = attackingHitbox;
-			}
 		}
 	}
 

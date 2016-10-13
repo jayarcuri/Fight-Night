@@ -7,15 +7,6 @@ public class CharacterData
 	//	protected SpecialMove fireBall;
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
 
-	protected IFrameSequence jab;
-	protected IFrameSequence AA;
-	protected IFrameSequence forwardStep;
-	protected IFrameSequence backwardStep;
-	protected IFrameSequence block;
-	IFrameSequence verticalJump;
-	IFrameSequence forwardJump;
-	IFrameSequence backwardJump;
-
 	public CharacterData ()
 	{
 		MoveFrame neutralFrame = new MoveFrame ();
@@ -44,14 +35,14 @@ public class CharacterData
 			neutralFrame
 		});
 		cancelsForJump.Add ("A", jumpAttack);
-		verticalJump = new JumpSequence (40, 3.5, 0.0, cancelsForJump);
-		forwardJump = new JumpSequence (40, 3.5, 2.5, cancelsForJump);
-		backwardJump = new JumpSequence (40, 3.5, -2.5, cancelsForJump);
+		JumpSequence verticalJump = new JumpSequence (40, 3.5, 0.0, cancelsForJump);
+		JumpSequence forwardJump = new JumpSequence (40, 3.5, 2.5, cancelsForJump);
+		JumpSequence backwardJump = new JumpSequence (40, 3.5, -2.5, cancelsForJump);
 
 		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (1f, 0.2f), 
 			new Vector3 (1f, .25f, 1f), 1, 7, 6, HitType.HIT);
 		MoveFrame jabHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, jabAttackData);
-		jab = new MoveSequence (new MoveFrame[] {
+		MoveSequence jab = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
 			neutralFrame,
 			jabHitbox,
@@ -66,7 +57,7 @@ public class CharacterData
 		});
 			
 		AttackFrameData throwAttackData = new AttackFrameData (new Vector2 (0.9f, -0.35f), 
-			new Vector3 (.8f, .3f, 1f), 3, 14, 0, HitType.THROW);
+			new Vector3 (.8f, .3f, 1f), 3, 0, 14, HitType.THROW);
 		MoveFrame throwHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, throwAttackData);
 		MoveSequence _throw = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
@@ -86,7 +77,7 @@ public class CharacterData
 
 		AttackFrameData AAAttackData = new AttackFrameData (new Vector2 (0.8f, 0.6f), new Vector3 (.6f, .8f, 1f), 4, 10, 8, HitType.HIT);
 		MoveFrame AAHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, AAAttackData);
-		AA = new MoveSequence (new MoveFrame[] {
+		MoveSequence AA = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
 			neutralFrame,
 			neutralFrame,
@@ -106,14 +97,15 @@ public class CharacterData
 			neutralFrame
 		});
 		Dictionary<string, IFrameSequence> blockDict = new Dictionary<string, IFrameSequence> ();
-		//blockDict.Add ("HIT", null);
-		block = new MoveSequence (new MoveFrame[] {
+		blockDict.Add ("HIT", null);
+		blockDict.Add ("stop us now", null);
+		MoveSequence block = new MoveSequence (new MoveFrame[] {
 			new MoveFrame (MoveType.BLOCKING)
 		}, blockDict
 		);
 
-		forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
-		backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
+		MoveSequence forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
+		MoveSequence backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
 
 
 		neutralMoveOptions = new Dictionary<string, IFrameSequence> ();

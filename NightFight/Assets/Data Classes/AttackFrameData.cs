@@ -19,10 +19,20 @@ public class AttackFrameData
 
 		this.damage = damage;
 		this.hitStun = hitStun;
-		hitStunFrames = new MoveSequence(new MoveFrame[] {new MoveFrame(MoveType.IN_HITSTUN), new MoveFrame(MoveType.IN_HITSTUN), 
-			new MoveFrame(MoveType.IN_HITSTUN), new MoveFrame(MoveType.IN_HITSTUN)});
+		MoveFrame hitstunFrame = new MoveFrame (new Vector2 (-0.3f, 0), MoveType.IN_HITSTUN);
+		MoveFrame[] rawHSFrames = new MoveFrame[hitStun];
+		for (int i = 0; i < rawHSFrames.Length; i++) {
+			rawHSFrames [i] = hitstunFrame;
+		}
+		hitStunFrames = new MoveSequence (rawHSFrames);
 		this.blockStun = blockStun;
-		blockStunFrames = new MoveSequence(new MoveFrame[blockStun]);
+		MoveFrame blockstunFrame = new MoveFrame (new Vector2 (-0.2f, 0), MoveType.BLOCKING);
+
+		MoveFrame[] rawBSFrames = new MoveFrame[blockStun];
+		for (int i = 0; i < rawBSFrames.Length; i++) {
+			rawBSFrames [i] = blockstunFrame;
+		}
+		blockStunFrames = new MoveSequence(rawBSFrames);
 		this.hitType = hitType;
 	}
 
