@@ -72,6 +72,11 @@ public class CharacterData
 			neutralFrame,
 			neutralFrame,
 			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
+			neutralFrame,
 			neutralFrame
 		});
 
