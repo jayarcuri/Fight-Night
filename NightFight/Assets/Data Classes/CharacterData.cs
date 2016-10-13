@@ -48,8 +48,8 @@ public class CharacterData
 		forwardJump = new JumpSequence (40, 3.5, 2.5, cancelsForJump);
 		backwardJump = new JumpSequence (40, 3.5, -2.5, cancelsForJump);
 
-		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (0.8f, 0.2f), 
-			new Vector3 (.7f, .25f, 1f), 1, 7, 6, HitType.HIT);
+		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (1f, 0.2f), 
+			new Vector3 (1f, .25f, 1f), 1, 7, 6, HitType.HIT);
 		MoveFrame jabHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, jabAttackData);
 		jab = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
@@ -65,8 +65,8 @@ public class CharacterData
 			neutralFrame
 		});
 			
-		AttackFrameData throwAttackData = new AttackFrameData (new Vector2 (0.9f, -0.25f), 
-			new Vector3 (.8f, .5f, 1f), 3, 14, 0, HitType.THROW);
+		AttackFrameData throwAttackData = new AttackFrameData (new Vector2 (0.9f, -0.35f), 
+			new Vector3 (.8f, .3f, 1f), 3, 14, 0, HitType.THROW);
 		MoveFrame throwHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, throwAttackData);
 		MoveSequence _throw = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
@@ -74,7 +74,7 @@ public class CharacterData
 			neutralFrame,
 			throwHitbox,
 			throwHitbox,
-			throwHitbox,
+			neutralFrame,
 			neutralFrame,
 			neutralFrame,
 			neutralFrame,
@@ -84,7 +84,7 @@ public class CharacterData
 			neutralFrame
 		});
 
-		AttackFrameData AAAttackData = new AttackFrameData (new Vector2 (0.6f, 0.6f), new Vector3 (.7f, .8f, 1f), 4, 10, 8, HitType.HIT);
+		AttackFrameData AAAttackData = new AttackFrameData (new Vector2 (0.8f, 0.6f), new Vector3 (.6f, .8f, 1f), 4, 10, 8, HitType.HIT);
 		MoveFrame AAHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, AAAttackData);
 		AA = new MoveSequence (new MoveFrame[] {
 			neutralFrame, 
