@@ -18,7 +18,7 @@ public class FrameManager : MonoBehaviour
 	public GameObject victoryWindow;
 	string defaultHealthText;
 	CharacterManager characterManager;
-	InputManager InputManager;
+	InputManager inputManager;
 	MoveFrame previousFrame;
 	public HitboxController pendingAttackHitbox;
 
@@ -30,7 +30,7 @@ public class FrameManager : MonoBehaviour
 	{
 		characterManager = new CharacterManager ();
 		pendingAttackHitbox = null;
-		InputManager = GetComponent<InputManager> ();
+		inputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
 		bodyLight = GetComponentInChildren<Light> ();
 		hitBox = GetComponentInChildren<HitboxController> ();
@@ -75,7 +75,7 @@ public class FrameManager : MonoBehaviour
 			directionalInput = new DirectionalInput (botDirectionalInputRaw);
 			attack = botAttackInput;
 		} else {
-			InputManager.GetInputs (out directionalInput, out attack);
+			inputManager.GetInputs (out directionalInput, out attack);
 		}
 
 		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.
@@ -95,7 +95,7 @@ public class FrameManager : MonoBehaviour
 
 		// Attempt to move (should be put into ExecuteFrame()
 		if (currentFrame != null) {
-			// TODO: remove this garbage for walking
+			// TODO: remove this garbage for walking	
 			if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
 				characterMovement.Move (currentFrame);
 			} else if (currentFrame.movementDuringFrame != Vector2.zero) {
@@ -103,8 +103,6 @@ public class FrameManager : MonoBehaviour
 			} 
 
 			ExecuteFrame (currentFrame);
-
-
 		}
 
 		if (currentFrame == null || !currentFrame.isLit) {

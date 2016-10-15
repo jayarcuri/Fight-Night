@@ -11,7 +11,7 @@ public class DashSequenceTests {
 	[Test]
 	public void TestResolvesInExpectedTime() {
 		int expectedLength = 5;
-		DashSequence testRunner = new DashSequence (expectedLength, 3.0);
+		DashSequence testRunner = new DashSequence (expectedLength, 3.0f);
 		int actualLength = 0;
 		while (testRunner.HasNext ()) {
 			actualLength++;
@@ -22,7 +22,7 @@ public class DashSequenceTests {
 
 	[Test]
 	public void TestTravelsExpectedDistance() {
-		double expectedDistance = 2.0;
+		float expectedDistance = 2.0f;
 		DashSequence testRunner = new DashSequence (10, expectedDistance);
 		double actualDistance = 0;
 		while (testRunner.HasNext ()) {
@@ -34,7 +34,7 @@ public class DashSequenceTests {
 
 	[Test]
 	public void TestJumpSequenceCanReset() {
-		DashSequence testRunner = new DashSequence (10, 2.0);
+		DashSequence testRunner = new DashSequence (10, 2.0f);
 		while (testRunner.HasNext ()) {
 			testRunner.GetNext ();
 		}

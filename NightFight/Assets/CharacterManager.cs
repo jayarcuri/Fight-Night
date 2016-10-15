@@ -5,16 +5,14 @@ using System;
 
 public class CharacterManager
 {
-	CharacterState characterState;
 	CharacterData characterData;
-
+	int currentHealth;
 	public IFrameSequence currentMove { get; private set; }
 
 	public CharacterManager ()
 	{
 		characterData = new CharacterData ();
-		characterState = new CharacterState (characterData.maxHealth);
-
+		this.currentHealth = characterData.maxHealth;
 		currentMove = null;
 	}
 
@@ -30,7 +28,7 @@ public class CharacterManager
 
 	public int GetCurrentHealth ()
 	{
-		return characterState.health;
+		return currentHealth;
 	}
 
 	public MoveFrame GetCurrentFrame (DirectionalInput directionalInput, AttackType attackType)
@@ -47,7 +45,7 @@ public class CharacterManager
 		// Otherwise, if we currently have a move that will not resolve next frame & exists, try to cancel that 
 		// frame to a new Sequence.currentMoveSequence
 		else if (currentMoveSequence != null && nextFrameToExecute.cancellableTo != null) {
-			newMove = TryToCancelCurrentMove (nextFrameToExecute, directionalInput, attackType);
+			newMove = GetSequenceFromCancelDictionary (nextFrameToExecute.cancellableTo, directionalInput, attackType);
 		}
 
 		if (newMove != null) {
@@ -81,18 +79,18 @@ public class CharacterManager
 				JumpSequence currentJumpSequence = (JumpSequence)currentMoveSequence;
 				JumpSequence recoverySequence = currentJumpSequence.GetAirRecoverySequence ();
 				QueueMoveWithoutReset (recoverySequence);
-				characterState.TakeDamage (hit.damage);
+				TakeDamage (hit.damage);
 			} else if (previousMoveType == MoveType.BLOCKING) {
 				QueueMove (hit.blockStunFrames);
 			} else  {
 				QueueMove (hit.hitStunFrames);
-				characterState.TakeDamage (hit.damage);
+				TakeDamage (hit.damage);
 			}
 			return true;
 		} else if (HitType.THROW == hit.hitType && optionDictionary.ContainsKey ("HIT")) {
 			Debug.Log ("Throw triggered");
 			QueueMove (hit.blockStunFrames);
-			characterState.TakeDamage (hit.damage);
+			TakeDamage (hit.damage);
 			return true;
 		} else if (HitType.HIT == hit.hitType && previousMoveType == MoveType.BLOCKING) {
 			QueueMove (hit.blockStunFrames);
@@ -101,19 +99,13 @@ public class CharacterManager
 			return false;
 	}
 
-	public IFrameSequence TryToCancelCurrentMove (MoveFrame currentFrame, DirectionalInput directionalInput, AttackType attack)
-	{
-		IFrameSequence newMove = GetSequenceFromDictionary (currentFrame.cancellableTo, directionalInput, attack);
-		return newMove;
-	}
-
 	public IFrameSequence GetNewMove (DirectionalInput directionalInput, AttackType attack)
 	{
-		IFrameSequence newMove = GetSequenceFromDictionary (characterData.neutralMoveOptions, directionalInput, attack);
+		IFrameSequence newMove = GetSequenceFromCancelDictionary (characterData.neutralMoveOptions, directionalInput, attack);
 		return newMove;
 	}
 
-	IFrameSequence GetSequenceFromDictionary (Dictionary<string, IFrameSequence> optionDictionary,
+	public IFrameSequence GetSequenceFromCancelDictionary (Dictionary<string, IFrameSequence> optionDictionary,
 	                                          DirectionalInput directionalInput, AttackType attack)
 	{
 		int intInput = directionalInput.numpadValue;
@@ -156,5 +148,9 @@ public class CharacterManager
 
 	void QueueMoveWithoutReset(IFrameSequence newMove) {
 		currentMove = newMove;
+	}
+
+	void TakeDamage(int damage) {
+		currentHealth -= damage;
 	}
 }

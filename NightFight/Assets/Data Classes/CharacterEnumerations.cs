@@ -7,13 +7,6 @@ public enum AttackType {
 	Block = 'X',
 	None = 'Z'
 }
-public enum CharacterAction {
-	Standing, 
-	Jumping, 
-	Blocking, 
-	BlockStunned, 
-	HitStunned
-}
 public enum MoveType {
 	NONE,
 	STARTUP,

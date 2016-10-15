@@ -12,8 +12,6 @@ public class CharacterMovement : MonoBehaviour
 
 	Rigidbody playerBody;
 
-	public CharacterAction action { get; protected set; }
-
 	MovementDirection moveDirection;
 	Transform opponentTransform;
 
@@ -36,8 +34,7 @@ public class CharacterMovement : MonoBehaviour
 		if (opponentTransform == null) {
 			throw new UnityException ("Cannot find other player with tag \'" + opponentTag + "\'.");
 		}
-
-		action = CharacterAction.Standing;
+			
 		initialHeight = playerBody.position.y;
 		speed = speed / 60;
 		isFacingRight = transform.localPosition.x < opponentTransform.transform.localPosition.x;
@@ -99,23 +96,6 @@ public class CharacterMovement : MonoBehaviour
 		}
 	}
 
-
-	public void Jump (int horizontalInput)
-	{
-		if (action == CharacterAction.Standing) {
-			// Set all variables for jump state
-			currentJumpVelocity = initialJumpVelocity;
-			action = CharacterAction.Jumping;
-
-			if (horizontalInput > 0)
-				moveDirection = MovementDirection.Right;
-			if (horizontalInput == 0)
-				moveDirection = MovementDirection.None;
-			if (horizontalInput < 0)
-				moveDirection = MovementDirection.Left;
-		}
-	}
-
 	Vector2 GetJumpVelocity ()
 	{
 		remainingJumpTime -= Time.fixedDeltaTime; 
@@ -146,7 +126,7 @@ public class CharacterMovement : MonoBehaviour
 		// Verify player is within bounds of level and constrain them
 		if (newPosition.y < initialHeight) {
 			newPosition.y = initialHeight;
-			action = CharacterAction.Standing;
+			//action = CharacterAction.Standing;
 		}
 		// Verify within horizontal bounds
 		if (newPosition.x + transform.localScale.x / 2 > eastStageConstraint) {
