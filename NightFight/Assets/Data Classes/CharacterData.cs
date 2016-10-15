@@ -109,8 +109,8 @@ public class CharacterData
 		}, blockDict
 		);
 
-		MoveSequence forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_FORWARD) });
-		MoveSequence backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (MoveType.STEP_BACK) });
+		MoveSequence forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (new Vector2(0.15f, 0), MoveType.NONE) });
+		MoveSequence backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (new Vector2(-0.15f, 0), MoveType.NONE) });
 
 
 		neutralMoveOptions = new Dictionary<string, IFrameSequence> ();

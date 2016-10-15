@@ -20,7 +20,7 @@ public class CharacterMovement : MonoBehaviour
 	float initialHeight;
 	float remainingJumpTime;
 	public float currentJumpVelocity;
-	// Make these get pulled by code
+	// TODO: Make these get pulled by code
 	float westStageConstraint = -9.5f;
 	float eastStageConstraint = 9.5f;
 
@@ -70,55 +70,6 @@ public class CharacterMovement : MonoBehaviour
 		moveTo += difference;
 		moveTo = ConstrainPlayerPosition (moveTo);
 		playerBody.MovePosition (moveTo);
-	}
-
-	public void Move (MoveFrame stepDirection)
-	{
-		// Hacky solution to simplifying horizontal inputs
-		int horizontal = stepDirection.moveType == MoveType.STEP_FORWARD ? 1 : -1;
-		if (!isFacingRight)
-			horizontal *= -1;
-
-		if (horizontal != 0) {
-			// variable which will be modified by checks for different states which impact movement
-			Vector2 moveTo = playerBody.position;
-
-			if (horizontal == 1) 
-				moveDirection = MovementDirection.Right;
-			else
-				moveDirection = MovementDirection.Left;
-				
-			moveTo += Vector2.right * speed * horizontal;
-			moveTo = ConstrainPlayerPosition (moveTo);
-			playerBody.MovePosition (moveTo);
-		} else {
-			moveDirection = MovementDirection.None;
-		}
-	}
-
-	Vector2 GetJumpVelocity ()
-	{
-		remainingJumpTime -= Time.fixedDeltaTime; 
-		Vector2 moveBy = Vector2.zero;
-
-		moveBy.y += currentJumpVelocity;
- 
-		currentJumpVelocity -= gravityForce;
-		if (currentJumpVelocity < terminalVelocity) {
-			currentJumpVelocity = terminalVelocity;
-		}
-
-		// Move horizontal
-		switch (moveDirection) {
-		case MovementDirection.Left:
-			moveBy += Vector2.right * -speed * jumpMovementModifier;
-			break;
-		case MovementDirection.Right:
-			moveBy += Vector2.right * speed * jumpMovementModifier;
-			break;
-		} 
-
-		return moveBy;
 	}
 
 	Vector2 ConstrainPlayerPosition (Vector2 newPosition)

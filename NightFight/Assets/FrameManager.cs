@@ -95,13 +95,6 @@ public class FrameManager : MonoBehaviour
 
 		// Attempt to move (should be put into ExecuteFrame()
 		if (currentFrame != null) {
-			// TODO: remove this garbage for walking	
-			if (currentFrame.moveType == MoveType.STEP_BACK || currentFrame.moveType == MoveType.STEP_FORWARD) {
-				characterMovement.Move (currentFrame);
-			} else if (currentFrame.movementDuringFrame != Vector2.zero) {
-				characterMovement.MoveByVector (currentFrame.movementDuringFrame);
-			} 
-
 			ExecuteFrame (currentFrame);
 		}
 
@@ -136,22 +129,26 @@ public class FrameManager : MonoBehaviour
 		if (attackingHitbox.IsLoaded ()) {
 			// TODO: hand hit frame to CharacterManager, let it deal with logic re: am I hit or not, &
 			// then queuing up the hitframes if necessary.
-
 				pendingAttackHitbox = attackingHitbox;
 		}
 	}
 
 	// If there is not a non-active frame between two active frames and a hit has already been dealt w/,
 	// this class will not allows the hitbox to be reapplied.
-	void ExecuteFrame (MoveFrame currentMoveFrame)
+	void ExecuteFrame (MoveFrame currentFrame)
 	{
-		if (currentMoveFrame.attackData != null) {
+		// TODO: remove this garbage for walking	
+		if (currentFrame.movementDuringFrame != Vector2.zero) {
+			characterMovement.MoveByVector (currentFrame.movementDuringFrame);
+		} 
+
+		if (currentFrame.attackData != null) {
 			if (previousFrame.attackData == null) {
-				AttackFrameData attackFrameData = currentMoveFrame.attackData;
+				AttackFrameData attackFrameData = currentFrame.attackData;
 				hitBox.ExecuteAttack (attackFrameData);
 			}
 			// TODO: add movement related stuff here
-		} else if (hitBox.IsLoaded () && currentMoveFrame.attackData == null) {
+		} else if (hitBox.IsLoaded () && currentFrame.attackData == null) {
 			hitBox.Reset ();
 		}
 	}
