@@ -135,21 +135,20 @@ public class FrameManager : MonoBehaviour
 
 	// If there is not a non-active frame between two active frames and a hit has already been dealt w/,
 	// this class will not allows the hitbox to be reapplied.
-	void ExecuteFrame (MoveFrame currentFrame)
+	public void ExecuteFrame (MoveFrame currentFrame)
 	{
-		// TODO: remove this garbage for walking	
 		if (currentFrame.movementDuringFrame != Vector2.zero) {
 			characterMovement.MoveByVector (currentFrame.movementDuringFrame);
 		} 
 
-		if (currentFrame.attackData != null) {
-			if (previousFrame.attackData == null) {
-				AttackFrameData attackFrameData = currentFrame.attackData;
-				hitBox.ExecuteAttack (attackFrameData);
+		if (currentFrame.attackData != null) { 
+			if (previousFrame.attackData == null || !currentFrame.attackData.Equals ((previousFrame.attackData))) {
+				hitBox.ExecuteAttack (currentFrame.attackData);
 			}
-			// TODO: add movement related stuff here
-		} else if (hitBox.IsLoaded () && currentFrame.attackData == null) {
-			hitBox.Reset ();
+		} else {
+			if (hitBox.IsLoaded ()) {
+				hitBox.Reset ();
+			}
 		}
 	}
 

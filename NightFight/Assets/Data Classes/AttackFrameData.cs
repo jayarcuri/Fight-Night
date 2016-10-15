@@ -20,6 +20,7 @@ public class AttackFrameData
 		this.damage = damage;
 		this.hitStun = hitStun;
 		MoveFrame hitstunFrame = new MoveFrame (new Vector2 (-0.3f, 0), MoveType.IN_HITSTUN);
+		hitstunFrame.isLit = true;
 		MoveFrame[] rawHSFrames = new MoveFrame[hitStun];
 		for (int i = 0; i < rawHSFrames.Length; i++) {
 			rawHSFrames [i] = hitstunFrame;
@@ -27,7 +28,7 @@ public class AttackFrameData
 		hitStunFrames = new MoveSequence (rawHSFrames);
 		this.blockStun = blockStun;
 		MoveFrame blockstunFrame = new MoveFrame (new Vector2 (-0.2f, 0), MoveType.BLOCKING);
-
+		blockstunFrame.isLit = true;
 		MoveFrame[] rawBSFrames = new MoveFrame[blockStun];
 		for (int i = 0; i < rawBSFrames.Length; i++) {
 			rawBSFrames [i] = blockstunFrame;

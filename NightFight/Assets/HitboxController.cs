@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HitboxController : MonoBehaviour {
 	Transform hitbox;
-	AttackFrameData attackPayload;
+	public AttackFrameData attackData { get; private set; }
 	// Use this for initialization
 	void Start () {
 		hitbox = GetComponent<Transform> ();
@@ -15,29 +15,29 @@ public class HitboxController : MonoBehaviour {
 		enabled = true;
 		hitbox.localPosition = attackFrame.offset;
 		hitbox.localScale = attackFrame.size;
-		attackPayload = attackFrame;
+		attackData = attackFrame;
 	}
 
 	public void Reset () {
 		enabled = false;
 		hitbox.localPosition = hitbox.localScale = Vector3.zero;
-		attackPayload = null;
+		attackData = null;
 	}
 
 	public MoveSequence GetCurrentMoveHitstun() {
-		return attackPayload.hitStunFrames;
+		return attackData.hitStunFrames;
 	}
 
 	public AttackFrameData GetCurrentHitFrame() {
-		return attackPayload;
+		return attackData;
 	}
 
 	public int GetCurrentMoveHitStunValue() {
-		return attackPayload.hitStun;
+		return attackData.hitStun;
 	}
 
 	public bool IsLoaded() {
-		return (attackPayload != null);
+		return (attackData != null);
 	}
 
 }
