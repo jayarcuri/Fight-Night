@@ -21,6 +21,7 @@ public class FrameManager : MonoBehaviour
 	InputManager inputManager;
 	MoveFrame previousFrame;
 	public HitboxController pendingAttackHitbox;
+	public HealthBarController healthBar;
 
 	public bool isBot;
 	public int botDirectionalInputRaw;
@@ -36,7 +37,7 @@ public class FrameManager : MonoBehaviour
 		hitBox = GetComponentInChildren<HitboxController> ();
 		bodyLight.enabled = false;
 		defaultHealthText = healthText.text;
-		healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
+		healthBar.maxHealth = characterManager.GetCurrentHealth ();
 
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
@@ -56,7 +57,8 @@ public class FrameManager : MonoBehaviour
 			if (hit != null) {
 				bool characterWasHit = characterManager.ProcessHitFrame (hit, previousFrame);
 				if (characterWasHit) {
-					healthText.text = defaultHealthText + characterManager.GetCurrentHealth ();
+					healthBar.UpdateHealthBar (characterManager.GetCurrentHealth ());
+
 					pendingAttackHitbox.Reset ();
 					pendingAttackHitbox = null;
 					// TODO: remove horrid temporary win code from here
