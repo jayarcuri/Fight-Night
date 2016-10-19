@@ -128,4 +128,8 @@ public class CharacterData
 		neutralMoveOptions.Add ("HIT", null);
 	}
 
+	public MoveFrame GetEmptyMoveFrame() {
+		return new MoveFrame (MoveType.NONE);
+	}
+
 }

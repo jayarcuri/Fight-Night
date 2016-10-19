@@ -72,13 +72,17 @@ public class FrameManager : MonoBehaviour
 
 		DirectionalInput directionalInput;
 		AttackType attack;
-		bool toggleLight = false;
+		bool toggleIllumination = false;
 
 		if (isBot) {
 			directionalInput = new DirectionalInput (botDirectionalInputRaw);
 			attack = botAttackInput;
 		} else {
-			inputManager.GetInputs (out directionalInput, out attack, out toggleLight);
+			inputManager.GetInputs (out directionalInput, out attack, out toggleIllumination);
+		}
+
+		if (toggleIllumination) {
+			characterManager.ToggleCharacterIllumination ();
 		}
 
 		// if (the character manager doesn't have a queued frame), attempt to flip the rotation.

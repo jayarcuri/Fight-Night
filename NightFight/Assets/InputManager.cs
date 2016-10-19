@@ -30,9 +30,8 @@ public class InputManager : MonoBehaviour {
 			attack = AttackType.None;
 		}
 
-		if (Input.GetButtonDown (illuminateButton)) {
+		if (Input.GetButton (illuminateButton)) {
 			toggleLight = true;
-			Debug.Log ("Illuminate button pressed.");
 		} else {
 			toggleLight = false;
 		}

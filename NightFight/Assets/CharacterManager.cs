@@ -7,6 +7,7 @@ public class CharacterManager
 {
 	CharacterData characterData;
 	int currentHealth;
+	bool isSelfIlluminated;
 	public IFrameSequence currentMove { get; private set; }
 
 	public CharacterManager ()
@@ -36,6 +37,7 @@ public class CharacterManager
 		IFrameSequence newMove = null;
 		IFrameSequence currentMoveSequence = this.currentMove;
 		MoveFrame nextFrameToExecute = currentMoveSequence != null && currentMoveSequence.HasNext () ? currentMoveSequence.Peek () : null;
+		MoveFrame returnFrame;
 		// ---Attempt to enqueue a new move using input---
 		//
 		// If there is no current Sequence or it would resolve, give input to neutral state to get new Sequence
@@ -55,15 +57,19 @@ public class CharacterManager
 			} else {
 				QueueMove (newMove);
 			}
-			return currentMove.GetNext ();
-		}
-
-		if (nextFrameToExecute != null) {
+			returnFrame = currentMove.GetNext ();
+		} else if (nextFrameToExecute != null) {
 			this.currentMove.IncrementIndex ();
-			return nextFrameToExecute;
+			returnFrame = nextFrameToExecute;
+		} else {
+			returnFrame = characterData.GetEmptyMoveFrame ();
 		}
 
-		return null;
+		if (isSelfIlluminated) {
+			returnFrame.isLit = true;
+		}
+
+		return returnFrame;
 	}
 
 	public bool ProcessHitFrame (AttackFrameData hit, MoveFrame previousFrame)
@@ -138,6 +144,10 @@ public class CharacterManager
 		}
 
 		return newMove;
+	}
+
+	public void ToggleCharacterIllumination () {
+		isSelfIlluminated = !isSelfIlluminated;
 	}
 
 	void QueueMove (IFrameSequence newMove)
