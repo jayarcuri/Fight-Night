@@ -32,7 +32,7 @@ public class CharacterManager
 		return currentHealth;
 	}
 
-	public MoveFrame GetCurrentFrame (DirectionalInput directionalInput, AttackType attackType)
+	public MoveFrame GetCurrentFrame (DirectionalInput directionalInput, AttackType attackType, out bool isLit)
 	{
 		IFrameSequence newMove = null;
 		IFrameSequence currentMoveSequence = this.currentMove;
@@ -65,9 +65,7 @@ public class CharacterManager
 			returnFrame = characterData.GetEmptyMoveFrame ();
 		}
 
-		if (isSelfIlluminated) {
-			returnFrame.isLit = true;
-		}
+		isLit = isSelfIlluminated || returnFrame.isLit;
 
 		return returnFrame;
 	}

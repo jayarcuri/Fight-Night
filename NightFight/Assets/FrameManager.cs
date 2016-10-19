@@ -97,18 +97,19 @@ public class FrameManager : MonoBehaviour
 		}
 
 		MoveFrame currentFrame = null;
+		bool isLit = false;
 
-		currentFrame = characterManager.GetCurrentFrame (directionalInput, attack);
+		currentFrame = characterManager.GetCurrentFrame (directionalInput, attack, out isLit);
 
 		// Attempt to move (should be put into ExecuteFrame()
 		if (currentFrame != null) {
 			ExecuteFrame (currentFrame);
 		}
 
-		if (currentFrame == null || !currentFrame.isLit) {
-			characterLight.TurnOffLight ();
-		} else {
+		if (isLit) {
 			characterLight.TurnOnLight ();
+		} else {
+			characterLight.TurnOffLight ();
 		}
 
 		if (currentFrame != null && MoveType.IN_HITSTUN.Equals (currentFrame.moveType)) {

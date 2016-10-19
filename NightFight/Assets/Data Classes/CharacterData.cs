@@ -9,8 +9,7 @@ public class CharacterData
 
 	public CharacterData ()
 	{
-		MoveFrame neutralFrame = new MoveFrame ();
-		neutralFrame.isLit = true;
+		MoveFrame neutralFrame = MoveFrame.GetEmptyLitFrame ();
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
 		AttackFrameData jumpAttackData = new AttackFrameData (new Vector2 (0.25f, -0.625f), 

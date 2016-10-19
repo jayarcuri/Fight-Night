@@ -7,7 +7,7 @@ public class MoveFrame {
 	public Vector2 movementDuringFrame;
 	public Dictionary<string, IFrameSequence> cancellableTo;
 	public AttackFrameData attackData = null;
-	public bool isLit;
+	public bool isLit { get; private set; }
 
 	public MoveFrame() {
 		movementDuringFrame = Vector2.zero;
@@ -29,6 +29,13 @@ public class MoveFrame {
 		cancellableTo = GetDefaultCancellables ();
 	}
 
+	public MoveFrame (Vector2 movementDuringFrame, MoveType moveType, bool isLit) {
+		this.moveType = moveType;
+		this.movementDuringFrame = movementDuringFrame;
+		this.isLit = isLit;
+		cancellableTo = GetDefaultCancellables ();
+	}
+
 	public MoveFrame (Vector2 movementDuringFrame, MoveType moveType, AttackFrameData attackData) {
 		this.moveType = moveType;
 		this.movementDuringFrame = movementDuringFrame;
@@ -41,6 +48,10 @@ public class MoveFrame {
 		Dictionary<string, IFrameSequence> cancelDict = new Dictionary<string, IFrameSequence> ();
 		cancelDict.Add("HIT", null);
 		return cancelDict;
+	}
+
+	public static MoveFrame GetEmptyLitFrame() {
+		return new MoveFrame (Vector2.zero, MoveType.NONE, true);
 	}
 }
 
