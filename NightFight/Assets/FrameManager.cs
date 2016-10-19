@@ -11,7 +11,6 @@ public class FrameManager : MonoBehaviour
 {
 	public bool isPlayer1;
 	public HitboxController hitBox;
-	public Light bodyLight;
 	// To flip orientation if necessary. Move to CharacterMovement.
 	public CharacterMovement characterMovement;
 	public Text healthText;
@@ -22,6 +21,7 @@ public class FrameManager : MonoBehaviour
 	MoveFrame previousFrame;
 	public HitboxController pendingAttackHitbox;
 	public HealthBarController healthBar;
+	public CharacterLightController characterLight;
 
 	public bool isBot;
 	public int botDirectionalInputRaw;
@@ -33,11 +33,11 @@ public class FrameManager : MonoBehaviour
 		pendingAttackHitbox = null;
 		inputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
-		bodyLight = GetComponentInChildren<Light> ();
+		characterLight = GetComponent<CharacterLightController> ();
 		hitBox = GetComponentInChildren<HitboxController> ();
-		bodyLight.enabled = false;
 		defaultHealthText = healthText.text;
 		healthBar.maxHealth = characterManager.GetCurrentHealth ();
+		characterLight.TurnOffLight ();
 
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
@@ -101,9 +101,15 @@ public class FrameManager : MonoBehaviour
 		}
 
 		if (currentFrame == null || !currentFrame.isLit) {
-			bodyLight.enabled = false;
+			characterLight.TurnOffLight ();
 		} else {
-			bodyLight.enabled = true;
+			characterLight.TurnOnLight ();
+		}
+
+		if (currentFrame != null && MoveType.IN_HITSTUN.Equals (currentFrame.moveType)) {
+			characterLight.SetLightColorHitstun ();
+		} else {
+			characterLight.SetLightColorDefault ();
 		}
 
 		// TODO: implement collision checking here
