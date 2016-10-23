@@ -37,7 +37,7 @@ public class FrameManager : MonoBehaviour
 		hitBox = GetComponentInChildren<HitboxController> ();
 		defaultHealthText = healthText.text;
 		healthBar.maxHealth = characterManager.GetCurrentHealth ();
-		characterLight.TurnOffLight ();
+		characterLight.SetLight (false, MoveType.NONE);
 
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
@@ -106,19 +106,8 @@ public class FrameManager : MonoBehaviour
 			ExecuteFrame (currentFrame);
 		}
 
-		if (isLit) {
-			characterLight.TurnOnLight ();
-		} else {
-			characterLight.TurnOffLight ();
-		}
-
-		if (currentFrame != null && MoveType.IN_HITSTUN.Equals (currentFrame.moveType)) {
-			characterLight.SetLightColorHitstun ();
-		} else {
-			characterLight.SetLightColorDefault ();
-		}
-
-		// TODO: implement collision checking here
+		MoveType currentMoveType = currentFrame != null ? currentFrame.moveType : MoveType.NONE;
+		characterLight.SetLight (isLit, currentMoveType);
 
 		previousFrame = currentFrame;
 	}
@@ -154,7 +143,7 @@ public class FrameManager : MonoBehaviour
 		if (currentFrame.movementDuringFrame != Vector2.zero) {
 			characterMovement.MoveByVector (currentFrame.movementDuringFrame);
 		} 
-
+		// Smelly Code Below
 		if (currentFrame.attackData != null) { 
 			if (previousFrame.attackData == null || !currentFrame.attackData.Equals ((previousFrame.attackData))) {
 				hitBox.ExecuteAttack (currentFrame.attackData);

@@ -10,27 +10,29 @@ public class CharacterLightController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		characterLight = GetComponentInChildren<Light> ();
-		defaultLightColor = characterLight.color;
+		defaultLightColor = Color.white;
 	}
 
-	public void SetLightColorDefault() {
-		characterLight.color = defaultLightColor;
-	}
+	public void SetLight(bool isLit, MoveType currentMoveType) {
+		if (isLit && !characterLight.enabled) {
+			characterLight.enabled = true;
+		} else if (!isLit && characterLight.enabled) {
+			characterLight.enabled = false;
+		}
 
-	public void SetLightColorHitstun() {
-		characterLight.color = hitstunColor;
-	}
-
-	public void SetLightColorBlockstun() {
-		characterLight.color = blockstunColor;
-	}
-
-	public void TurnOnLight () {
-		characterLight.enabled = true;
-	}
-
-	public void TurnOffLight () {
-		characterLight.enabled = false;
+		switch (currentMoveType) {
+		case MoveType.IN_HITSTUN:
+			characterLight.color = hitstunColor;
+			break;
+		case MoveType.BLOCKING:
+			characterLight.color = blockstunColor;
+			break;
+		default:
+			if (characterLight.color != defaultLightColor) {
+				characterLight.color = defaultLightColor;
+			}
+			break;
+		}
 	}
 
 }
