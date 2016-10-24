@@ -16,7 +16,7 @@ public class FrameManager : MonoBehaviour
 	public Text healthText;
 	public GameObject victoryWindow;
 	string defaultHealthText;
-	CharacterManager characterManager;
+	CharacterDataManager characterManager;
 	InputManager inputManager;
 	MoveFrame previousFrame;
 	public HitboxController pendingAttackHitbox;
@@ -29,7 +29,7 @@ public class FrameManager : MonoBehaviour
 
 	void Start ()
 	{
-		characterManager = new CharacterManager ();
+		characterManager = new CharacterDataManager ();
 		pendingAttackHitbox = null;
 		inputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
