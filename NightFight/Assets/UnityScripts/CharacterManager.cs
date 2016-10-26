@@ -76,6 +76,7 @@ public class CharacterManager : MonoBehaviour {
 
 			if (wasHit) {
 				healthBar.UpdateHealthBar (characterDataManager.GetCurrentHealth ());
+				collisionManager.ClearPendingHit ();
 			}
 		}
 	}
