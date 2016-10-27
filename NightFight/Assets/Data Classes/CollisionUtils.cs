@@ -39,19 +39,22 @@ public class CollisionUtils
 		Vector2 rightCharacterPosition, Vector2 rightCharacterVelocity) {
 		float distance = rightCharacterPosition.x - leftCharacterPosition.x;
 		// if a collision does not occur...
+		float percentageTraveledBefore;
+		float percentTraveledAfter;
+
 		if ((0 <= leftCharacterVelocity.x && 0 <= rightCharacterVelocity.x) || (0 >= leftCharacterVelocity.x && 0 >= rightCharacterVelocity.x)) {
 			// a - d - v_a
 			// if the distance traveled by b exceeds the initial distance between a & b plus the distance traveled by a, then a collision will occur
 			if (Mathf.Abs(rightCharacterVelocity.x - leftCharacterVelocity.x) >= distance) {
 				float velocityDifferential = rightCharacterVelocity.x - leftCharacterVelocity.x;
-				float percentDistanceTraveledBeforeCollision = Mathf.Abs (distance / velocityDifferential);
-				float percentDistanceTraveledAfter = 1f - percentDistanceTraveledBeforeCollision;
+				percentageTraveledBefore = Mathf.Abs (distance / velocityDifferential);
+				percentTraveledAfter = 1f - percentageTraveledBefore;
 
 				// velocity after contact (for both players) is equal to the remaining "percentage distance" multiplied by the velocity differential
-				float velocityAfterContact = velocityDifferential * percentDistanceTraveledAfter;
+				float velocityAfterContact = velocityDifferential * percentageTraveledBefore;
 
-				Vector2 newLeftVelocity = new Vector2 ((leftCharacterVelocity.x * percentDistanceTraveledBeforeCollision) + velocityAfterContact, 0);
-				Vector2 newRightVelocity = new Vector2 ((rightCharacterVelocity.x * percentDistanceTraveledBeforeCollision) + velocityAfterContact, 0);
+				Vector2 newLeftVelocity = new Vector2 ((leftCharacterVelocity.x * percentageTraveledBefore) + velocityAfterContact, 0);
+				Vector2 newRightVelocity = new Vector2 ((rightCharacterVelocity.x * percentageTraveledBefore) + velocityAfterContact, 0);
 					
 				return new Tuple<Vector2, Vector2> (newLeftVelocity, newRightVelocity);
 				//return new Vector2 (rightCharacterPosition.x + (percentDistanceTraveledBeforeCollision * rightCharacterVelocity.x), 0);
@@ -61,10 +64,10 @@ public class CollisionUtils
 			float ratio = Mathf.Abs (leftCharacterVelocity.x) / (Mathf.Abs (leftCharacterVelocity.x) + Mathf.Abs (rightCharacterVelocity.x));
 			float offsetFromLeft = distance * ratio;
 
-			float percentageTraveledBefore = leftCharacterVelocity.x / offsetFromLeft;
-			float percentAfter = 1f - percentageTraveledBefore;
+			percentageTraveledBefore = leftCharacterVelocity.x / offsetFromLeft;
+			percentTraveledAfter = 1f - percentageTraveledBefore;
 
-			float velocityAfterContact = (leftCharacterVelocity.x - rightCharacterVelocity.x) * percentAfter;
+			float velocityAfterContact = (leftCharacterVelocity.x - rightCharacterVelocity.x) * percentTraveledAfter;
 
 			Vector2 newLeftVelocity = new Vector2 ((leftCharacterVelocity.x * percentageTraveledBefore) + velocityAfterContact, 0);
 			Vector2 newRightVelocity = new Vector2 ((rightCharacterVelocity.x * percentageTraveledBefore) + velocityAfterContact, 0);

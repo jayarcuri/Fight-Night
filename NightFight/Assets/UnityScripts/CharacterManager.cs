@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Eppy;
 // Tracks all components related to a given player's avatar.
 public class CharacterManager : MonoBehaviour {
 
@@ -38,7 +39,7 @@ public class CharacterManager : MonoBehaviour {
 		}
 	}
 
-	public void ExecuteCurrentFrame () {
+	public Tuple<MoveFrame, bool> GetCurrentFrame () {
 		AttackType attack;
 		DirectionalInput directionalInput;
 		bool toggleIllumination = false;
@@ -56,9 +57,14 @@ public class CharacterManager : MonoBehaviour {
 		MoveFrame currentFrame = null;
 		bool isLit;
 		currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);
+
+		return new Tuple<MoveFrame, bool>(currentFrame, isLit);
+	}
+
+	public void ExecuteCurrentFrame(MoveFrame currentFrame, Vector2 movementDuringFrame, bool isLit) {
 		// 3: Execute frame.
 		if (currentFrame != null) {
-			UpdateCharacterBody (currentFrame);
+			PerformFrame (currentFrame, movementDuringFrame);
 		}
 
 		MoveType currentMoveType = currentFrame != null ? currentFrame.moveType : MoveType.NONE;
@@ -91,10 +97,10 @@ public class CharacterManager : MonoBehaviour {
 		}
 	}
 
-	public void UpdateCharacterBody (MoveFrame currentFrame)
+	public void PerformFrame (MoveFrame currentFrame, Vector2 movementDuringFrame)
 	{
-		if (currentFrame.movementDuringFrame != Vector2.zero) {
-			characterMovement.MoveByVector (currentFrame.movementDuringFrame);
+		if (movementDuringFrame != Vector2.zero) {
+			characterMovement.MoveByVector (movementDuringFrame);
 		} 
 		// Smelly Code Below
 		if (currentFrame.attackData != null) { 
