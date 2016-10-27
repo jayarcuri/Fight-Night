@@ -10,7 +10,6 @@ public class CharacterManager : MonoBehaviour {
 	public CharacterDataManager characterDataManager;
 	public InputManager inputManager;
 	public CollisionManager collisionManager;
-	public HitboxController pendingAttackHitbox;
 	public HealthBarController healthBar;
 	public CharacterLightController characterLight;
 	public GameObject victoryWindow;
@@ -24,7 +23,6 @@ public class CharacterManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		characterDataManager = new CharacterDataManager ();
-		pendingAttackHitbox = null;
 		inputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
 		characterLight = GetComponent<CharacterLightController> ();
