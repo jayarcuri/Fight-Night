@@ -76,5 +76,12 @@ public class CollisionUtilsTests
 	public void GetUpdatedVelocitiesTest() {
 
 	}
+
+
+	[Test]
+	public void TakeThreeTests() {
+
+	}
+
 }
 

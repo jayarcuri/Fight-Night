@@ -27,8 +27,14 @@ public class GameDirector : MonoBehaviour {
 		}
 		// TODO: 4: Check & resolve collisions (hits & bumps)
 		Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
-		if (newVelocities != null) {
+		if (!newVelocities.Item1.Equals (CollisionUtils.NaV2)) {
 			//currentFrames[0].Item1
+			characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
+			characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
+				
+		} else {
+			characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, currentFrames[0].Item1.movementDuringFrame, currentFrames [0].Item2);
+			characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
 		}
 		//	If (either would be outside the bounds of the game)
 
