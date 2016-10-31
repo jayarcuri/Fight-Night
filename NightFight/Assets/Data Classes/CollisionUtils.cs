@@ -1,98 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 using Eppy;
 
 public class CollisionUtils
 {
 	public static readonly Vector2 NaV2 = new Vector2(float.NaN, float.NaN);
+	public static readonly float bufferValue = 0.05f;
 
-	public static Vector2 GetPointOfImpact(Vector2 leftCharacterPosition, Vector2 leftCharacterVelocity, 
-		Vector2 rightCharacterPosition, Vector2 rightCharacterVelocity) {
-		float distance = rightCharacterPosition.x - leftCharacterPosition.x;
-		// if a collision does not occur...
-		if ((0 <= leftCharacterVelocity.x && 0 <= rightCharacterVelocity.x) || (0 >= leftCharacterVelocity.x && 0 >= rightCharacterVelocity.x)) {
-			// a - d - v_a
-			// if the distance traveled by b exceeds the initial distance between a & b plus the distance traveled by a, then a collision will occur
-			if (Mathf.Abs(rightCharacterVelocity.x - leftCharacterVelocity.x) >= distance) {
-				float velocityDifferential = rightCharacterVelocity.x - leftCharacterVelocity.x;
-				float percentDistanceTraveledBeforeCollision = Mathf.Abs (distance / velocityDifferential);
-				float percentDistanceTraveledAfter = 1f - percentDistanceTraveledBeforeCollision;
-
-				// velocity after contact (for both players) is equal to the remaining "percentage distance" multiplied by the velocity differential
-				float velocityAfterContact = velocityDifferential * percentDistanceTraveledAfter;
-
-				return new Vector2 (rightCharacterPosition.x + (percentDistanceTraveledBeforeCollision * rightCharacterVelocity.x), 0);
-			}
-		}	else if (distance <= leftCharacterVelocity.x + Mathf.Abs (rightCharacterVelocity.x)) {
-
-			float ratio = Mathf.Abs (leftCharacterVelocity.x) / (Mathf.Abs (leftCharacterVelocity.x) + Mathf.Abs (rightCharacterVelocity.x));
-			float offsetFromLeft = distance * ratio;
-
-			return new Vector2 (leftCharacterPosition.x + offsetFromLeft, 0);
-
-		}
-		//	else
-		return NaV2;
-	}
-
-	public static Tuple<Vector2, Vector2> GetUpdatedVelocities (Vector2 leftCharacterPosition, Vector2 leftCharacterVelocity, 
-		Vector2 rightCharacterPosition, Vector2 rightCharacterVelocity) {
-		float distance = rightCharacterPosition.x - leftCharacterPosition.x;
-		// if a collision does not occur...
-		float percentageTraveledBefore;
-		float percentTraveledAfter;
-
-		if (leftCharacterVelocity.x != 0) {
-			Debug.Log ("Hey sailor.");
-		}
-
-		if ((0 <= leftCharacterVelocity.x && 0 <= rightCharacterVelocity.x) || (0 >= leftCharacterVelocity.x && 0 >= rightCharacterVelocity.x)) {
-			// a - d - v_a
-			// if the distance traveled by b exceeds the initial distance between a & b plus the distance traveled by a, then a collision will occur
-			if (Mathf.Abs(rightCharacterVelocity.x - leftCharacterVelocity.x) >= Mathf.Abs(distance)) {
-				float velocityDifferential = rightCharacterVelocity.x - leftCharacterVelocity.x;
-				percentageTraveledBefore = Mathf.Abs (distance / velocityDifferential);
-				percentTraveledAfter = 1f - percentageTraveledBefore;
-
-				// velocity after contact (for both players) is equal to the remaining "percentage distance" multiplied by the velocity differential
-				float velocityAfterContact = velocityDifferential * percentageTraveledBefore;
-
-				Vector2 newLeftVelocity = new Vector2 ((leftCharacterVelocity.x * percentageTraveledBefore) + velocityAfterContact, 0);
-				Vector2 newRightVelocity = new Vector2 ((rightCharacterVelocity.x * percentageTraveledBefore) + velocityAfterContact, 0);
-					
-				return new Tuple<Vector2, Vector2> (newLeftVelocity, newRightVelocity);
-				//return new Vector2 (rightCharacterPosition.x + (percentDistanceTraveledBeforeCollision * rightCharacterVelocity.x), 0);
-			}
-		}	else if (distance <= leftCharacterVelocity.x + Mathf.Abs (rightCharacterVelocity.x)) {
-
-			float ratio = Mathf.Abs (leftCharacterVelocity.x) / (Mathf.Abs (leftCharacterVelocity.x) + Mathf.Abs (rightCharacterVelocity.x));
-			float offsetFromLeft = distance * ratio;
-
-			percentageTraveledBefore = leftCharacterVelocity.x / offsetFromLeft;
-			percentTraveledAfter = 1f - percentageTraveledBefore;
-
-			float velocityAfterContact = (leftCharacterVelocity.x - rightCharacterVelocity.x) * percentTraveledAfter;
-
-			Vector2 newLeftVelocity = new Vector2 ((leftCharacterVelocity.x * percentageTraveledBefore) + velocityAfterContact, 0);
-			Vector2 newRightVelocity = new Vector2 ((rightCharacterVelocity.x * percentageTraveledBefore) + velocityAfterContact, 0);
-
-			return new Tuple<Vector2, Vector2> (newLeftVelocity, newRightVelocity);
-			//return new Vector2 (leftCharacterPosition.x + offsetFromLeft, 0);
-
-		}
-		//	else
-		return new Tuple<Vector2, Vector2>(NaV2, NaV2);
-
-	}
-
-	public static Tuple<Vector2, Vector2> TakeThree(Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
+	public static Tuple<Vector2, Vector2> GetUpdatedVelocities(Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
 		Transform leftCharacterTransform;
 		Vector2 leftCharacterVelocity;
 		Transform rightCharacterTransform;
 		Vector2 rightCharacterVelocity;
 
 		if (p1Transform.position.Equals(p2Transform.position)) {
+			//	Occurs when a character jumps in on another in the corner.
 			throw new UnityException ("There should NEVER be a case of 1 to 1 overlap before velocity is calculated.");
+		}
+
+		if (p1Velocity != Vector2.zero && p2Velocity != Vector2.zero) {
+			Debug.Log ("Both characters are moving.");
 		}
 
 		bool p1IsFacingRight = p1Transform.position.x < p2Transform.position.x;
@@ -101,16 +29,18 @@ public class CollisionUtils
 			leftCharacterTransform = p1Transform;
 			leftCharacterVelocity = p1Velocity;
 			rightCharacterTransform = p2Transform;
-			rightCharacterVelocity = p2Velocity;
+			rightCharacterVelocity = new Vector2(p2Velocity.x * -1f, p2Velocity.y);
 		} else {
 			leftCharacterTransform = p2Transform;
 			leftCharacterVelocity = p2Velocity;
 			rightCharacterTransform = p1Transform;
-			rightCharacterVelocity = p1Velocity;
+			rightCharacterVelocity = new Vector2(p1Velocity.x * -1f, p1Velocity.y);
 		}
 
-		Vector2 a = new Vector2 (leftCharacterTransform.position.x + leftCharacterTransform.localScale.x / 2, leftCharacterTransform.position.y); 
-		Vector2 b = new Vector2 (rightCharacterTransform.position.x - rightCharacterTransform.localScale.x / 2, rightCharacterTransform.position.y); 
+		Vector2 a = new Vector2 (leftCharacterTransform.position.x + leftCharacterTransform.localScale.x / 2f, leftCharacterTransform.position.y); 
+		Debug.Log (a);
+		Vector2 b = new Vector2 (rightCharacterTransform.position.x - rightCharacterTransform.localScale.x / 2f, rightCharacterTransform.position.y); 
+		Debug.Log (b);
 
 		Vector2 a_LocationAfterMovement = a + leftCharacterVelocity;
 		Vector2 b_LocationAfterMovement = b + rightCharacterVelocity;
@@ -124,10 +54,10 @@ public class CollisionUtils
 				(Mathf.Abs(leftCharacterVelocity.x) + Mathf.Abs(rightCharacterVelocity.x));
 			float newMidPoint = b_LocationAfterMovement.x + (distanceBetween * velocitiesRatio);
 
-			Vector2 newLeftCharacterVelocity = new Vector2 (newMidPoint - leftCharacterTransform.position.x - leftCharacterTransform.localScale.x/2 - 0.05f, 
-				leftCharacterTransform.position.y);
-			Vector2 newRightCharacterVelocity = new Vector2 (newMidPoint - rightCharacterTransform.position.x + rightCharacterTransform.localScale.x/2 + 0.05f, 
-				rightCharacterTransform.position.y);
+			Vector2 newLeftCharacterVelocity = new Vector2 (newMidPoint - leftCharacterTransform.position.x - leftCharacterTransform.localScale.x/2 - bufferValue, 
+				leftCharacterVelocity.y);
+			Vector2 newRightCharacterVelocity = new Vector2 ((newMidPoint - rightCharacterTransform.position.x + rightCharacterTransform.localScale.x/2 + bufferValue) * -1f, 
+				rightCharacterVelocity.y);
 
 			if (p1IsFacingRight) {
 				return new Tuple<Vector2, Vector2> (newLeftCharacterVelocity, newRightCharacterVelocity);

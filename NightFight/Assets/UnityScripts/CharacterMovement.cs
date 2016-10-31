@@ -3,8 +3,6 @@ using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
-
-	public float speed = 2f;
 	public float jumpMovementModifier;
 	public float initialJumpVelocity;
 	public float gravityForce;
@@ -36,7 +34,7 @@ public class CharacterMovement : MonoBehaviour
 		}
 			
 		initialHeight = playerBody.position.y;
-		speed = speed / 60;
+
 		isFacingRight = transform.localPosition.x < opponentTransform.transform.localPosition.x;
 	}
 

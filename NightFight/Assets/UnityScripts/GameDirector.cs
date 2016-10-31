@@ -63,13 +63,8 @@ public class GameDirector : MonoBehaviour {
 		//	---------		---------
 		//
 		// get character positions, presumptive locations after frame concludes
-		CharacterManager player1 = characters[0];
-		CharacterManager player2 = characters[1];
-
-		float p1Width;
-		float p2Width;
-		Vector3 player1Location = characters[0].gameObject.transform.localPosition;
-		Vector3 player2Location = characters[1].gameObject.transform.localPosition;
+		Transform player1Location = characters[0].gameObject.transform;
+		Transform player2Location = characters[1].gameObject.transform;
 		Vector2 player1Velocity = player1Frame.movementDuringFrame;
 		Vector2 player2Velocity = player2Frame.movementDuringFrame;
 

@@ -18,12 +18,16 @@ public class CharacterManager : MonoBehaviour {
 	public bool isBot;
 	public int botDirectionalInputRaw;
 	public AttackType botAttackInput;
+	public float overrideWalkSpeed;
 
 	MoveFrame lastExecutedFrame;
 
 	// Use this for initialization
 	void Start () {
 		characterDataManager = new CharacterDataManager ();
+		if (overrideWalkSpeed > 0) {
+			characterDataManager.SetWalkSpeed (overrideWalkSpeed);
+		}
 		inputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
 		characterLight = GetComponent<CharacterLightController> ();

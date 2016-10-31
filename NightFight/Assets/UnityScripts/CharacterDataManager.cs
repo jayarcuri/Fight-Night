@@ -148,6 +148,10 @@ public class CharacterDataManager
 		isSelfIlluminated = !isSelfIlluminated;
 	}
 
+	public void SetWalkSpeed(float newWalkSpeed) {
+		characterData.SetWalkSpeed (newWalkSpeed);
+	}
+
 	void QueueMove (IFrameSequence newMove)
 	{
 		currentMove = newMove;
