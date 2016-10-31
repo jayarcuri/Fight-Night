@@ -3,13 +3,7 @@ using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
-	public float jumpMovementModifier;
-	public float initialJumpVelocity;
-	public float gravityForce;
-	public float terminalVelocity;
-
 	Rigidbody playerBody;
-
 	MovementDirection moveDirection;
 	Transform opponentTransform;
 

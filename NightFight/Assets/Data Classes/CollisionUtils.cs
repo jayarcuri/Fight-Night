@@ -19,6 +19,14 @@ public class CollisionUtils
 			throw new UnityException ("There should NEVER be a case of 1 to 1 overlap before velocity is calculated.");
 		}
 
+		//	if the vertical distance between p1 & p2 after movement is not less than p1.height/2f + p2.height/2f than no collision can have occurred.
+		float min_distance = p1Transform.localScale.y / 2f + p2Transform.localScale.y / 2f;
+		float verticalDistanceAfterMovement = Mathf.Abs(p1Transform.position.y + p1Velocity.y - (p2Transform.position.y + p2Velocity.y));
+
+		if (verticalDistanceAfterMovement > min_distance) {
+			return new Tuple<Vector2, Vector2>(NaV2, NaV2);
+		}
+
 		if (p1Velocity != Vector2.zero && p2Velocity != Vector2.zero) {
 			Debug.Log ("Both characters are moving.");
 		}
@@ -38,9 +46,7 @@ public class CollisionUtils
 		}
 
 		Vector2 a = new Vector2 (leftCharacterTransform.position.x + leftCharacterTransform.localScale.x / 2f, leftCharacterTransform.position.y); 
-		Debug.Log (a);
 		Vector2 b = new Vector2 (rightCharacterTransform.position.x - rightCharacterTransform.localScale.x / 2f, rightCharacterTransform.position.y); 
-		Debug.Log (b);
 
 		Vector2 a_LocationAfterMovement = a + leftCharacterVelocity;
 		Vector2 b_LocationAfterMovement = b + rightCharacterVelocity;
