@@ -48,7 +48,13 @@ public class CharacterManager : MonoBehaviour {
 		DirectionalInput directionalInput;
 		bool toggleIllumination = false;
 		// 1: Get input.
-		inputManager.GetInputs (out directionalInput, out attack, out toggleIllumination);
+		if (isBot) {
+			directionalInput = new DirectionalInput (botDirectionalInputRaw);
+			attack = botAttackInput;
+			toggleIllumination = true;
+		} else {
+			inputManager.GetInputs (out directionalInput, out attack, out toggleIllumination);
+		}
 
 		if (toggleIllumination) {
 			characterDataManager.ToggleCharacterIllumination ();

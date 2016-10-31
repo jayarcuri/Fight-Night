@@ -7,6 +7,8 @@ public class CollisionUtils
 {
 	public static readonly Vector2 NaV2 = new Vector2(float.NaN, float.NaN);
 	public static readonly float bufferValue = 0.05f;
+	public static readonly float leftSideLevelBounds = -9.5f;
+	public static readonly float rightSideLevelBounds = 9.5f;
 
 	public static Tuple<Vector2, Vector2> GetUpdatedVelocities(Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
 		Transform leftCharacterTransform;
@@ -71,6 +73,36 @@ public class CollisionUtils
 				return new Tuple<Vector2, Vector2> (newRightCharacterVelocity, newLeftCharacterVelocity);
 			}
 		}
+			
+		return new Tuple<Vector2, Vector2>(NaV2, NaV2);
+	}
+
+	public static Tuple<Vector2, Vector2> GetLegalVelocities (Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
+		Vector2 newP1Velocity;
+		Vector2 newP2Velocity;
+		float p1VelocityModifier = p1Transform.rotation.y != 1f ? 1f : -1f;
+		float p2VelocityModifier = p2Transform.rotation.y != 1f ? 1f : -1f;
+
+		if (p1Transform.position.x + p1Velocity.x * p1VelocityModifier < leftSideLevelBounds) {
+			newP1Velocity = new Vector2 ((leftSideLevelBounds - p1Transform.position.x) * p1VelocityModifier, p1Velocity.y);
+		} else if (p1Transform.position.x + p1Velocity.x * p1VelocityModifier > rightSideLevelBounds) {
+			newP1Velocity = new Vector2 ((rightSideLevelBounds - p1Transform.position.x) * p1VelocityModifier, p1Velocity.y);
+		} else {
+			newP1Velocity = NaV2;
+		}
+
+		if (p2Transform.position.x + p2Velocity.x * p2VelocityModifier < leftSideLevelBounds) {
+			newP2Velocity = new Vector2 ((leftSideLevelBounds - p2Transform.position.x) * p2VelocityModifier, p2Velocity.y);
+		} else if (p2Transform.position.x + p2Velocity.x * p2VelocityModifier > rightSideLevelBounds) {
+			newP2Velocity = new Vector2 ((rightSideLevelBounds - p2Transform.position.x) * p2VelocityModifier, p2Velocity.y);
+		} else {
+			newP2Velocity = NaV2;
+		}
+
+		return new Tuple<Vector2, Vector2>(newP1Velocity, newP2Velocity);
+	}
+
+	public static Tuple<Vector2, Vector2> GetNonOverlappingVelocities (Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
 
 
 		return new Tuple<Vector2, Vector2>(NaV2, NaV2);

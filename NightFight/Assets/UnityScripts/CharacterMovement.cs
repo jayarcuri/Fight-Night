@@ -60,7 +60,7 @@ public class CharacterMovement : MonoBehaviour
 		Vector2 moveTo = playerBody.position;
 
 		moveTo += difference;
-		moveTo = ConstrainPlayerPosition (moveTo);
+		//moveTo = ConstrainPlayerPosition (moveTo);
 		playerBody.MovePosition (moveTo);
 	}
 

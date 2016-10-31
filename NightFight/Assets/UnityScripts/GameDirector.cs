@@ -31,7 +31,7 @@ public class GameDirector : MonoBehaviour {
 			//currentFrames[0].Item1
 			characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
 			characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
-				
+
 		} else {
 			characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, currentFrames[0].Item1.movementDuringFrame, currentFrames [0].Item2);
 			characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
@@ -52,7 +52,6 @@ public class GameDirector : MonoBehaviour {
 
 	}
 
-	// assumes a collision has occurred
 	Tuple<Vector2, Vector2> ResolveCharacterCollisions (MoveFrame player1Frame, MoveFrame player2Frame) {
 		//	---------		---------
 		//	|		|		|		|
@@ -62,13 +61,37 @@ public class GameDirector : MonoBehaviour {
 		//	|		|		|		|
 		//	---------		---------
 		//
-		// get character positions, presumptive locations after frame concludes
+		//	Gets character velocities which are legal in regards to avoiding character overlap & remaining within the bounds of the game.
 		Transform player1Location = characters[0].gameObject.transform;
 		Transform player2Location = characters[1].gameObject.transform;
 		Vector2 player1Velocity = player1Frame.movementDuringFrame;
 		Vector2 player2Velocity = player2Frame.movementDuringFrame;
+		Vector2 newPlayer1Velocity = player1Velocity;
+		Vector2 newPlayer2Velocity = player2Velocity;
 
-		return CollisionUtils.GetUpdatedVelocities (player1Location, player1Velocity, player2Location, player2Velocity);
+		Tuple<Vector2, Vector2> newVelocities = CollisionUtils.GetUpdatedVelocities (player1Location, player1Velocity, player2Location, player2Velocity);
+		if (!newVelocities.Item1.Equals (CollisionUtils.NaV2)) {
+			newPlayer1Velocity = newVelocities.Item1;
+		}
+
+		if (!newVelocities.Item2.Equals (CollisionUtils.NaV2)) {
+			newPlayer2Velocity = newVelocities.Item2;
+		}
+
+		Tuple<Vector2, Vector2> modifiedNewVelocities = CollisionUtils.GetLegalVelocities (player1Location, player1Velocity, player2Location, player2Velocity);
+
+		if (!modifiedNewVelocities.Item1.Equals(CollisionUtils.NaV2)) {
+			newPlayer1Velocity = modifiedNewVelocities.Item1;
+		}
+		if (!modifiedNewVelocities.Item2.Equals(CollisionUtils.NaV2)) {
+			newPlayer2Velocity = modifiedNewVelocities.Item2;
+		}
+
+		//			if (!modifiedNewVelocities.Item1.Equals (CollisionUtils.NaV2) || !modifiedNewVelocities.Item2.Equals (CollisionUtils.NaV2)) {
+		//newVelocities = CollisionUtils.GetNonOverlappingVelocities (player1Location, modifiedNewVelocities.Item1, player2Location, modifiedNewVelocities.Item2);
+		//			}
+
+		return new Tuple<Vector2, Vector2>(newPlayer1Velocity, newPlayer2Velocity);
 	}
 
 
