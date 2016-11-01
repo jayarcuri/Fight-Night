@@ -78,32 +78,51 @@ public class CollisionUtils
 		return new Tuple<Vector2, Vector2>(NaV2, NaV2);
 	}
 
-	public static Tuple<Vector2, Vector2> GetLegalVelocities (Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
-		Vector2 newP1Velocity;
-		Vector2 newP2Velocity;
-		float p1VelocityModifier = p1Transform.rotation.y != 1f ? 1f : -1f;
-		float p2VelocityModifier = p2Transform.rotation.y != 1f ? 1f : -1f;
-		float p1YVelocity = GetYVelocity (p1Transform, p1Velocity.y);
-		float p2YVelocity = GetYVelocity (p2Transform, p2Velocity.y);
+	public static Vector2 GetConstraintedVelocity (Transform characterTransform, Vector2 characterVelocity) {
+		Vector2 newCharacterVelocity;
+		float characterVelocityModifier = characterTransform.rotation.y != 1f ? 1f : -1f;
+		float constraintedYVelocity = GetConstrainedYVelocity (characterTransform, characterVelocity.y);
+		float characterWidth = characterTransform.localScale.x / 2f;
 
-		if (p1Transform.position.x + p1Velocity.x * p1VelocityModifier < leftSideLevelBounds) {
-			newP1Velocity = new Vector2 ((leftSideLevelBounds - p1Transform.position.x) * p1VelocityModifier, p1YVelocity);
-		} else if (p1Transform.position.x + p1Velocity.x * p1VelocityModifier > rightSideLevelBounds) {
-			newP1Velocity = new Vector2 ((rightSideLevelBounds - p1Transform.position.x) * p1VelocityModifier, p1YVelocity);
+		if (characterTransform.position.x + characterVelocity.x * characterVelocityModifier < leftSideLevelBounds + characterWidth) {
+			newCharacterVelocity = new Vector2 ((leftSideLevelBounds - characterTransform.position.x + characterWidth) * characterVelocityModifier, constraintedYVelocity);
+		} else if (characterTransform.position.x + characterVelocity.x * characterVelocityModifier > rightSideLevelBounds - characterWidth) {
+			newCharacterVelocity = new Vector2 ((rightSideLevelBounds - characterTransform.position.x - characterWidth) * characterVelocityModifier, constraintedYVelocity);
+		} else if (constraintedYVelocity != characterVelocity.y) {
+			newCharacterVelocity = new Vector2(characterVelocity.x, constraintedYVelocity);
 		} else {
-			newP1Velocity = NaV2;
+			newCharacterVelocity = NaV2;
 		}
 
-		if (p2Transform.position.x + p2Velocity.x * p2VelocityModifier < leftSideLevelBounds) {
-			newP2Velocity = new Vector2 ((leftSideLevelBounds - p2Transform.position.x) * p2VelocityModifier, p2YVelocity);
-		} else if (p2Transform.position.x + p2Velocity.x * p2VelocityModifier > rightSideLevelBounds) {
-			newP2Velocity = new Vector2 ((rightSideLevelBounds - p2Transform.position.x) * p2VelocityModifier, p2YVelocity);
-		} else {
-			newP2Velocity = NaV2;
-		}
-
-		return new Tuple<Vector2, Vector2>(newP1Velocity, newP2Velocity);
+		return newCharacterVelocity;
 	}
+
+//	public static Tuple<Vector2, Vector2> GetLegalVelocities (Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
+//		Vector2 newP1Velocity;
+//		Vector2 newP2Velocity;
+//		float p1VelocityModifier = p1Transform.rotation.y != 1f ? 1f : -1f;
+//		float p2VelocityModifier = p2Transform.rotation.y != 1f ? 1f : -1f;
+//		float p1YVelocity = GetYVelocity (p1Transform, p1Velocity.y);
+//		float p2YVelocity = GetYVelocity (p2Transform, p2Velocity.y);
+//
+//		if (p1Transform.position.x + p1Velocity.x * p1VelocityModifier < leftSideLevelBounds) {
+//			newP1Velocity = new Vector2 ((leftSideLevelBounds - p1Transform.position.x) * p1VelocityModifier, p1YVelocity);
+//		} else if (p1Transform.position.x + p1Velocity.x * p1VelocityModifier > rightSideLevelBounds) {
+//			newP1Velocity = new Vector2 ((rightSideLevelBounds - p1Transform.position.x) * p1VelocityModifier, p1YVelocity);
+//		} else {
+//			newP1Velocity = NaV2;
+//		}
+//
+//		if (p2Transform.position.x + p2Velocity.x * p2VelocityModifier < leftSideLevelBounds) {
+//			newP2Velocity = new Vector2 ((leftSideLevelBounds - p2Transform.position.x) * p2VelocityModifier, p2YVelocity);
+//		} else if (p2Transform.position.x + p2Velocity.x * p2VelocityModifier > rightSideLevelBounds) {
+//			newP2Velocity = new Vector2 ((rightSideLevelBounds - p2Transform.position.x) * p2VelocityModifier, p2YVelocity);
+//		} else {
+//			newP2Velocity = NaV2;
+//		}
+//
+//		return new Tuple<Vector2, Vector2>(newP1Velocity, newP2Velocity);
+//	}
 
 	public static Tuple<Vector2, Vector2> GetNonOverlappingVelocities (Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
 
@@ -113,7 +132,7 @@ public class CollisionUtils
 
 
 
-	static float GetYVelocity(Transform transform, float yVelocity) {
+	static float GetConstrainedYVelocity(Transform transform, float yVelocity) {
 		float height = transform.localScale.y;
 
 		if (transform.position.y - height / 2f + yVelocity < floor) {
