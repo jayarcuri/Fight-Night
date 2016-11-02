@@ -17,51 +17,32 @@ public class CollisionUtils
 		Transform rightCharacterTransform;
 		Vector2 rightCharacterVelocity;
 
-		if (p1Transform.position.Equals(p2Transform.position)) {
+		if (p1Transform.position.Equals (p2Transform.position)) {
 			//	Occurs when a character jumps in on another in the corner.
 			throw new UnityException ("There should NEVER be a case of 1 to 1 overlap before velocity is calculated.");
 		}
-
-		//	if the vertical distance between p1 & p2 after movement is not less than p1.height/2f + p2.height/2f than no collision can have occurred.
-		float min_distance = p1Transform.localScale.y / 2f + p2Transform.localScale.y / 2f;
-		float verticalDistanceAfterMovement = Mathf.Abs(p1Transform.position.y + p1Velocity.y - (p2Transform.position.y + p2Velocity.y));
-
-		if (verticalDistanceAfterMovement > min_distance) {
+		if (!VerticalCollisionWillOccur(p1Transform, p1Velocity, p2Transform, p2Velocity)) {
 			return new Tuple<Vector2, Vector2>(NaV2, NaV2);
-		}
-
-		if (p1Velocity != Vector2.zero && p2Velocity != Vector2.zero) {
-			Debug.Log ("Both characters are moving.");
 		}
 
 		bool p1IsFacingRight = p1Transform.position.x < p2Transform.position.x;
 
-		if (p1IsFacingRight) {
-			leftCharacterTransform = p1Transform;
-			leftCharacterVelocity = p1Velocity;
-			rightCharacterTransform = p2Transform;
-			rightCharacterVelocity = new Vector2(p2Velocity.x * -1f, p2Velocity.y);
-		} else {
-			leftCharacterTransform = p2Transform;
-			leftCharacterVelocity = p2Velocity;
-			rightCharacterTransform = p1Transform;
-			rightCharacterVelocity = new Vector2(p1Velocity.x * -1f, p1Velocity.y);
-		}
+		leftCharacterTransform = p1IsFacingRight ? p1Transform : p2Transform;
+		leftCharacterVelocity = p1IsFacingRight ? p1Velocity : p2Velocity;
+		rightCharacterTransform = p1IsFacingRight ? p2Transform : p1Transform;
+		rightCharacterVelocity = p1IsFacingRight ? new Vector2(p2Velocity.x * -1f, p2Velocity.y) : new Vector2(p1Velocity.x * -1f, p1Velocity.y);
 
-		Vector2 a = new Vector2 (leftCharacterTransform.position.x + leftCharacterTransform.localScale.x / 2f, leftCharacterTransform.position.y); 
-		Vector2 b = new Vector2 (rightCharacterTransform.position.x - rightCharacterTransform.localScale.x / 2f, rightCharacterTransform.position.y); 
+		float leftCharacterRightSideBounds = leftCharacterTransform.position.x + leftCharacterTransform.localScale.x / 2f;
+		float rightCharacterLeftSideBounds = rightCharacterTransform.position.x - rightCharacterTransform.localScale.x / 2f;
+		float leftCharacterBoundsFinalX = leftCharacterRightSideBounds + leftCharacterVelocity.x;
+		float rightCharacterBoundsFinalX = rightCharacterLeftSideBounds + rightCharacterVelocity.x;
 
-		Vector2 a_LocationAfterMovement = a + leftCharacterVelocity;
-		Vector2 b_LocationAfterMovement = b + rightCharacterVelocity;
+		if (rightCharacterBoundsFinalX <= leftCharacterBoundsFinalX) {
 
-		//	If the right-side character's left-side bound has passed the left-side character's right-side bound, then a collision has occurred 
-		//	& we need to correct the velocities to prevent this.
-		if (b_LocationAfterMovement.x <= a_LocationAfterMovement.x) {
-			// get distance between the two overlapped bodies
-			float distanceBetween = a_LocationAfterMovement.x - b_LocationAfterMovement.x;
+			float distanceBetween = leftCharacterBoundsFinalX - rightCharacterBoundsFinalX;
 			float velocitiesRatio = Mathf.Abs(leftCharacterVelocity.x) / 
 				(Mathf.Abs(leftCharacterVelocity.x) + Mathf.Abs(rightCharacterVelocity.x));
-			float newMidPoint = b_LocationAfterMovement.x + (distanceBetween * velocitiesRatio);
+			float newMidPoint = rightCharacterBoundsFinalX + (distanceBetween * velocitiesRatio);
 
 			Vector2 newLeftCharacterVelocity = new Vector2 (newMidPoint - leftCharacterTransform.position.x - leftCharacterTransform.localScale.x/2 - bufferValue, 
 				leftCharacterVelocity.y);
@@ -78,7 +59,7 @@ public class CollisionUtils
 		return new Tuple<Vector2, Vector2>(NaV2, NaV2);
 	}
 
-	public static Vector2 GetConstraintedVelocity (Transform characterTransform, Vector2 characterVelocity) {
+	public static Vector2 GetLevelConstraintedVelocity (Transform characterTransform, Vector2 characterVelocity) {
 		Vector2 newCharacterVelocity;
 		float characterVelocityModifier = characterTransform.rotation.y != 1f ? 1f : -1f;
 		float constraintedYVelocity = GetConstrainedYVelocity (characterTransform, characterVelocity.y);
@@ -99,11 +80,8 @@ public class CollisionUtils
 
 	public static Tuple<Vector2, Vector2> GetNonOverlappingVelocities (Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
 
-
 		return new Tuple<Vector2, Vector2>(NaV2, NaV2);
 	}
-
-
 
 	static float GetConstrainedYVelocity(Transform transform, float yVelocity) {
 		float height = transform.localScale.y;
@@ -115,7 +93,14 @@ public class CollisionUtils
 		return yVelocity;
 	}
 
+	static bool VerticalCollisionWillOccur(Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
+		float minYDistance = p1Transform.localScale.y / 2f + p2Transform.localScale.y / 2f;
+		float yDistanceAfterMovement = Mathf.Abs(p1Transform.position.y + p1Velocity.y - (p2Transform.position.y + p2Velocity.y));
+//		float minXDistance = p1Transform.localScale.x / 2f + p2Transform.localScale.x / 2f;
+//		float xDistanceAfterMovement = Mathf.Abs(p1Transform.position.x + p1Velocity.x - (p2Transform.position.x + p2Velocity.x));
 
+		return (yDistanceAfterMovement <= minYDistance);
+	}
 
 
 }

@@ -78,8 +78,8 @@ public class GameDirector : MonoBehaviour {
 			newPlayer2Velocity = newVelocities.Item2;
 		}
 
-		Vector2 modifiedP1Velocities = CollisionUtils.GetConstraintedVelocity (player1Location, player1Velocity);
-		Vector2 modifiedP2Velocities = CollisionUtils.GetConstraintedVelocity (player2Location, player2Velocity);
+		Vector2 modifiedP1Velocities = CollisionUtils.GetLevelConstraintedVelocity (player1Location, player1Velocity);
+		Vector2 modifiedP2Velocities = CollisionUtils.GetLevelConstraintedVelocity (player2Location, player2Velocity);
 
 		if (!modifiedP1Velocities.Equals(CollisionUtils.NaV2)) {
 			newPlayer1Velocity = modifiedP1Velocities;
