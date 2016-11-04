@@ -61,7 +61,7 @@ public class CollisionUtils
 
 	public static Vector2 GetLevelConstraintedVelocity (Transform characterTransform, Vector2 characterVelocity) {
 		Vector2 newCharacterVelocity;
-		float characterVelocityModifier = characterTransform.rotation.y != 1f ? 1f : -1f;
+		float characterVelocityModifier = Mathf.Abs(characterTransform.rotation.y) != 1f ? 1f : -1f;
 		float constraintedYVelocity = GetConstrainedYVelocity (characterTransform, characterVelocity.y);
 		float characterWidth = characterTransform.localScale.x / 2f;
 
@@ -78,9 +78,28 @@ public class CollisionUtils
 		return newCharacterVelocity;
 	}
 
-	public static Tuple<Vector2, Vector2> GetNonOverlappingVelocities (Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
+	public static float GetNonOverlappingXVelocity (Transform correctedPlayerTransform, float correctedPlayerXVelocity, Transform otherPlayerTransform, float otherPlayerXVelocity) {
+		float correctedPlayerWidthFromOrigin = correctedPlayerTransform.localScale.x / 2f;
+		float otherPlayerWidthFromOrigin = otherPlayerTransform.localScale.x / 2f;	
+		float minXDistance = correctedPlayerWidthFromOrigin + otherPlayerWidthFromOrigin;
+		correctedPlayerXVelocity = GetAbsoluteXVelocity (correctedPlayerTransform, correctedPlayerXVelocity);
+		otherPlayerXVelocity = GetAbsoluteXVelocity (otherPlayerTransform, otherPlayerXVelocity);
+		float xDistanceAfterMovement = Mathf.Abs(correctedPlayerTransform.position.x + correctedPlayerXVelocity 
+			- (otherPlayerTransform.position.x + otherPlayerXVelocity));
 
-		return new Tuple<Vector2, Vector2>(NaV2, NaV2);
+		if (minXDistance >= xDistanceAfterMovement) {
+			if (correctedPlayerTransform.position.x < 0) {
+				float newX = correctedPlayerTransform.position.x + correctedPlayerXVelocity + correctedPlayerWidthFromOrigin + (otherPlayerWidthFromOrigin + bufferValue * 2f);
+				float newXVelocity = newX - otherPlayerTransform.position.x;
+				return GetAbsoluteXVelocity(otherPlayerTransform, newXVelocity);
+			} else {
+				float newX = correctedPlayerTransform.position.x + correctedPlayerXVelocity - correctedPlayerWidthFromOrigin - (otherPlayerWidthFromOrigin + bufferValue * 2f);
+				float newXVelocity = newX - otherPlayerTransform.position.x;
+				return GetAbsoluteXVelocity(otherPlayerTransform, newXVelocity);
+			}
+		}
+
+		return float.NaN;
 	}
 
 	static float GetConstrainedYVelocity(Transform transform, float yVelocity) {
@@ -100,6 +119,12 @@ public class CollisionUtils
 //		float xDistanceAfterMovement = Mathf.Abs(p1Transform.position.x + p1Velocity.x - (p2Transform.position.x + p2Velocity.x));
 
 		return (yDistanceAfterMovement <= minYDistance);
+	}
+
+	static float GetAbsoluteXVelocity(Transform characterTransform, float xVelocity) {
+		float modifier = Mathf.Abs(characterTransform.rotation.y) != 1f ? 1f : -1f;
+
+		return xVelocity * modifier;
 	}
 
 

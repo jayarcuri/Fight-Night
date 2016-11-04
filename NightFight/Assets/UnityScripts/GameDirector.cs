@@ -76,21 +76,46 @@ public class GameDirector : MonoBehaviour {
 
 		if (!newVelocities.Item2.Equals (CollisionUtils.NaV2)) {
 			newPlayer2Velocity = newVelocities.Item2;
+
+			if (newPlayer2Velocity.x > 1f || newPlayer2Velocity.x < -1f ) {
+				Debug.Log ("Done fucked up");
+			}
+
 		}
 
 		Vector2 modifiedP1Velocities = CollisionUtils.GetLevelConstraintedVelocity (player1Location, player1Velocity);
 		Vector2 modifiedP2Velocities = CollisionUtils.GetLevelConstraintedVelocity (player2Location, player2Velocity);
+		bool p1HorizontalVelocityChanged = modifiedP1Velocities.x != newPlayer1Velocity.x && !float.IsNaN(modifiedP1Velocities.x);
+		bool p2HorizontalVelocityChanged = modifiedP2Velocities.x != newPlayer2Velocity.x && !float.IsNaN(modifiedP2Velocities.x);
 
-		if (!modifiedP1Velocities.Equals(CollisionUtils.NaV2)) {
+		if (!modifiedP1Velocities.Equals(newPlayer1Velocity) && !float.IsNaN(modifiedP1Velocities.x)) {
 			newPlayer1Velocity = modifiedP1Velocities;
 		}
-		if (!modifiedP2Velocities.Equals(CollisionUtils.NaV2)) {
+		if (!modifiedP2Velocities.Equals(newPlayer2Velocity) && !float.IsNaN(modifiedP2Velocities.x)) {
 			newPlayer2Velocity = modifiedP2Velocities;
+
+			if (newPlayer2Velocity.x > 1f || newPlayer2Velocity.x < -1f ) {
+				Debug.Log ("Done fucked up");
+			}
+
 		}
 
-		//			if (!modifiedNewVelocities.Item1.Equals (CollisionUtils.NaV2) || !modifiedNewVelocities.Item2.Equals (CollisionUtils.NaV2)) {
-		//newVelocities = CollisionUtils.GetNonOverlappingVelocities (player1Location, modifiedNewVelocities.Item1, player2Location, modifiedNewVelocities.Item2);
-		//			}
+		if (p1HorizontalVelocityChanged) {
+			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity.x, player2Location, newPlayer2Velocity.x);
+			if (!float.IsNaN (newXVelocity)) {
+				newPlayer2Velocity = new Vector2 (newXVelocity, newPlayer2Velocity.y);
+
+				if (newPlayer2Velocity.x > 1f || newPlayer2Velocity.x < -1f ) {
+					Debug.Log ("Done fucked up");
+				}
+
+			}
+		} else if (p2HorizontalVelocityChanged) {
+			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity.x, player1Location, newPlayer1Velocity.x);
+			if (!float.IsNaN (newXVelocity)) {
+				newPlayer1Velocity = new Vector2 (newXVelocity, newPlayer1Velocity.y);
+			}
+		}
 
 		return new Tuple<Vector2, Vector2>(newPlayer1Velocity, newPlayer2Velocity);
 	}
