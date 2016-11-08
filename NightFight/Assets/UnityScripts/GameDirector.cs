@@ -104,11 +104,6 @@ public class GameDirector : MonoBehaviour {
 			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity.x, player2Location, newPlayer2Velocity.x);
 			if (!float.IsNaN (newXVelocity)) {
 				newPlayer2Velocity = new Vector2 (newXVelocity, newPlayer2Velocity.y);
-
-				if (newPlayer2Velocity.x > 1f || newPlayer2Velocity.x < -1f ) {
-					Debug.Log ("Done fucked up");
-				}
-
 			}
 		} else if (p2HorizontalVelocityChanged) {
 			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity.x, player1Location, newPlayer1Velocity.x);
