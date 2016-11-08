@@ -17,10 +17,6 @@ public class CollisionUtils
 		Transform rightCharacterTransform;
 		Vector2 rightCharacterVelocity;
 
-		if (p1Transform.position.Equals (p2Transform.position)) {
-			//	Occurs when a character jumps in on another in the corner.
-			throw new UnityException ("There should NEVER be a case of 1 to 1 overlap before velocity is calculated.");
-		}
 		if (!VerticalCollisionWillOccur(p1Transform, p1Velocity, p2Transform, p2Velocity)) {
 			return new Tuple<Vector2, Vector2>(NaV2, NaV2);
 		}

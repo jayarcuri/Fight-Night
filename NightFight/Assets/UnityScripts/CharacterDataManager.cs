@@ -115,6 +115,11 @@ public class CharacterDataManager
 		int intInput = directionalInput.numpadValue;
 		IFrameSequence newMove = null;
 		bool hasValue = false;
+
+
+		// TODO: give input to special move buffers
+
+
 		if (intInput != 5 || AttackType.None != attack)
 		// Test input in order of what we've defined to be the "priority" of input
 		// 1. Can I jump?
