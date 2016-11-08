@@ -93,11 +93,6 @@ public class GameDirector : MonoBehaviour {
 		}
 		if (!modifiedP2Velocities.Equals(newPlayer2Velocity) && !float.IsNaN(modifiedP2Velocities.x)) {
 			newPlayer2Velocity = modifiedP2Velocities;
-
-			if (newPlayer2Velocity.x > 1f || newPlayer2Velocity.x < -1f ) {
-				Debug.Log ("Done fucked up");
-			}
-
 		}
 
 		if (p1HorizontalVelocityChanged) {

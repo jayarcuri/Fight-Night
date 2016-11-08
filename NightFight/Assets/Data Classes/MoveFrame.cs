@@ -44,6 +44,10 @@ public class MoveFrame {
 		this.attackData = attackData;
 	}
 
+	public void SetLitness(bool isLit) {
+		this.isLit = isLit;
+	}
+
 	static Dictionary<string, IFrameSequence> GetDefaultCancellables () {
 		Dictionary<string, IFrameSequence> cancelDict = new Dictionary<string, IFrameSequence> ();
 		cancelDict.Add("HIT", null);

@@ -86,6 +86,7 @@ public class JumpSequence : IFrameSequence
 		} else {
 			nextFrame = GetNextMoveFrame(velocity, supplementalFrame);
 		}
+
 		return nextFrame;
 	}
 
@@ -130,7 +131,7 @@ public class JumpSequence : IFrameSequence
 					MoveType.AIRBORNE, hit);
 				returnFrame.cancellableTo = supplementalFrame.cancellableTo;
 			} else {
-				returnFrame = new MoveFrame (nextVelocity + supplementalFrame.movementDuringFrame, MoveType.AIRBORNE);
+				returnFrame = new MoveFrame (nextVelocity + supplementalFrame.movementDuringFrame, MoveType.AIRBORNE, supplementalFrame.isLit);
 			}
 		} else {
 			returnFrame = new MoveFrame (nextVelocity, MoveType.AIRBORNE);

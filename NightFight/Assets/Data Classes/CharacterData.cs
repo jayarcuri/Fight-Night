@@ -19,7 +19,7 @@ public class CharacterData
 			new Vector3 (1.2f, .25f, 1f), 5, 6, 6, HitType.HIT);
 		MoveFrame jumpAttackHitbox = new MoveFrame (Vector2.zero, MoveType.AIRBORNE, jumpAttackData);
 		
-		MoveSequence jumpAttack = new MoveSequence (new MoveFrame[] {
+		MoveSequence jumpAttack = new SupplementaryJumpMove (new MoveFrame[] {
 			neutralFrame,
 			neutralFrame,
 			neutralFrame,
@@ -29,13 +29,9 @@ public class CharacterData
 			jumpAttackHitbox,
 			jumpAttackHitbox,
 			jumpAttackHitbox,
-			jumpAttackHitbox,
-			neutralFrame,
-			neutralFrame,
-			neutralFrame,
-			neutralFrame,
-			neutralFrame
-		});
+			jumpAttackHitbox
+		},
+			new Dictionary<string, IFrameSequence>());
 		cancelsForJump.Add ("A", jumpAttack);
 		JumpSequence verticalJump = new JumpSequence (40, 3.5, 0.0, cancelsForJump);
 		JumpSequence forwardJump = new JumpSequence (40, 3.5, 2.5, cancelsForJump);
