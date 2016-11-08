@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class CharacterManager
+public class CharacterDataManager
 {
 	CharacterData characterData;
 	int currentHealth;
-	bool isSelfIlluminated;
+	public bool isSelfIlluminated { get; private set; }
 	public IFrameSequence currentMove { get; private set; }
 
-	public CharacterManager ()
+	public CharacterDataManager ()
 	{
 		characterData = new CharacterData ();
 		this.currentHealth = characterData.maxHealth;
@@ -115,6 +115,11 @@ public class CharacterManager
 		int intInput = directionalInput.numpadValue;
 		IFrameSequence newMove = null;
 		bool hasValue = false;
+
+
+		// TODO: give input to special move buffers
+
+
 		if (intInput != 5 || AttackType.None != attack)
 		// Test input in order of what we've defined to be the "priority" of input
 		// 1. Can I jump?
@@ -146,6 +151,10 @@ public class CharacterManager
 
 	public void ToggleCharacterIllumination () {
 		isSelfIlluminated = !isSelfIlluminated;
+	}
+
+	public void SetWalkSpeed(float newWalkSpeed) {
+		characterData.SetWalkSpeed (newWalkSpeed);
 	}
 
 	void QueueMove (IFrameSequence newMove)

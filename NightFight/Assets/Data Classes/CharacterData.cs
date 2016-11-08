@@ -4,8 +4,11 @@ using System.Collections.Generic;
 public class CharacterData
 {
 	public readonly int maxHealth = 15;
+	float walkSpeed = 0.15f;
 	//	protected SpecialMove fireBall;
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
+	public MoveFrame forwardStepFrame;
+	public MoveFrame backStepFrame;
 
 	public CharacterData ()
 	{
@@ -107,10 +110,10 @@ public class CharacterData
 			new MoveFrame (MoveType.BLOCKING)
 		}, blockDict
 		);
-
-		MoveSequence forwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (new Vector2(0.15f, 0), MoveType.NONE) });
-		MoveSequence backwardStep = new MoveSequence (new MoveFrame[] { new MoveFrame (new Vector2(-0.15f, 0), MoveType.NONE) });
-
+		this.forwardStepFrame = new MoveFrame (new Vector2 (walkSpeed, 0), MoveType.NONE);
+		this.backStepFrame = new MoveFrame (new Vector2 (-walkSpeed, 0), MoveType.NONE);
+		MoveSequence forwardStep = new MoveSequence (new MoveFrame[] { forwardStepFrame });
+		MoveSequence backwardStep = new MoveSequence (new MoveFrame[] { backStepFrame });
 
 		neutralMoveOptions = new Dictionary<string, IFrameSequence> ();
 		// Adding moves to default FSM
@@ -129,6 +132,14 @@ public class CharacterData
 
 	public MoveFrame GetEmptyMoveFrame() {
 		return new MoveFrame (MoveType.NONE);
+	}
+
+	public void SetWalkSpeed(float newWalkSpeed) {
+		if (newWalkSpeed <= 0) {
+			throw new UnityException ("Invalid speed; must be positive");
+		}
+		this.forwardStepFrame.movementDuringFrame = new Vector2 (newWalkSpeed, 0);
+		this.backStepFrame.movementDuringFrame = new Vector2 (-newWalkSpeed, 0);
 	}
 
 }

@@ -2,11 +2,11 @@
 using System.Collections;
 using NUnit.Framework;
 
-public class CharacterManagerTests {
+public class CharacterDataManagerTests {
 
 	[Test]
 	public void BackwardStepTest () {
-		CharacterManager tester = new CharacterManager ();
+		CharacterDataManager tester = new CharacterDataManager ();
 		bool x = false;
 		tester.GetCurrentFrame (DirectionalInput.Right, AttackType.None, out x);
 		Assert.IsNotNull (tester.currentMove);
@@ -14,7 +14,7 @@ public class CharacterManagerTests {
 
 	[Test]
 	public void LightAttackTest () {
-		CharacterManager tester = new CharacterManager ();
+		CharacterDataManager tester = new CharacterDataManager ();
 		bool x = false;
 		tester.GetCurrentFrame (DirectionalInput.Neutral, AttackType.Light, out x);
 		Assert.IsNotNull (tester.currentMove);
@@ -22,7 +22,7 @@ public class CharacterManagerTests {
 
 	[Test]
 	public void TestCancellableJumpAttack () {
-		CharacterManager tester = new CharacterManager ();
+		CharacterDataManager tester = new CharacterDataManager ();
 		bool x = false;
 
 		tester.GetCurrentFrame (new DirectionalInput(8), AttackType.None, out x);

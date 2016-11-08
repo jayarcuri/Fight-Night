@@ -3,15 +3,7 @@ using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
-
-	public float speed = 2f;
-	public float jumpMovementModifier;
-	public float initialJumpVelocity;
-	public float gravityForce;
-	public float terminalVelocity;
-
 	Rigidbody playerBody;
-
 	MovementDirection moveDirection;
 	Transform opponentTransform;
 
@@ -36,7 +28,7 @@ public class CharacterMovement : MonoBehaviour
 		}
 			
 		initialHeight = playerBody.position.y;
-		speed = speed / 60;
+
 		isFacingRight = transform.localPosition.x < opponentTransform.transform.localPosition.x;
 	}
 
@@ -68,7 +60,7 @@ public class CharacterMovement : MonoBehaviour
 		Vector2 moveTo = playerBody.position;
 
 		moveTo += difference;
-		moveTo = ConstrainPlayerPosition (moveTo);
+		//moveTo = ConstrainPlayerPosition (moveTo);
 		playerBody.MovePosition (moveTo);
 	}
 
