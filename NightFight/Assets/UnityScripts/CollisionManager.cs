@@ -5,6 +5,7 @@ public class CollisionManager : MonoBehaviour
 {
 	public HitboxController pendingAttackHitbox { get; private set; }
 	HitboxController hitBox;
+	Collider mostRecentIlluminatedArea;
 	// Use this for initialization
 	void Start ()
 	{
@@ -18,12 +19,9 @@ public class CollisionManager : MonoBehaviour
 		}
 	}
 
-//	void OnTriggerStay (Collider other)
-//	{
-//		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
-//			ProcessHitboxCollision (other);
-//		}
-//	}
+	void OnTriggerLeave (Collider other) {
+
+	}
 
 	void ProcessHitboxCollision (Collider hitboxObject)
 	{
@@ -35,6 +33,10 @@ public class CollisionManager : MonoBehaviour
 
 	public bool HasPendingHit () {
 		return (pendingAttackHitbox != null && pendingAttackHitbox.attackData != null);
+	}
+
+	public bool InIlluminatedArea () {
+		return (mostRecentIlluminatedArea != null);
 	}
 
 	public AttackFrameData GetPendingHit () {

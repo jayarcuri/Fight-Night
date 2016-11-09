@@ -7,6 +7,7 @@ public class CharacterDataManager
 {
 	CharacterData characterData;
 	int currentHealth;
+	public int illuminationCounter { get; private set; }
 	public bool isSelfIlluminated { get; private set; }
 	public IFrameSequence currentMove { get; private set; }
 
@@ -14,6 +15,7 @@ public class CharacterDataManager
 	{
 		characterData = new CharacterData ();
 		this.currentHealth = characterData.maxHealth;
+		illuminationCounter = 0;
 		currentMove = null;
 	}
 
@@ -155,6 +157,10 @@ public class CharacterDataManager
 
 	public void SetWalkSpeed(float newWalkSpeed) {
 		characterData.SetWalkSpeed (newWalkSpeed);
+	}
+
+	public void IncrementIlluminationCounter () {
+		illuminationCounter++;
 	}
 
 	void QueueMove (IFrameSequence newMove)

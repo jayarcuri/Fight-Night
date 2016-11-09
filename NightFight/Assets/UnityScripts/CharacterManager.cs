@@ -101,6 +101,13 @@ public class CharacterManager : MonoBehaviour {
 			characterMovement.FlipRotation ();
 		}
 
+		if (characterLight.LightEnabled ()) {
+			characterDataManager.IncrementIlluminationCounter ();
+			string illuminationString = isPlayer1 ? "Player 1 illumination counter: " + characterDataManager.illuminationCounter :
+				"Player 2 illumination counter: " + characterDataManager.illuminationCounter;
+			Debug.Log (illuminationString);
+		}
+
 		if (characterDataManager.GetCurrentHealth () <= 0) {
 			victoryWindow.SetActive (true);
 			Time.timeScale = 0;

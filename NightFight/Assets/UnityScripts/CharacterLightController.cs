@@ -5,7 +5,7 @@ public class CharacterLightController : MonoBehaviour {
 	Color defaultLightColor;
 	public Color hitstunColor;
 	public Color blockstunColor;
-	public Light characterLight;
+	Light characterLight;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +33,10 @@ public class CharacterLightController : MonoBehaviour {
 			}
 			break;
 		}
+	}
+
+	public bool LightEnabled () {
+		return (characterLight.enabled);
 	}
 
 }
