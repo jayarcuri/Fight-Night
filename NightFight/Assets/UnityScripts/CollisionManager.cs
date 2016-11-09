@@ -18,12 +18,12 @@ public class CollisionManager : MonoBehaviour
 		}
 	}
 
-	void OnTriggerStay (Collider other)
-	{
-		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
-			ProcessHitboxCollision (other);
-		}
-	}
+//	void OnTriggerStay (Collider other)
+//	{
+//		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
+//			ProcessHitboxCollision (other);
+//		}
+//	}
 
 	void ProcessHitboxCollision (Collider hitboxObject)
 	{
@@ -46,7 +46,7 @@ public class CollisionManager : MonoBehaviour
 	}
 
 	public void ClearPendingHit() {
-		pendingAttackHitbox = null;
+			pendingAttackHitbox = null;
 	}
 }
 

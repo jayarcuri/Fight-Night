@@ -29,11 +29,11 @@ public class MoveSequence : IFrameSequence {
 		}
 
 	public virtual MoveFrame Peek () {
-		if (HasNext()) {
-			return moveSequence [index+1];
+		if (HasNext ()) {
+			return moveSequence [index + 1];
+		} else {
+			throw new System.IndexOutOfRangeException ("Current move sequence does not have a next move!");
 		}
-		else
-			throw new System.IndexOutOfRangeException("Current move sequence does not have a next move!");
 	}
 
 	public virtual bool HasNext() {
