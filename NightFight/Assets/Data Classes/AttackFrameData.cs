@@ -11,6 +11,7 @@ public class AttackFrameData
 	public int blockStun {get; private set;}
 	public MoveSequence blockStunFrames;
 	public HitType hitType {get; private set;}
+	public bool didHit;
 
 	public AttackFrameData (Vector2 offset, Vector3 size, int damage, int hitStun, int blockStun, HitType hitType)
 	{
@@ -33,6 +34,22 @@ public class AttackFrameData
 		}
 		blockStunFrames = new MoveSequence(rawBSFrames);
 		this.hitType = hitType;
+
+		didHit = false;
+	}
+
+	public bool Equals(AttackFrameData otherAFD) 
+	{
+		if (otherAFD == null) {
+			return false;
+		}
+
+		return (this.offset == otherAFD.offset) 
+			&& (this.size == otherAFD.size) 
+			&& (this.damage == otherAFD.damage) 
+			&& (this.hitStun == otherAFD.hitStun) 
+			&& (this.blockStun == otherAFD.blockStun)
+			&& (this.hitType == otherAFD.hitType);
 	}
 
 

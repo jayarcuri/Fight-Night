@@ -16,6 +16,7 @@ public class HitboxController : MonoBehaviour {
 		hitbox.localPosition = attackFrame.offset;
 		hitbox.localScale = attackFrame.size;
 		attackData = attackFrame;
+		attackData.didHit = false;
 	}
 
 	public void Reset () {

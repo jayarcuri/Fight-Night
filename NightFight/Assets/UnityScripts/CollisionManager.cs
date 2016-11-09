@@ -28,7 +28,7 @@ public class CollisionManager : MonoBehaviour
 	void ProcessHitboxCollision (Collider hitboxObject)
 	{
 		HitboxController attackingHitbox = hitboxObject.GetComponent <HitboxController> ();
-		if (attackingHitbox.IsLoaded ()) {
+		if (attackingHitbox.IsLoaded () && !attackingHitbox.attackData.didHit) {
 			pendingAttackHitbox = attackingHitbox;
 		}
 	}
@@ -46,7 +46,8 @@ public class CollisionManager : MonoBehaviour
 	}
 
 	public void ClearPendingHit() {
-			pendingAttackHitbox = null;
+		pendingAttackHitbox.attackData.didHit = true;
+		pendingAttackHitbox = null;
 	}
 }
 

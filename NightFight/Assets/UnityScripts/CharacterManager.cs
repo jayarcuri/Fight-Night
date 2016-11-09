@@ -114,7 +114,7 @@ public class CharacterManager : MonoBehaviour {
 		} 
 		// Smelly Code Below
 		if (currentFrame.attackData != null) { 
-			if (lastExecutedFrame == null || !currentFrame.attackData.Equals ((lastExecutedFrame.attackData))) {
+			if (lastExecutedFrame == null || !currentFrame.attackData.Equals (lastExecutedFrame.attackData)) {
 				hitBox.ExecuteAttack (currentFrame.attackData);
 			}
 		} else {
