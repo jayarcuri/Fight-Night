@@ -5,6 +5,7 @@ using Eppy;
 
 public class GameDirector : MonoBehaviour {
 	public GameObject victoryWindow;
+	public ScreenShakeTest shaker;
 	public CharacterManager[] characters;
 	public HitboxController[] pendingAttackHitboxes;
 
@@ -20,28 +21,36 @@ public class GameDirector : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-		Tuple<MoveFrame, bool>[] currentFrames = new  Tuple<MoveFrame, bool>[2];
-		for (int i = 0; i < characters.Length; i++) {
-			// Execute current move
-			currentFrames[i] = characters[i].GetCurrentFrame ();
-		}
-		// TODO: 4: Check & resolve collisions (hits & bumps)
-		Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
-		if (!newVelocities.Item1.Equals (CollisionUtils.NaV2)) {
-			characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
-			characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
-
+		if (shaker.shakeCounter >= 0) {
+			shaker.StepShakeForward ();
 		} else {
-			characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, currentFrames[0].Item1.movementDuringFrame, currentFrames [0].Item2);
-			characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
-		}
+			Tuple<MoveFrame, bool>[] currentFrames = new  Tuple<MoveFrame, bool>[2];
+			for (int i = 0; i < characters.Length; i++) {
+				// Execute current move
+				currentFrames [i] = characters [i].GetCurrentFrame ();
+			}
+			// TODO: 4: Check & resolve collisions (hits & bumps)
+			Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
+			if (!newVelocities.Item1.Equals (CollisionUtils.NaV2)) {
+				characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
+				characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
 
-		for (int i = 0; i < characters.Length; i++) {
-			characters [i].ResolveCollisions ();
-		}
-		// 5: Update character/game/UI state.
-		for (int i = 0; i < characters.Length; i++) {
-			characters [i].UpdateCharacterState ();
+			} else {
+				characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, currentFrames [0].Item1.movementDuringFrame, currentFrames [0].Item2);
+				characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
+			}
+
+			for (int i = 0; i < characters.Length; i++) {
+				bool hitOccurred = characters [i].ResolveAttackCollisions ();
+
+				if (hitOccurred) {
+					shaker.SetCameraToShake ();
+				}
+			}
+			// 5: Update character/game/UI state.
+			for (int i = 0; i < characters.Length; i++) {
+				characters [i].UpdateCharacterState ();
+			}
 		}
 
 	}

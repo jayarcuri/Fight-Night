@@ -81,7 +81,7 @@ public class CharacterManager : MonoBehaviour {
 		characterLight.SetLight(isLit, currentMoveType);
 	}
 
-	public void ResolveCollisions () {
+	public bool ResolveAttackCollisions () {
 		if (collisionManager.HasPendingHit ()) {
 			AttackFrameData hit = collisionManager.GetPendingHit ();
 
@@ -91,8 +91,11 @@ public class CharacterManager : MonoBehaviour {
 			if (wasHit) {
 				healthBar.UpdateHealthBar (characterDataManager.GetCurrentHealth ());
 				collisionManager.ClearPendingHit ();
+
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public void UpdateCharacterState () {
@@ -100,12 +103,9 @@ public class CharacterManager : MonoBehaviour {
 		if (lastExecutedFrame.moveType == MoveType.NONE) {
 			characterMovement.FlipRotation ();
 		}
-
+		//	Illumination stuff
 		if (characterLight.LightEnabled ()) {
 			characterDataManager.IncrementIlluminationCounter ();
-			string illuminationString = isPlayer1 ? "Player 1 illumination counter: " + characterDataManager.illuminationCounter :
-				"Player 2 illumination counter: " + characterDataManager.illuminationCounter;
-			Debug.Log (illuminationString);
 		}
 
 		if (characterDataManager.GetCurrentHealth () <= 0) {
