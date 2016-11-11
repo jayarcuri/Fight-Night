@@ -6,6 +6,8 @@ public class CharacterData
 	public readonly int maxHealth = 15;
 	float walkSpeed = 0.15f;
 	MoveBufferManager moveBufferManager;
+
+
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
 	public MoveFrame forwardStepFrame;
 	public MoveFrame backStepFrame;
@@ -13,6 +15,13 @@ public class CharacterData
 	public CharacterData ()
 	{
 		moveBufferManager = new MoveBufferManager ();
+		DirectionalInput[] dashInput = new DirectionalInput[] {new DirectionalInput(1,0), new DirectionalInput(0,0), new DirectionalInput(1,0)};
+		string dashCode = "FrD";
+		MoveBuffer forwardDash = new MoveBuffer (8, dashInput, false, dashCode);
+		moveBufferManager.AddMoveBuffer (forwardDash);
+		DashSequence dash = new DashSequence (10, 5);
+		
+
 		MoveFrame neutralFrame = MoveFrame.GetEmptyLitFrame ();
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
@@ -123,6 +132,8 @@ public class CharacterData
 		neutralMoveOptions.Add ("C", AA);
 		neutralMoveOptions.Add ("X", block);
 		neutralMoveOptions.Add ("T", _throw);
+		neutralMoveOptions.Add (dashCode, dash);
+
 		neutralMoveOptions.Add ("THROW", null);
 		neutralMoveOptions.Add ("HIT", null);
 	}
