@@ -13,7 +13,7 @@ public class CharacterDataManager
 
 	public CharacterDataManager ()
 	{
-		characterData = new CharacterData ();
+		this.characterData = new CharacterData ();
 		this.currentHealth = characterData.maxHealth;
 		illuminationCounter = 0;
 		currentMove = null;
@@ -118,16 +118,23 @@ public class CharacterDataManager
 		IFrameSequence newMove = null;
 		bool hasValue = false;
 
-
-		// TODO: give input to special move buffers
-
+		//	Check if any special moves are currently executable, & if those special moves are currently in the cancel dictionary
+		List<string> executableSpecialMoves = characterData.GetMoveCodesForReadyBufferMoves(directionalInput, attack);
+		if (executableSpecialMoves.Count > 0) {
+			foreach (string moveCode in executableSpecialMoves) {
+				if (optionDictionary.TryGetValue (moveCode, out newMove)) {
+					newMove.Reset ();
+					characterData.ResetMoveBuffer (moveCode);
+					return newMove;
+				}
+			}
+		}
 
 		if (intInput != 5 || AttackType.None != attack)
 		// Test input in order of what we've defined to be the "priority" of input
 		// 1. Can I jump?
 		if (intInput >= 7) {
-			hasValue = optionDictionary.TryGetValue (intInput.ToString (), out newMove);
-			if (hasValue) {
+			if (optionDictionary.TryGetValue (intInput.ToString (), out newMove)) {
 				newMove.Reset ();
 				return newMove;
 			}

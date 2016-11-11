@@ -5,13 +5,14 @@ public class CharacterData
 {
 	public readonly int maxHealth = 15;
 	float walkSpeed = 0.15f;
-	//	protected SpecialMove fireBall;
+	MoveBufferManager moveBufferManager;
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
 	public MoveFrame forwardStepFrame;
 	public MoveFrame backStepFrame;
 
 	public CharacterData ()
 	{
+		moveBufferManager = new MoveBufferManager ();
 		MoveFrame neutralFrame = MoveFrame.GetEmptyLitFrame ();
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
@@ -124,6 +125,14 @@ public class CharacterData
 		neutralMoveOptions.Add ("T", _throw);
 		neutralMoveOptions.Add ("THROW", null);
 		neutralMoveOptions.Add ("HIT", null);
+	}
+
+	public List<string> GetMoveCodesForReadyBufferMoves(DirectionalInput currentDirectionalInput, AttackType currentButton) {
+		return moveBufferManager.GetReadiedBufferMove (currentDirectionalInput, currentButton);
+	}
+
+	public void ResetMoveBuffer(string forMove) {
+		moveBufferManager.ResetMoveBuffer (forMove);
 	}
 
 	public MoveFrame GetEmptyMoveFrame() {
