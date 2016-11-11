@@ -45,7 +45,15 @@ using NUnit.Framework;
 			Console.WriteLine (s);
 		}
 
-		bufferManager.ResetMoveBuffer (readyMoveCodes [0]);
+		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.None);
+		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.None);
+		readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.Heavy);
+
+		Console.WriteLine (readyMoveCodes.Count);
+		Assert.IsTrue (readyMoveCodes.Count == 1);
+
+
+		//bufferManager.ResetMoveBuffer (readyMoveCodes [0]);
 
 		List<string> readyMoveCodesPostReset = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), AttackType.Heavy);
 		foreach (string s in readyMoveCodesPostReset) {

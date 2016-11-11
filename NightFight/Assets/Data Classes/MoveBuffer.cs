@@ -39,7 +39,7 @@ public class MoveBuffer {
 			return moveCode;
 		}
 
-		if (bufferActiveFor > maxAllowedBufferLength) {
+		if (bufferActiveFor >= maxAllowedBufferLength) {
 			this.Reset ();
 		}
 			

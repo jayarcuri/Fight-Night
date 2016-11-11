@@ -28,12 +28,7 @@ public class MoveBufferManager
 				moveCodeList.Add(moveCode);
 			}
 		}
-		if (moveCodeList.Count == 0) {
-			return null;
-		} else {
-			return moveCodeList;
-		}
-		
+		return moveCodeList;
 	}
 
 	public void ResetMoveBuffer(string forMove) {
