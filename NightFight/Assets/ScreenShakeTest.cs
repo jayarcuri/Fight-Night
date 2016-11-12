@@ -15,7 +15,7 @@ public class ScreenShakeTest : MonoBehaviour {
 
 	public void StepShakeForward () {
 		shakeCounter++;
-		if (shakeCounter < 7) {
+		if (shakeCounter < 12) {
 			cameraRef.orthographicSize = cameraRef.orthographicSize == originalCameraSize ?
 				originalCameraSize * 99f / 100f : originalCameraSize;
 		} else {
