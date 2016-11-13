@@ -4,15 +4,15 @@ using System.Collections;
 
 public class GameTimer : MonoBehaviour {
 	public int roundLengthInSeconds;
-	public GameObject victoryScreen;
+	public int secondsLeftInRound {get; private set; }
 
+	GameDirector gameDirector;
 	Text timerText;
 	float roundStartTime;
-	int secondsLeftInRound;
 
-	// Use this for initialization
 	void Start () {		
 		timerText = GetComponent<Text> ();
+		gameDirector = GameObject.FindGameObjectWithTag ("GameDirector").GetComponent<GameDirector> ();
 		SetUpTimer ();
 	}
 	
@@ -25,10 +25,8 @@ public class GameTimer : MonoBehaviour {
 		timerText.text = secondsLeftInRound.ToString().PadLeft(2, '0');
 
 		if (secondsLeftInRound <= 0) {
-			//	TODO: tigger game over screen (with Time Over)
-			victoryScreen.SetActive(true);
 			CancelInvoke ();
-			Time.timeScale = 0;
+			gameDirector.timeOver = true;
 		}
 	}
 

@@ -1,17 +1,21 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using Eppy;
 
 public class GameDirector : MonoBehaviour {
-	public GameObject victoryWindow;
-//	public GameTimer gameTimer;
+	public EndGameMenuController victoryWindowController;
+	public bool timeOver;
 	public ScreenShakeTest shaker;
 	public CharacterManager[] characters;
 	public HitboxController[] pendingAttackHitboxes;
 
 	// Use this for initialization
 	void Start () {
+		timeOver = false;
+		victoryWindowController = GameObject.FindGameObjectWithTag ("VictoryWindow").GetComponent<EndGameMenuController> ();
+		victoryWindowController.gameObject.SetActive (false);
 		foreach (CharacterManager characterManager in characters) {
 			if (characterManager == null) {
 				throw new UnityException ("We are missing a player's character.");
@@ -54,6 +58,7 @@ public class GameDirector : MonoBehaviour {
 			}
 		}
 
+		CheckIfGameHasEnded ();
 	}
 
 	Tuple<Vector2, Vector2> ResolveCharacterCollisions (MoveFrame player1Frame, MoveFrame player2Frame) {
@@ -114,22 +119,42 @@ public class GameDirector : MonoBehaviour {
 		return new Tuple<Vector2, Vector2>(newPlayer1Velocity, newPlayer2Velocity);
 	}
 
+	public void RestartGame() {
+		SceneManager.LoadScene (SceneManager.GetActiveScene().name);
+		Time.timeScale = 1;
+	}
+
 	void CheckIfGameHasEnded () {
 		int player1Health = characters [0].characterDataManager.GetCurrentHealth ();
 		int player2Health = characters [1].characterDataManager.GetCurrentHealth ();
-
-		if (player1Health < 1 || player2Health < 1) {
-			EndGameWithKO ();
+		if (player1Health < 1 || player2Health < 1 || timeOver) {
+			EndGameWithWinner (GetWinner (player1Health, player2Health));
 		}
 	}
 
-	void EndGameWithKO () {
-
+	WinningPlayer GetWinner (int player1Health, int player2Health) {
+		WinningPlayer winner;
+		if (player1Health < 1 && player2Health < 1 || player1Health == player2Health) {
+				winner = WinningPlayer.None;
+			} else if (player1Health < player2Health) {
+				winner = WinningPlayer.Player2;
+			} else {
+				winner = WinningPlayer.Player1;
+		}
+		return winner;
 	}
 
-	void EndGameWithTimeOver () {
-
+	void EndGameWithWinner (WinningPlayer winner) {
+		victoryWindowController.gameObject.SetActive (true);
+		victoryWindowController.SetVictoryTitleForWinner (winner);
+		Time.timeScale = 0;
 	}
 
 
+}
+
+public enum WinningPlayer {
+	Player1,
+	Player2,
+	None
 }
