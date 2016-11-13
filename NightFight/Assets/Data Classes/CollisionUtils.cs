@@ -111,8 +111,6 @@ public class CollisionUtils
 	static bool VerticalCollisionWillOccur(Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
 		float minYDistance = p1Transform.localScale.y / 2f + p2Transform.localScale.y / 2f;
 		float yDistanceAfterMovement = Mathf.Abs(p1Transform.position.y + p1Velocity.y - (p2Transform.position.y + p2Velocity.y));
-//		float minXDistance = p1Transform.localScale.x / 2f + p2Transform.localScale.x / 2f;
-//		float xDistanceAfterMovement = Mathf.Abs(p1Transform.position.x + p1Velocity.x - (p2Transform.position.x + p2Velocity.x));
 
 		return (yDistanceAfterMovement <= minYDistance);
 	}

@@ -113,5 +113,22 @@ public class GameDirector : MonoBehaviour {
 		return new Tuple<Vector2, Vector2>(newPlayer1Velocity, newPlayer2Velocity);
 	}
 
+	void CheckIfGameHasEnded () {
+		int player1Health = characters [0].characterDataManager.GetCurrentHealth ();
+		int player2Health = characters [1].characterDataManager.GetCurrentHealth ();
+
+		if (player1Health < 1 || player2Health < 1) {
+			EndGameWithKO ();
+		}
+	}
+
+	void EndGameWithKO () {
+
+	}
+
+	void EndGameWithTimeOver () {
+
+	}
+
 
 }
