@@ -26,7 +26,9 @@ public class GameTimer : MonoBehaviour {
 
 		if (secondsLeftInRound <= 0) {
 			//	TODO: tigger game over screen (with Time Over)
+			victoryScreen.SetActive(true);
 			CancelInvoke ();
+			Time.timeScale = 0;
 		}
 	}
 

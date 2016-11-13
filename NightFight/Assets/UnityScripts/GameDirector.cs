@@ -5,6 +5,7 @@ using Eppy;
 
 public class GameDirector : MonoBehaviour {
 	public GameObject victoryWindow;
+//	public GameTimer gameTimer;
 	public ScreenShakeTest shaker;
 	public CharacterManager[] characters;
 	public HitboxController[] pendingAttackHitboxes;
