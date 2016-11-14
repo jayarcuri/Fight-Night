@@ -7,7 +7,7 @@ using Eppy;
 public class GameDirector : MonoBehaviour {
 	public EndGameMenuController victoryWindowController;
 	public bool timeOver;
-	public ScreenShakeTest shaker;
+	public HitEffectsManager shaker;
 	public CharacterManager[] characters;
 	public HitboxController[] pendingAttackHitboxes;
 

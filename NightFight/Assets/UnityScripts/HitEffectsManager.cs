@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScreenShakeTest : MonoBehaviour {
+public class HitEffectsManager : MonoBehaviour {
 	Camera cameraRef;
 	float originalCameraSize;
 	public int shakeCounter { get; private set; }
