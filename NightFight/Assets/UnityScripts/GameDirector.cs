@@ -49,7 +49,7 @@ public class GameDirector : MonoBehaviour {
 				hitsOccurred [i] = characters [i].ResolveAttackCollisions ();
 
 				if (hitsOccurred [i]) {
-					
+
 				}
 			}
 
@@ -88,19 +88,29 @@ public class GameDirector : MonoBehaviour {
 
 		Vector2 levelConstrainedP1Velocity = CollisionUtils.GetLevelConstraintedVelocity (player1Location, player1Velocity);
 		Vector2 levelConstrainedP2Velocity = CollisionUtils.GetLevelConstraintedVelocity (player2Location, player2Velocity);
-		bool p1VelocityChanged = !levelConstrainedP1Velocity.Equals (newPlayer1Velocity) && !float.IsNaN (levelConstrainedP1Velocity.x);
-		bool p2VelocityChanged = !levelConstrainedP2Velocity.Equals (newPlayer2Velocity) && !float.IsNaN (levelConstrainedP2Velocity.x);
+		bool p1VelocityChanged_X = levelConstrainedP1Velocity.x != newPlayer1Velocity.x && !float.IsNaN (levelConstrainedP1Velocity.x);
+		bool p1VelocityChanged_Y = levelConstrainedP1Velocity.y != newPlayer1Velocity.y && !float.IsNaN (levelConstrainedP1Velocity.y);
+		bool p2VelocityChanged_X = levelConstrainedP2Velocity.x != newPlayer2Velocity.x && !float.IsNaN (levelConstrainedP2Velocity.x);
+		bool p2VelocityChanged_Y = levelConstrainedP2Velocity.y != newPlayer2Velocity.y && !float.IsNaN (levelConstrainedP2Velocity.y);
 
-		newPlayer1Velocity = p1VelocityChanged ? levelConstrainedP1Velocity : newPlayer1Velocity;
-		newPlayer2Velocity = p2VelocityChanged ? levelConstrainedP2Velocity : newPlayer2Velocity;
+		newPlayer1Velocity = p1VelocityChanged_X || p1VelocityChanged_Y ? levelConstrainedP1Velocity : newPlayer1Velocity;
+		newPlayer2Velocity = p2VelocityChanged_X || p2VelocityChanged_Y ? levelConstrainedP2Velocity : newPlayer2Velocity;
 
-		if (p1VelocityChanged) {
+		if (p1VelocityChanged_X) {
 			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity.x, player2Location, newPlayer2Velocity.x);
+
+			if (float.IsNaN (newXVelocity) && characters [0].IsBlockingOrHit ()) {
+				newXVelocity = newPlayer2Velocity.x + (player1Velocity.x - newPlayer1Velocity.x);
+			}
 			if (!float.IsNaN (newXVelocity)) {
 				newPlayer2Velocity = new Vector2 (newXVelocity, newPlayer2Velocity.y);
 			}
-		} else if (p2VelocityChanged) {
+		} else if (p2VelocityChanged_X) {
 			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity.x, player1Location, newPlayer1Velocity.x);
+
+			if (float.IsNaN (newXVelocity) && characters [1].IsBlockingOrHit ()) {
+				newXVelocity = newPlayer1Velocity.x + (player2Velocity.x - newPlayer2Velocity.x);
+			}
 			if (!float.IsNaN (newXVelocity)) {
 				newPlayer1Velocity = new Vector2 (newXVelocity, newPlayer1Velocity.y);
 			}
@@ -125,11 +135,11 @@ public class GameDirector : MonoBehaviour {
 	WinningPlayer GetWinner (int player1Health, int player2Health) {
 		WinningPlayer winner;
 		if (player1Health < 1 && player2Health < 1 || player1Health == player2Health) {
-				winner = WinningPlayer.None;
-			} else if (player1Health < player2Health) {
-				winner = WinningPlayer.Player2;
-			} else {
-				winner = WinningPlayer.Player1;
+			winner = WinningPlayer.None;
+		} else if (player1Health < player2Health) {
+			winner = WinningPlayer.Player2;
+		} else {
+			winner = WinningPlayer.Player1;
 		}
 		return winner;
 	}

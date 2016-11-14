@@ -153,4 +153,12 @@ public class CharacterManager : MonoBehaviour {
 		return lastExecutedFrame != null ? lastExecutedFrame.moveType : MoveType.NONE;
 	}
 
+	public bool IsBlockingOrHit () {
+		//	will not count last frame as in blockstun
+		MoveType lastMoveType = GetLastFrameMoveType ();
+		bool isInBlockstun = lastMoveType == MoveType.BLOCKING && characterDataManager.currentMove.HasNext ();
+		bool isInHitstun = lastMoveType == MoveType.IN_HITSTUN;
+		return isInBlockstun || isInHitstun;
+	}
+
 }
