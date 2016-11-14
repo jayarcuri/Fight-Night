@@ -74,15 +74,6 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	Tuple<Vector2, Vector2> ResolveCharacterCollisions (MoveFrame player1Frame, MoveFrame player2Frame) {
-		//	---------		---------
-		//	|		|		|		|
-		//	|		|		|		|
-		//	|		a |---| b		|
-		//	|		|		|		|
-		//	|		|		|		|
-		//	---------		---------
-		//
-		//	Gets character velocities which are legal in regards to avoiding character overlap & remaining within the bounds of the game.
 		Transform player1Location = characters[0].gameObject.transform;
 		Transform player2Location = characters[1].gameObject.transform;
 		Vector2 player1Velocity = player1Frame.movementDuringFrame;
@@ -91,37 +82,24 @@ public class GameDirector : MonoBehaviour {
 		Vector2 newPlayer2Velocity = player2Velocity;
 
 		Tuple<Vector2, Vector2> newVelocities = CollisionUtils.GetUpdatedVelocities (player1Location, player1Velocity, player2Location, player2Velocity);
-		if (!newVelocities.Item1.Equals (CollisionUtils.NaV2)) {
-			newPlayer1Velocity = newVelocities.Item1;
-		}
 
-		if (!newVelocities.Item2.Equals (CollisionUtils.NaV2)) {
-			newPlayer2Velocity = newVelocities.Item2;
+		newPlayer1Velocity = !newVelocities.Item1.Equals (CollisionUtils.NaV2) ? newVelocities.Item1 : newPlayer1Velocity;
+		newPlayer2Velocity = !newVelocities.Item2.Equals (CollisionUtils.NaV2) ? newVelocities.Item2 : newPlayer2Velocity;
 
-			if (newPlayer2Velocity.x > 1f || newPlayer2Velocity.x < -1f ) {
-				Debug.Log ("Done fucked up");
-			}
+		Vector2 levelConstrainedP1Velocity = CollisionUtils.GetLevelConstraintedVelocity (player1Location, player1Velocity);
+		Vector2 levelConstrainedP2Velocity = CollisionUtils.GetLevelConstraintedVelocity (player2Location, player2Velocity);
+		bool p1VelocityChanged = !levelConstrainedP1Velocity.Equals (newPlayer1Velocity) && !float.IsNaN (levelConstrainedP1Velocity.x);
+		bool p2VelocityChanged = !levelConstrainedP2Velocity.Equals (newPlayer2Velocity) && !float.IsNaN (levelConstrainedP2Velocity.x);
 
-		}
+		newPlayer1Velocity = p1VelocityChanged ? levelConstrainedP1Velocity : newPlayer1Velocity;
+		newPlayer2Velocity = p2VelocityChanged ? levelConstrainedP2Velocity : newPlayer2Velocity;
 
-		Vector2 modifiedP1Velocities = CollisionUtils.GetLevelConstraintedVelocity (player1Location, player1Velocity);
-		Vector2 modifiedP2Velocities = CollisionUtils.GetLevelConstraintedVelocity (player2Location, player2Velocity);
-		bool p1HorizontalVelocityChanged = modifiedP1Velocities.x != newPlayer1Velocity.x && !float.IsNaN(modifiedP1Velocities.x);
-		bool p2HorizontalVelocityChanged = modifiedP2Velocities.x != newPlayer2Velocity.x && !float.IsNaN(modifiedP2Velocities.x);
-
-		if (!modifiedP1Velocities.Equals(newPlayer1Velocity) && !float.IsNaN(modifiedP1Velocities.x)) {
-			newPlayer1Velocity = modifiedP1Velocities;
-		}
-		if (!modifiedP2Velocities.Equals(newPlayer2Velocity) && !float.IsNaN(modifiedP2Velocities.x)) {
-			newPlayer2Velocity = modifiedP2Velocities;
-		}
-
-		if (p1HorizontalVelocityChanged) {
+		if (p1VelocityChanged) {
 			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity.x, player2Location, newPlayer2Velocity.x);
 			if (!float.IsNaN (newXVelocity)) {
 				newPlayer2Velocity = new Vector2 (newXVelocity, newPlayer2Velocity.y);
 			}
-		} else if (p2HorizontalVelocityChanged) {
+		} else if (p2VelocityChanged) {
 			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity.x, player1Location, newPlayer1Velocity.x);
 			if (!float.IsNaN (newXVelocity)) {
 				newPlayer1Velocity = new Vector2 (newXVelocity, newPlayer1Velocity.y);
