@@ -26,7 +26,7 @@ public class RecoilSequence : IFrameSequence
 			throw new Exception ("RecoilSequence does not have next!");
 		}
 
-		MoveFrame returnFrame = new MoveFrame (new Vector2 (-velocity, 0), recoilType);
+		MoveFrame returnFrame = new MoveFrame (new Vector2 (-velocity, 0), recoilType, true);
 		velocity -= friction;
 
 		return returnFrame;
@@ -41,7 +41,7 @@ public class RecoilSequence : IFrameSequence
 	}
 
 	public MoveFrame Peek () {
-		return new MoveFrame (new Vector2 (-velocity, 0), recoilType);
+		return new MoveFrame (new Vector2 (-velocity, 0), recoilType, true);
 	}
 
 	public Dictionary<string, IFrameSequence> GetCancellableDictionary () {
