@@ -145,4 +145,12 @@ public class CharacterManager : MonoBehaviour {
 		characterLight.SetLight (isLit, currentMoveType);
 	}
 
+	public void SetCharacterLight(bool lightShouldBeOn, MoveType forMoveType) {
+		characterLight.SetLight (lightShouldBeOn, forMoveType);
+	}
+
+	public MoveType GetLastFrameMoveType () {
+		return lastExecutedFrame != null ? lastExecutedFrame.moveType : MoveType.NONE;
+	}
+
 }

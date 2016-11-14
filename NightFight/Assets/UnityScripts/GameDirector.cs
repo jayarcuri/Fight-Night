@@ -29,6 +29,7 @@ public class GameDirector : MonoBehaviour {
 		if (shaker.shakeCounter >= 0) {
 			shaker.StepShakeForward ();
 		} else {
+			bool[] hitsOccurred = new bool[2];
 			Tuple<MoveFrame, bool>[] currentFrames = new  Tuple<MoveFrame, bool>[2];
 			for (int i = 0; i < characters.Length; i++) {
 				// Execute current move
@@ -45,15 +46,27 @@ public class GameDirector : MonoBehaviour {
 			}
 
 			for (int i = 0; i < characters.Length; i++) {
-				bool hitOccurred = characters [i].ResolveAttackCollisions ();
+				hitsOccurred [i] = characters [i].ResolveAttackCollisions ();
 
-				if (hitOccurred) {
-					shaker.SetCameraToShake ();
+				if (hitsOccurred [i]) {
+					
 				}
 			}
-			// 5: Update character/game/UI state.
+
 			for (int i = 0; i < characters.Length; i++) {
 				characters [i].UpdateCharacterState ();
+			}
+
+			if (hitsOccurred [0] || hitsOccurred [1]) {
+				shaker.SetCameraToShake ();
+				for (int i = 0; i < characters.Length; i++) {
+					if (hitsOccurred [i]) {
+						MoveType lastFrameMoveType = characters [i].GetLastFrameMoveType () == MoveType.BLOCKING 
+							? MoveType.BLOCKING 
+							: MoveType.IN_HITSTUN;
+						characters [i].SetCharacterLight (true, lastFrameMoveType);
+					}
+				}
 			}
 		}
 
