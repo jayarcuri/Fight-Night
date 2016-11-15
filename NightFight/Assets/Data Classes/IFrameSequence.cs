@@ -28,8 +28,6 @@ public interface IFrameSequence
 	/// </summary>
 	MoveFrame Peek ();
 
-	Dictionary<string, IFrameSequence> GetCancellableDictionary ();
-
 	void IncrementIndex ();
 
 }

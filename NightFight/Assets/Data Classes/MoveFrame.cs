@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MoveFrame {
 	public MoveType moveType = MoveType.RECOVERY;
@@ -46,6 +47,22 @@ public class MoveFrame {
 
 	public void SetLitness(bool isLit) {
 		this.isLit = isLit;
+	}
+
+	public bool Equals(MoveFrame otherMoveFrame) {
+		if (otherMoveFrame == null) {
+			return false;
+		}
+
+		bool cancelDictionariesEqual = this.cancellableTo.Keys.Count == otherMoveFrame.cancellableTo.Keys.Count 
+			&& this.cancellableTo.Keys.SequenceEqual (otherMoveFrame.cancellableTo.Keys);
+
+		return this.moveType == otherMoveFrame.moveType
+		&& this.movementDuringFrame.Equals (otherMoveFrame.movementDuringFrame)
+		&& cancelDictionariesEqual
+		&& (this.attackData == null && otherMoveFrame.attackData == null
+				|| (this.attackData != null && this.attackData.Equals (otherMoveFrame.attackData)))
+		&& this.isLit == otherMoveFrame.isLit;
 	}
 
 	static Dictionary<string, IFrameSequence> GetDefaultCancellables () {
