@@ -14,7 +14,6 @@ public class GameDirector : MonoBehaviour {
 	//	Should be a float > 0f & <= 1f
 	private float cornerPushBackModifier = 1f;
 
-	// Use this for initialization
 	void Start () {
 		CollisionUtils.SetUp ();
 		timeOver = false;
