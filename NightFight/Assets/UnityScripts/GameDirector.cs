@@ -16,6 +16,7 @@ public class GameDirector : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		CollisionUtils.SetUp ();
 		timeOver = false;
 		victoryWindowController = GameObject.FindGameObjectWithTag ("VictoryWindow").GetComponent<EndGameMenuController> ();
 		victoryWindowController.gameObject.SetActive (false);

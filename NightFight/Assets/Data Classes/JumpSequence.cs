@@ -11,10 +11,6 @@ public class JumpSequence : IFrameSequence
 	protected int currentFrameCount;
 	Dictionary<string, IFrameSequence> cancelsTo;
 
-//	public double currentHeight { get; private set; }
-
-//	public bool isFalling { get; private set; }
-
 	public JumpSequence (int jumpLengthInFrames, float jumpHeight, float horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancelsTo)
 	{
 		Reset ();
@@ -64,7 +60,6 @@ public class JumpSequence : IFrameSequence
 	}
 
 	public JumpSequence GetAirRecoverySequence() {
-//		float verticalVelocity = isFalling ? -velocity.y : velocity.y;
 		int recoverySequenceLength = 15;
 		int framesBeforeDescent = 0;
 		int spoofLength = (recoverySequenceLength - framesBeforeDescent) * 2;

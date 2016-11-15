@@ -7,9 +7,18 @@ public class CollisionUtils
 {
 	public static readonly Vector2 NaV2 = new Vector2(float.NaN, float.NaN);
 	public static readonly float bufferValue = 0.05f;
-	public static readonly float leftSideLevelBounds = -9.5f;
-	public static readonly float rightSideLevelBounds = 9.5f;
-	public static readonly float floor = -0.77f;
+	public static float leftSideLevelBounds { get; private set; }
+	public static float rightSideLevelBounds { get; private set; }
+	public static float floorBounds { get; private set; }
+
+	public static void SetUp () {
+		Transform leftWall = GameObject.FindGameObjectWithTag ("LeftWall").GetComponent<Transform> ();
+		leftSideLevelBounds = leftWall.position.x + leftWall.localScale.x / 2;
+		Transform rightWall = GameObject.FindGameObjectWithTag ("RightWall").GetComponent<Transform> ();
+		rightSideLevelBounds = rightWall.position.x - rightWall.localScale.x / 2;
+		Transform floor = GameObject.FindGameObjectWithTag ("Floor").GetComponent<Transform> ();
+		floorBounds = floor.position.y + floor.localScale.y / 2;
+	}
 
 	public static Tuple<Vector2, Vector2> GetUpdatedVelocities(Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
 		Transform leftCharacterTransform;
@@ -101,8 +110,8 @@ public class CollisionUtils
 	static float GetConstrainedYVelocity(Transform transform, float yVelocity) {
 		float height = transform.localScale.y;
 
-		if (transform.position.y - height / 2f + yVelocity < floor) {
-			return floor - (transform.position.y - height / 2f);
+		if (transform.position.y - height / 2f + yVelocity < floorBounds) {
+			return floorBounds - (transform.position.y - height / 2f);
 		}
 
 		return yVelocity;
