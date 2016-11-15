@@ -11,7 +11,7 @@ public class GameStateManager : MonoBehaviour {
 	public GameState currentGameState;
 
 	void Start () {
-		currentGameState = GameState.GAME_RUNNING;
+		currentGameState = GameState.INSTRUCTIONS;
 	}
 
 	public GameState GetCurrentGameState () {
