@@ -11,6 +11,9 @@ public class GameDirector : MonoBehaviour {
 	public CharacterManager[] characters;
 	public HitboxController[] pendingAttackHitboxes;
 
+	//	Should be a float > 0f & <= 1f
+	private float cornerPushBackModifier = 1f;
+
 	// Use this for initialization
 	void Start () {
 		timeOver = false;
@@ -100,7 +103,7 @@ public class GameDirector : MonoBehaviour {
 			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity.x, player2Location, newPlayer2Velocity.x);
 
 			if (float.IsNaN (newXVelocity) && characters [0].IsBlockingOrHit ()) {
-				newXVelocity = newPlayer2Velocity.x + (player1Velocity.x - newPlayer1Velocity.x);
+				newXVelocity = newPlayer2Velocity.x + (player1Velocity.x - newPlayer1Velocity.x) * cornerPushBackModifier;
 			}
 			if (!float.IsNaN (newXVelocity)) {
 				newPlayer2Velocity = new Vector2 (newXVelocity, newPlayer2Velocity.y);
@@ -109,7 +112,7 @@ public class GameDirector : MonoBehaviour {
 			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity.x, player1Location, newPlayer1Velocity.x);
 
 			if (float.IsNaN (newXVelocity) && characters [1].IsBlockingOrHit ()) {
-				newXVelocity = newPlayer1Velocity.x + (player2Velocity.x - newPlayer2Velocity.x);
+				newXVelocity = newPlayer1Velocity.x + (player2Velocity.x - newPlayer2Velocity.x) * cornerPushBackModifier;
 			}
 			if (!float.IsNaN (newXVelocity)) {
 				newPlayer1Velocity = new Vector2 (newXVelocity, newPlayer1Velocity.y);

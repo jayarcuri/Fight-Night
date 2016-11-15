@@ -43,9 +43,9 @@ public class CharacterData
 		},
 			new Dictionary<string, IFrameSequence>());
 		cancelsForJump.Add ("A", jumpAttack);
-		JumpSequence verticalJump = new JumpSequence (40, 3.5, 0.0, cancelsForJump);
-		JumpSequence forwardJump = new JumpSequence (40, 3.5, 2.5, cancelsForJump);
-		JumpSequence backwardJump = new JumpSequence (40, 3.5, -2.5, cancelsForJump);
+		JumpSequence verticalJump = new JumpSequence (40, 3.5f, 0.0f, cancelsForJump);
+		JumpSequence forwardJump = new JumpSequence (40, 3.5f, 2.5f, cancelsForJump);
+		JumpSequence backwardJump = new JumpSequence (40, 3.5f, -2.5f, cancelsForJump);
 
 		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (1f, 0.2f), 
 			new Vector3 (1f, .25f, 1f), 1, 7, 6, HitType.HIT);

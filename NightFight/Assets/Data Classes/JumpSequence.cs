@@ -5,34 +5,29 @@ using System.Collections.Generic;
 public class JumpSequence : IFrameSequence
 {
 	IFrameSequence supplementaryMove;
-	Vector2 velocity;
-	double maxJumpHeight;
+	float horizontalVelocity;
+	float maxJumpHeight;
+	int jumpLengthInFrames;
+	protected int currentFrameCount;
 	Dictionary<string, IFrameSequence> cancelsTo;
 
-	public double currentHeight { get; private set; }
+//	public double currentHeight { get; private set; }
 
-	public bool isFalling { get; private set; }
+//	public bool isFalling { get; private set; }
 
-	public JumpSequence (int jumpLengthInFrames, double jumpHeight, double horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancelsTo)
+	public JumpSequence (int jumpLengthInFrames, float jumpHeight, float horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancelsTo)
 	{
-		SetUp ();
+		Reset ();
 		this.maxJumpHeight = jumpHeight;
-		this.velocity = new Vector2 ((float)horizontalDistanceCovered / jumpLengthInFrames, (float)jumpHeight * 2 / jumpLengthInFrames);
+		this.jumpLengthInFrames = jumpLengthInFrames;
+		horizontalVelocity = horizontalDistanceCovered / jumpLengthInFrames;
 		this.cancelsTo = cancelsTo;
-	}
-
-	public JumpSequence (double maxHeight, double currentHeight, Vector2 velocity, Dictionary<string, IFrameSequence> cancelsTo)
-	{
-		SetUp ();
-		this.maxJumpHeight = maxHeight;
-		this.currentHeight = currentHeight;
-		this.velocity = velocity;
-		this.cancelsTo = cancelsTo;
+		currentFrameCount = 0;
 	}
 
 	public bool HasNext ()
 	{
-		return (!isFalling || currentHeight > 0);
+		return (currentFrameCount < jumpLengthInFrames);
 	}
 
 	public int MoveLength ()
@@ -42,30 +37,16 @@ public class JumpSequence : IFrameSequence
 
 	public void Reset ()
 	{
-		if (isFalling) {
-			velocity = new Vector2 (velocity.x, -velocity.y);
-		}
-		SetUp ();
+		currentFrameCount = 0;
+		supplementaryMove = null;
 	}
 		
 	public MoveFrame GetNext ()
 	{
 		if (HasNext ()) {
-
-			currentHeight += velocity.y;
-
-			if (currentHeight >= maxJumpHeight && !isFalling) {
-				isFalling = true;
-				velocity = new Vector2 (velocity.x, -velocity.y);
-			}
-
-			MoveFrame supplementalFrame = null;
-			if (supplementaryMove != null && supplementaryMove.HasNext ()) {
-				supplementalFrame = supplementaryMove.GetNext ();
-			}
-
-			MoveFrame returnFrame = GetNextMoveFrame (velocity, supplementalFrame);
-			return returnFrame;
+			MoveFrame nextFrame = GetNextFrame ();
+			IncrementIndex ();
+			return nextFrame;
 		} else  {
 			throw new System.IndexOutOfRangeException ("Current sequence does not have a next move!");
 		}
@@ -74,20 +55,7 @@ public class JumpSequence : IFrameSequence
 
 	public MoveFrame Peek ()
 	{
-		MoveFrame nextFrame;
-		MoveFrame supplementalFrame = null;
-
-		if (supplementaryMove != null && supplementaryMove.HasNext ()) {
-			supplementalFrame = supplementaryMove.Peek ();
-		}
-			
-		if (!isFalling && currentHeight + velocity.y >= maxJumpHeight) {
-			nextFrame = GetNextMoveFrame(new Vector2 (velocity.x, -velocity.y), supplementalFrame);
-		} else {
-			nextFrame = GetNextMoveFrame(velocity, supplementalFrame);
-		}
-
-		return nextFrame;
+		return GetNextFrame ();
 	}
 
 	public void AddSupplementaryFrameSequence (IFrameSequence newSequence)
@@ -96,10 +64,17 @@ public class JumpSequence : IFrameSequence
 	}
 
 	public JumpSequence GetAirRecoverySequence() {
-		float verticalVelocity = isFalling ? -velocity.y : velocity.y;
-		float horizontalVelocity = velocity.x != 0 ? -Mathf.Abs(velocity.x/2) : -0.1f;
-		Vector2 recoveryVelocity = new Vector2 (horizontalVelocity, verticalVelocity);
-		return new JumpSequence (currentHeight + (verticalVelocity * 10), currentHeight, recoveryVelocity, new Dictionary<string, IFrameSequence> ());
+//		float verticalVelocity = isFalling ? -velocity.y : velocity.y;
+		int recoverySequenceLength = 15;
+		int framesBeforeDescent = 0;
+		int spoofLength = (recoverySequenceLength - framesBeforeDescent) * 2;
+
+		float maxHeightForRS = GetCurrentHeight () /*/ Mathf.Sin (11f / 13f * Mathf.PI * 0.5f)*/;		
+		float newHorizontalVelocity = /*horizontalVelocity != 0 ? -Mathf.Abs(horizontalVelocity / 2f) :*/ -2.5f;
+
+		JumpSequence recoverySequence = new JumpSequence (recoverySequenceLength * 2, maxHeightForRS, newHorizontalVelocity, new Dictionary<string, IFrameSequence> ());
+		recoverySequence.currentFrameCount = spoofLength / 2 - framesBeforeDescent;
+		return recoverySequence;
 	}
 
 	public Dictionary<string, IFrameSequence> GetCancellableDictionary () {
@@ -107,20 +82,25 @@ public class JumpSequence : IFrameSequence
 	}
 
 	public void IncrementIndex () {
-
-		currentHeight += velocity.y;
-
-		if (currentHeight >= maxJumpHeight && !isFalling) {
-			isFalling = true;
-			velocity = new Vector2 (velocity.x, -velocity.y);
-		}
-
+		currentFrameCount++;
 		if (supplementaryMove != null && supplementaryMove.HasNext ()) {
 			supplementaryMove.IncrementIndex ();
 		}
 	}
 
-	MoveFrame GetNextMoveFrame (Vector2 nextVelocity, MoveFrame supplementalFrame)
+	MoveFrame GetNextFrame () {
+		Vector2 velocity = GetMovementForNextFrame ();
+
+		MoveFrame supplementalFrame = null;
+		if (supplementaryMove != null && supplementaryMove.HasNext ()) {
+			supplementalFrame = supplementaryMove.Peek ();
+		}
+
+		MoveFrame returnFrame = GetCombinedMoveFrame (velocity, supplementalFrame);
+		return returnFrame;
+	}
+
+	MoveFrame GetCombinedMoveFrame (Vector2 nextVelocity, MoveFrame supplementalFrame)
 	{
 		MoveFrame returnFrame;
 		if (supplementalFrame != null) {
@@ -139,12 +119,26 @@ public class JumpSequence : IFrameSequence
 		}
 		return returnFrame;
 	}
-
-	void SetUp ()
+		
+	JumpSequence (double maxHeight, double currentHeight, Dictionary<string, IFrameSequence> cancelsTo)
 	{
-		supplementaryMove = null;
-		isFalling = false;
-		currentHeight = 0;
+		Reset ();
+		this.maxJumpHeight = (float)maxHeight;
+		this.cancelsTo = cancelsTo;
+		currentFrameCount = 0;
+	}
+
+	Vector2 GetMovementForNextFrame () {
+		float yPercentageNextFrame = Mathf.Sin ((currentFrameCount + 1) / (jumpLengthInFrames / 2f) * Mathf.PI * 0.5f);
+		float yPercentageThisFrame = Mathf.Sin ((currentFrameCount) / (jumpLengthInFrames / 2f) * Mathf.PI * 0.5f);
+
+		float percentageDelta = yPercentageNextFrame - yPercentageThisFrame;
+
+		return new Vector2 (horizontalVelocity, maxJumpHeight * percentageDelta); 
+	}
+
+	float GetCurrentHeight () {
+		return Mathf.Sin ((currentFrameCount) / (jumpLengthInFrames / 2f) * Mathf.PI * 0.5f) * maxJumpHeight;
 	}
 		
 }
