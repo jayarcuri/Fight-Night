@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public class RecoilSequence : IFrameSequence
 {
-	int lengthInFrames;
-	float velocity;
-	float friction = 0.05f;
+	public int lengthInFrames { get; private set; }
+	int currentFrameCount;
+	public float distanceToRecoil { get; private set; }
 	MoveType recoilType;
 	Dictionary<string, IFrameSequence> cancellableDictionary;
 
-	public RecoilSequence (int lengthInFrames, float distanceToTravel, MoveType recoilType)
+	public RecoilSequence (int lengthInFrames, float distance, MoveType recoilType)
 	{
 		this.lengthInFrames = lengthInFrames;
-		velocity = Mathf.Sqrt((float)lengthInFrames * 2f * friction * distanceToTravel);
+		this.distanceToRecoil = distance;
 		this.recoilType = recoilType;
 		Dictionary<string, IFrameSequence> blockDict = new Dictionary<string, IFrameSequence> ();
 		blockDict.Add ("HIT", null);
@@ -28,11 +28,11 @@ public class RecoilSequence : IFrameSequence
 	}
 
 	public bool HasNext () {
-		return (velocity > 0);
+		return (currentFrameCount < lengthInFrames);
 	}
 
 	public void Reset () {
-		velocity = lengthInFrames * friction;
+		currentFrameCount = 0;
 	}
 
 	public MoveFrame Peek () {
@@ -44,15 +44,17 @@ public class RecoilSequence : IFrameSequence
 	}
 
 	public void IncrementIndex () {
-		velocity -= friction;
+		currentFrameCount++;
 	}
 
 	MoveFrame GetNextFrame () {
-		if (velocity <= 0) {
+		if (!HasNext()) {
 			throw new Exception ("RecoilSequence does not have next!");
 		}
-
-		return new MoveFrame (new Vector2 (-velocity, 0), recoilType, true);
+		float currentPercentage = Mathf.Sin ((float) (currentFrameCount + 1) / lengthInFrames * Mathf.PI * 0.5f);
+		float previousPercentage = Mathf.Sin ((float) currentFrameCount / lengthInFrames * Mathf.PI * 0.5f);
+		float currentFrameDistance = distanceToRecoil * (currentPercentage - previousPercentage);
+		return new MoveFrame (new Vector2 (-currentFrameDistance, 0), recoilType, true);
 	}
 
 }

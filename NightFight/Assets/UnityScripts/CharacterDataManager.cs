@@ -87,19 +87,19 @@ public class CharacterDataManager
 				QueueMoveWithoutReset (recoverySequence);
 				TakeDamage (hit.damage);
 			} else if (previousMoveType == MoveType.BLOCKING) {
-				QueueMove (new RecoilSequence(hit.blockStun, 1f, MoveType.BLOCKING));
+				QueueMove (hit.blockStunSequence);
 			} else  {
-				QueueMove (new RecoilSequence (hit.hitStun, 1f, MoveType.IN_HITSTUN));
+				QueueMove (hit.hitStunSequence);
 				TakeDamage (hit.damage);
 			}
 			return true;
 		} else if (HitType.THROW == hit.hitType && optionDictionary.ContainsKey ("HIT")) {
 			Debug.Log ("Throw triggered");
-			QueueMove (new RecoilSequence(hit.blockStun, 1f, MoveType.IN_HITSTUN));
+			QueueMove (hit.blockStunSequence);
 			TakeDamage (hit.damage);
 			return true;
 		} else if (HitType.HIT == hit.hitType && previousMoveType == MoveType.BLOCKING) {
-			QueueMove (new RecoilSequence(hit.blockStun, 1f, MoveType.BLOCKING));
+			QueueMove (hit.blockStunSequence);
 			return true;
 		}
 			return false;

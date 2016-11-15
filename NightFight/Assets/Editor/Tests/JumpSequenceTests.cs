@@ -38,7 +38,7 @@ public class JumpSequenceTests {
 		// Correct length
 		MoveFrame neutralFrame = new MoveFrame ();
 		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (0.8f, 0.2f), 
-			new Vector3 (.7f, .25f, 1f), 1, 7, 6, HitType.HIT);
+			new Vector3 (.7f, .25f, 1f), 1, null, null, HitType.HIT);
 		MoveFrame jabHitbox = new MoveFrame (Vector2.zero, MoveType.NONE, jabAttackData);
 		MoveSequence flyingJumpKick = new MoveSequence(new MoveFrame[] {
 			neutralFrame,
