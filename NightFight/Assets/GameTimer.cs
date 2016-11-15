@@ -13,7 +13,6 @@ public class GameTimer : MonoBehaviour {
 	void Start () {		
 		timerText = GetComponent<Text> ();
 		gameDirector = GameObject.FindGameObjectWithTag ("GameDirector").GetComponent<GameDirector> ();
-		SetUpTimer ();
 	}
 	
 	public void UpdateTimer () {
