@@ -28,7 +28,7 @@ public class GameDirector : MonoBehaviour {
 				throw new UnityException ("We are missing a player's character.");
 			}
 		}
-
+		stateManager.SetCurrentGameState (GameState.GAME_RUNNING);
 		StartCoroutine (SetUpGame());
 	}
 
@@ -107,7 +107,7 @@ public class GameDirector : MonoBehaviour {
 		newPlayer2Velocity = p2VelocityChanged_X || p2VelocityChanged_Y ? levelConstrainedP2Velocity : newPlayer2Velocity;
 
 		if (p1VelocityChanged_X) {
-			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity.x, player2Location, newPlayer2Velocity.x);
+			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity, player2Location, newPlayer2Velocity);
 
 			if (float.IsNaN (newXVelocity) && characters [0].IsBlockingOrHit ()) {
 				newXVelocity = newPlayer2Velocity.x + (player1Velocity.x - newPlayer1Velocity.x) * cornerPushBackModifier;
@@ -116,7 +116,7 @@ public class GameDirector : MonoBehaviour {
 				newPlayer2Velocity = new Vector2 (newXVelocity, newPlayer2Velocity.y);
 			}
 		} else if (p2VelocityChanged_X) {
-			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity.x, player1Location, newPlayer1Velocity.x);
+			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity, player1Location, newPlayer1Velocity);
 
 			if (float.IsNaN (newXVelocity) && characters [1].IsBlockingOrHit ()) {
 				newXVelocity = newPlayer1Velocity.x + (player2Velocity.x - newPlayer2Velocity.x) * cornerPushBackModifier;

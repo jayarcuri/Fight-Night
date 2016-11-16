@@ -43,11 +43,16 @@ public class CollisionUtils
 		float rightCharacterBoundsFinalX = rightCharacterLeftSideBounds + rightCharacterVelocity.x;
 
 		if (rightCharacterBoundsFinalX <= leftCharacterBoundsFinalX) {
-
+			float newMidPoint;
 			float distanceBetween = leftCharacterBoundsFinalX - rightCharacterBoundsFinalX;
 			float velocitiesRatio = Mathf.Abs(leftCharacterVelocity.x) / 
 				(Mathf.Abs(leftCharacterVelocity.x) + Mathf.Abs(rightCharacterVelocity.x));
-			float newMidPoint = rightCharacterBoundsFinalX + (distanceBetween * velocitiesRatio);
+			if (float.IsNaN (velocitiesRatio)) {
+				velocitiesRatio = 0;
+				newMidPoint = rightCharacterVelocity.magnitude > leftCharacterVelocity.magnitude ? rightCharacterLeftSideBounds : leftCharacterRightSideBounds;
+			} else {
+				newMidPoint = rightCharacterBoundsFinalX + (distanceBetween * velocitiesRatio);
+			}
 
 			Vector2 newLeftCharacterVelocity = new Vector2 (newMidPoint - leftCharacterTransform.position.x - leftCharacterTransform.localScale.x/2 - bufferValue, 
 				leftCharacterVelocity.y);
@@ -83,7 +88,12 @@ public class CollisionUtils
 		return newCharacterVelocity;
 	}
 
-	public static float GetNonOverlappingXVelocity (Transform correctedPlayerTransform, float correctedPlayerXVelocity, Transform otherPlayerTransform, float otherPlayerXVelocity) {
+	public static float GetNonOverlappingXVelocity (Transform correctedPlayerTransform, Vector2 correctedPlayerVelocity, Transform otherPlayerTransform, Vector2 otherPlayerVelocity) {
+		float correctedPlayerXVelocity = correctedPlayerVelocity.x;
+		float otherPlayerXVelocity = otherPlayerVelocity.x;
+		if (!VerticalCollisionWillOccur(correctedPlayerTransform, correctedPlayerVelocity, otherPlayerTransform, otherPlayerVelocity)) {
+			return float.NaN;
+		}
 		float correctedPlayerWidthFromOrigin = correctedPlayerTransform.localScale.x / 2f;
 		float otherPlayerWidthFromOrigin = otherPlayerTransform.localScale.x / 2f;	
 		float minXDistance = correctedPlayerWidthFromOrigin + otherPlayerWidthFromOrigin;
