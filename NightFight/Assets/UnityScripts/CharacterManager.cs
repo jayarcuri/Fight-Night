@@ -108,9 +108,10 @@ public class CharacterManager : MonoBehaviour {
 			characterDataManager.IncrementIlluminationCounter ();
 		}
 
+		healthBar.UpdateChargeBar (characterDataManager.GetIlluminationCount ());
+
 		if (characterDataManager.GetCurrentHealth () <= 0) {
 			victoryWindow.SetActive (true);
-			Time.timeScale = 0;
 		}
 	}
 

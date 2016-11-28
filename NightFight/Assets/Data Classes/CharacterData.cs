@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class CharacterData
 {
+	public static int maxCharge = 1200;
+
 	public readonly int maxHealth = 15;
 	float walkSpeed = 0.15f;
 	MoveBufferManager moveBufferManager;

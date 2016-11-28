@@ -5,6 +5,7 @@ using System;
 
 public class CharacterDataManager
 {
+
 	CharacterData characterData;
 	int currentHealth;
 	public int illuminationCounter { get; private set; }
@@ -167,7 +168,13 @@ public class CharacterDataManager
 	}
 
 	public void IncrementIlluminationCounter () {
-		illuminationCounter++;
+		if (illuminationCounter + 1 <= CharacterData.maxCharge) {
+			illuminationCounter++;
+		}
+	}
+
+	public int GetIlluminationCount () {
+		return illuminationCounter;
 	}
 
 	void QueueMove (IFrameSequence newMove)

@@ -17,7 +17,7 @@ public class HitEffectsManager : MonoBehaviour {
 		shakeCounter++;
 		if (shakeCounter < 12) {
 			cameraRef.orthographicSize = cameraRef.orthographicSize == originalCameraSize ?
-				originalCameraSize * 99f / 100f : originalCameraSize;
+				originalCameraSize * 98f / 100f : originalCameraSize;
 		} else {
 			shakeCounter = -1;
 		}
