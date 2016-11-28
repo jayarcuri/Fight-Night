@@ -37,7 +37,6 @@ public class CharacterManager : MonoBehaviour {
 		characterLight.SetLight (false, MoveType.NONE);
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
-
 		} else {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player1").GetComponent <Transform> ());
 		}
@@ -66,6 +65,12 @@ public class CharacterManager : MonoBehaviour {
 		// 2: Execute input.
 		MoveFrame currentFrame = null;
 		bool isLit;
+		/*
+		 *	if (the previous moveframe is sustainable && the current move sequence was executed with a button which is still being pressed) {
+		 *		currentFrame = lastExecutedFrame;
+		 *		isLit = currentFrame.isLit && characterDataManager.isCharacterLit ();
+		 *	}
+		 */
 		currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);
 
 		return new Tuple<MoveFrame, bool>(currentFrame, isLit);

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour
 {
@@ -62,5 +63,44 @@ public class InputManager : MonoBehaviour
 			illuminateButtonPressed = false;
 		}
 
+	}
+
+	public void NewGetInputs (out DirectionalInput directionalInput, out ButtonInput[] activeButtons, out bool toggleLight)
+	{
+		// read directional inputs
+		List<ButtonInput> activeButtonList = new List<ButtonInput> ();
+		int horizontal = (int)Input.GetAxisRaw (horizontalAxis);
+		int vertical = (int)Input.GetAxisRaw (verticalAxis);
+
+		directionalInput = new DirectionalInput (horizontal, vertical);
+
+		if (Input.GetButton (heavyAtack) && !heavyAttackPressed) {
+			heavyAttackPressed = true;
+			activeButtonList.Add(new ButtonInput(AttackType.Heavy, ButtonState.depressed));
+		} 
+
+		if (Input.GetButton (lightAttack) && !lightAttackPressed) {
+			if (Input.GetButton (block)) {
+				lightAttackPressed = true;
+				activeButtonList.Add(new ButtonInput(AttackType.Throw, ButtonState.depressed));
+			} else {
+				lightAttackPressed = true;
+				activeButtonList.Add(new ButtonInput(AttackType.Light, ButtonState.depressed));
+			}
+		}
+		if (Input.GetButton (block)) {
+			activeButtonList.Add(new ButtonInput(AttackType.Block, ButtonState.sustained));
+		}
+
+		if (Input.GetButton (illuminateButton) && !illuminateButtonPressed) {
+			illuminateButtonPressed = true;
+			toggleLight = true;
+		} else {
+			toggleLight = false;
+		}
+
+		RecordDisengagedButtons ();
+
+		activeButtons = activeButtonList.ToArray ();
 	}
 }
