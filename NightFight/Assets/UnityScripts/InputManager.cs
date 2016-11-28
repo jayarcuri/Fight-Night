@@ -26,12 +26,14 @@ public class InputManager : MonoBehaviour
 		if (Input.GetButton (heavyAtack) && !heavyAttackPressed) {
 			heavyAttackPressed = true;
 			attack = AttackType.Heavy;
-		} else if (Input.GetButton (lightAttack) && !lightAttackPressed && Input.GetButton (block)) {
-			lightAttackPressed = true;
-			attack = AttackType.Throw;
 		} else if (Input.GetButton (lightAttack) && !lightAttackPressed) {
-			lightAttackPressed = true;
-			attack = AttackType.Light;
+			if (Input.GetButton (block)) {
+				lightAttackPressed = true;
+				attack = AttackType.Throw;
+			} else {
+				lightAttackPressed = true;
+				attack = AttackType.Light;
+			}
 		} else if (Input.GetButton (block)) {
 			attack = AttackType.Block;
 		} else {
