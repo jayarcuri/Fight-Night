@@ -164,7 +164,6 @@ public class GameDirector : MonoBehaviour {
 		while (stateManager.GetCurrentGameState () != GameState.GAME_RUNNING) {
 			yield return null;
 		}
-
 		gameTimer.SetUpTimer ();
 	}
 }
