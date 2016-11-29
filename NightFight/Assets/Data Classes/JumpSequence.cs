@@ -83,6 +83,10 @@ public class JumpSequence : IFrameSequence
 		}
 	}
 
+	public bool SequenceStartedWithButton(AttackType thisButton) {
+		return false;
+	}
+
 	MoveFrame GetNextFrame () {
 		Vector2 velocity = GetMovementForNextFrame ();
 

@@ -58,4 +58,8 @@ public class DashSequence : IFrameSequence {
 		currFrame++;
 	}
 
+	public bool SequenceStartedWithButton(AttackType thisButton) {
+		return false;
+	}
+
 }

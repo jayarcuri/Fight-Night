@@ -47,6 +47,10 @@ public class RecoilSequence : IFrameSequence
 		currentFrameCount++;
 	}
 
+	public bool SequenceStartedWithButton(AttackType thisButton) {
+		return false;
+	}
+
 	MoveFrame GetNextFrame () {
 		if (!HasNext()) {
 			throw new Exception ("RecoilSequence does not have next!");

@@ -30,5 +30,7 @@ public interface IFrameSequence
 
 	void IncrementIndex ();
 
+	bool SequenceStartedWithButton(AttackType thisButton);
+
 }
 

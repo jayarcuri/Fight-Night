@@ -78,7 +78,7 @@ public class CharacterManager : MonoBehaviour {
 		/*
 		 *	if (the previous moveframe is sustainable && the current move sequence was executed with a button which is still being pressed) {
 		 *		currentFrame = lastExecutedFrame;
-		 *		isLit = currentFrame.isLit && characterDataManager.isCharacterLit ();
+		 *		isLit = currentFrame.isLit || characterDataManager.isCharacterLit ();
 		 *	}
 		 */
 		currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);

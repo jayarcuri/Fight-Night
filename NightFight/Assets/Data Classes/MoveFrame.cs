@@ -9,6 +9,7 @@ public class MoveFrame {
 	public Dictionary<string, IFrameSequence> cancellableTo;
 	public AttackFrameData attackData = null;
 	public bool isLit { get; private set; }
+	public bool canBeExtended = false;
 
 	public MoveFrame() {
 		movementDuringFrame = Vector2.zero;

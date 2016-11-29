@@ -4,14 +4,16 @@ using System.Collections;
 public class MoveSequence : IFrameSequence {
 	int index;
 	MoveFrame[] moveSequence;
+	AttackType startedByButton;
 
-	public MoveSequence(MoveFrame[] moveSequence) {
+	public MoveSequence(MoveFrame[] moveSequence, AttackType startedByButton) {
 		index = -1;
 		this.moveSequence = moveSequence;
+		this.startedByButton = startedByButton;
 	}
 
-	public static MoveSequence GetAttackSequenceWithFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData) {
-		MoveSequence newMoveSequence = new MoveSequence (new MoveFrame[0]);
+	public static MoveSequence GetAttackSequenceWithFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData, AttackType mappedToButton) {
+		MoveSequence newMoveSequence = new MoveSequence (new MoveFrame[0], mappedToButton);
 		newMoveSequence.PopulateMoveSequenceUsingFrameData (startUp, activeFrames, recoveryFrames, hitData);
 
 		return newMoveSequence;
@@ -58,6 +60,10 @@ public class MoveSequence : IFrameSequence {
 
 	public void IncrementIndex () {
 		index++;
+	}
+
+	public bool SequenceStartedWithButton(AttackType thisButton) {
+		return startedByButton == thisButton;
 	}
 
 	protected void PopulateMoveSequenceUsingFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData) {
