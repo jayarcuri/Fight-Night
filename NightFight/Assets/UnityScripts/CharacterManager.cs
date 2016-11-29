@@ -57,12 +57,12 @@ public class CharacterManager : MonoBehaviour {
 			bool hey = false;
 			inputManager.NewGetInputs (out buttons, out hey);
 
-			if (buttons.Length != 0 && isPlayer1) {
-				foreach (ButtonInput input in buttons) {
-					Debug.Log (input.buttonType + " is currently " + input.buttonState);
-				}
-
-			}
+//			if (buttons.Length != 0 && isPlayer1) {
+//				foreach (ButtonInput input in buttons) {
+//					Debug.Log (input.buttonType + " is currently " + input.buttonState);
+//				}
+//
+//			}
 		}
 
 		if (toggleIllumination) {

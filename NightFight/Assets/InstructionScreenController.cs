@@ -18,7 +18,7 @@ public class InstructionScreenController : MonoBehaviour {
 		newColor.a = Mathf.Lerp(1f, 0.1f, Mathf.Sin (Time.time * 2f));
 		startGameText.color = newColor;
 
-		if (Input.GetButton ("P1_Block") && Input.GetButton ("P1_Light") && Input.GetButton ("P2_Light") && Input.GetButton ("P2_Block")) {
+		if (Input.GetButton ("p1_block") && Input.GetButton ("p1_light") && Input.GetButton ("p2_light") && Input.GetButton ("p2_block")) {
 			stateManager.SetCurrentGameState (GameState.GAME_RUNNING);
 			gameObject.SetActive (false);
 		}
