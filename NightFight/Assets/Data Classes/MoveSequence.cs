@@ -62,8 +62,13 @@ public class MoveSequence : IFrameSequence {
 		index++;
 	}
 
-	public bool SequenceStartedWithButton(AttackType thisButton) {
-		return startedByButton == thisButton;
+	public bool SequenceStartedWithButton(ButtonInput[] engagedButtons) {
+		foreach (ButtonInput input in engagedButtons) {
+			if (input.buttonType == startedByButton) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected void PopulateMoveSequenceUsingFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData, bool hitboxMayBeExtended) {

@@ -47,7 +47,7 @@ public class RecoilSequence : IFrameSequence
 		currentFrameCount++;
 	}
 
-	public bool SequenceStartedWithButton(AttackType thisButton) {
+	public bool SequenceStartedWithButton(ButtonInput[] engagedButtons) {
 		return false;
 	}
 

@@ -83,7 +83,7 @@ public class JumpSequence : IFrameSequence
 		}
 	}
 
-	public bool SequenceStartedWithButton(AttackType thisButton) {
+	public bool SequenceStartedWithButton(ButtonInput[] engagedButtons) {
 		return false;
 	}
 

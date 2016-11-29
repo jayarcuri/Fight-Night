@@ -46,6 +46,10 @@ public class CharacterManager : MonoBehaviour {
 		AttackType attack;
 		DirectionalInput directionalInput;
 		bool toggleIllumination = false;
+
+
+		ButtonInput[] buttons = new ButtonInput[0];
+		bool hey = false;
 		// 1: Get input.
 		if (isBot) {
 			directionalInput = new DirectionalInput (botDirectionalInputRaw);
@@ -53,8 +57,6 @@ public class CharacterManager : MonoBehaviour {
 			toggleIllumination = true;
 		} else {
 			inputManager.GetInputs (out directionalInput, out attack, out toggleIllumination);
-			ButtonInput[] buttons = new ButtonInput[0];
-			bool hey = false;
 			inputManager.NewGetInputs (out buttons, out hey);
 
 //			if (buttons.Length != 0 && isPlayer1) {
@@ -81,7 +83,13 @@ public class CharacterManager : MonoBehaviour {
 		 *		isLit = currentFrame.isLit || characterDataManager.isCharacterLit ();
 		 *	}
 		 */
-		currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);
+		if ((lastExecutedFrame != null && lastExecutedFrame.canBeExtended) 
+			&& (characterDataManager.currentMove != null && characterDataManager.currentMove.SequenceStartedWithButton (buttons))) {
+			currentFrame = lastExecutedFrame;
+			isLit = currentFrame.isLit || characterDataManager.isSelfIlluminated;
+		} else {
+			currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);
+		}
 
 		return new Tuple<MoveFrame, bool>(currentFrame, isLit);
 	}
