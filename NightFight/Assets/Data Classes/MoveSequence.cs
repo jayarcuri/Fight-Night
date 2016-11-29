@@ -12,9 +12,9 @@ public class MoveSequence : IFrameSequence {
 		this.startedByButton = startedByButton;
 	}
 
-	public static MoveSequence GetAttackSequenceWithFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData, AttackType mappedToButton) {
+	public static MoveSequence GetAttackSequenceWithFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData, AttackType mappedToButton, bool canBeExtended) {
 		MoveSequence newMoveSequence = new MoveSequence (new MoveFrame[0], mappedToButton);
-		newMoveSequence.PopulateMoveSequenceUsingFrameData (startUp, activeFrames, recoveryFrames, hitData);
+		newMoveSequence.PopulateMoveSequenceUsingFrameData (startUp, activeFrames, recoveryFrames, hitData, canBeExtended);
 
 		return newMoveSequence;
 	}
@@ -66,7 +66,7 @@ public class MoveSequence : IFrameSequence {
 		return startedByButton == thisButton;
 	}
 
-	protected void PopulateMoveSequenceUsingFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData) {
+	protected void PopulateMoveSequenceUsingFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData, bool hitboxMayBeExtended) {
 		MoveFrame neutralFrame = MoveFrame.GetEmptyLitFrame ();
 		MoveFrame attackFrame = new MoveFrame (Vector2.zero, MoveType.NONE, hitData);
 		moveSequence = new MoveFrame[startUp + activeFrames + recoveryFrames - 1];
@@ -76,6 +76,11 @@ public class MoveSequence : IFrameSequence {
 		}
 		for (int j = startUp - 1; j < startUp + activeFrames - 1; j++) {
 			moveSequence [j] = attackFrame;
+			if (j == startUp + activeFrames - 2 && hitboxMayBeExtended) {
+				MoveFrame extendoFrame = attackFrame.CloneMoveFrame ();
+				extendoFrame.canBeExtended = true;
+				moveSequence [j] = extendoFrame;
+			}
 		}
 		for (int k = startUp + activeFrames - 1; k < moveSequence.Length; k++) {
 			moveSequence [k] = neutralFrame;

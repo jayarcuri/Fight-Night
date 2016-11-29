@@ -11,9 +11,9 @@ public class SupplementaryJumpMove : MoveSequence
 		finalRepeatingFrame = new MoveFrame (Vector2.zero, MoveType.RECOVERY, true);
 	}
 
-	public static SupplementaryJumpMove GetSupplementaryJumpMoveWithFrameData(int startUp, int activeFrames, AttackFrameData attackData, AttackType mappedToButton) {
+	public static SupplementaryJumpMove GetSupplementaryJumpMoveWithFrameData(int startUp, int activeFrames, AttackFrameData attackData, AttackType mappedToButton, bool canBeExtended) {
 		SupplementaryJumpMove newJumpMove = new SupplementaryJumpMove(new MoveFrame[0], mappedToButton);
-		newJumpMove.PopulateMoveSequenceUsingFrameData (startUp, activeFrames, 0, attackData);
+		newJumpMove.PopulateMoveSequenceUsingFrameData (startUp, activeFrames, 0, attackData, canBeExtended);
 		newJumpMove.finalRepeatingFrame = new MoveFrame (Vector2.zero, MoveType.RECOVERY, true);
 
 		return newJumpMove;

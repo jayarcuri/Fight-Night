@@ -41,9 +41,14 @@ public class MoveFrame {
 	public MoveFrame (Vector2 movementDuringFrame, MoveType moveType, AttackFrameData attackData) {
 		this.moveType = moveType;
 		this.movementDuringFrame = movementDuringFrame;
-		isLit = true;
+		isLit = (attackData != null);
 		cancellableTo = GetDefaultCancellables ();
 		this.attackData = attackData;
+	}
+
+	public MoveFrame CloneMoveFrame () {
+		MoveFrame clone = new MoveFrame (movementDuringFrame, moveType, attackData);
+		return clone;
 	}
 
 	public void SetLitness(bool isLit) {
