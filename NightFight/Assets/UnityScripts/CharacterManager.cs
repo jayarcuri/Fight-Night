@@ -87,6 +87,7 @@ public class CharacterManager : MonoBehaviour {
 			&& (characterDataManager.currentMove != null && characterDataManager.currentMove.SequenceStartedWithButton (buttons))) {
 			currentFrame = lastExecutedFrame;
 			isLit = currentFrame.isLit || characterDataManager.isSelfIlluminated;
+			// TODO: Drain light from character accordingly.
 		} else {
 			currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);
 		}
