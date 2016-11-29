@@ -173,8 +173,17 @@ public class CharacterDataManager
 		}
 	}
 
+	public void SubtractFromIllumination (int drainValue) {
+		int valueAfterDrain = illuminationCounter - drainValue;
+		illuminationCounter = valueAfterDrain >= 0 ? valueAfterDrain : 0;
+	}
+
 	public int GetIlluminationCount () {
 		return illuminationCounter;
+	}
+
+	public int GetDrainRateForHeldMoves () {
+		return characterData.drainRateForHeldMoves;
 	}
 
 	void QueueMove (IFrameSequence newMove)

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 public class CharacterData
 {
-	public static int maxCharge = 1200;
+	public static int maxCharge = 600;
 
+	public readonly int drainRateForHeldMoves = 2;
 	public readonly int maxHealth = 15;
 	float walkSpeed = 0.15f;
 	MoveBufferManager moveBufferManager;
@@ -22,9 +23,7 @@ public class CharacterData
 		MoveBuffer forwardDash = new MoveBuffer (8, dashInput, false, dashCode);
 		moveBufferManager.AddMoveBuffer (forwardDash);
 		DashSequence dash = new DashSequence (10, 5);
-		
 
-		MoveFrame neutralFrame = MoveFrame.GetEmptyLitFrame ();
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
 

@@ -31,8 +31,5 @@ public class HealthBarController : MonoBehaviour {
 		float percentFull = (float)currentCharge / (float) maxCharge;
 		float newWidth = Mathf.Lerp (defaultChargeBarLength, 0, percentFull);
 		chargeBarTransform.offsetMax = new Vector2(-newWidth, 0);
-		//healthBarTransform.sizeDelta = new Vector2 (newWidth, 0);
-		// lerp
-
 	}
 }

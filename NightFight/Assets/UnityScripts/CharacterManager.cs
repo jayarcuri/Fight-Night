@@ -21,6 +21,7 @@ public class CharacterManager : MonoBehaviour {
 	public float overrideWalkSpeed;
 
 	MoveFrame lastExecutedFrame;
+	int drainRateForHeldMoves;
 
 	// Use this for initialization
 	void Start () {
@@ -28,6 +29,7 @@ public class CharacterManager : MonoBehaviour {
 		if (overrideWalkSpeed > 0) {
 			characterDataManager.SetWalkSpeed (overrideWalkSpeed);
 		}
+		drainRateForHeldMoves = characterDataManager.GetDrainRateForHeldMoves ();
 		inputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
 		characterLight = GetComponent<CharacterLightController> ();
@@ -84,10 +86,11 @@ public class CharacterManager : MonoBehaviour {
 		 *	}
 		 */
 		if ((lastExecutedFrame != null && lastExecutedFrame.canBeExtended) 
-			&& (characterDataManager.currentMove != null && characterDataManager.currentMove.SequenceStartedWithButton (buttons))) {
+			&& (characterDataManager.currentMove != null && characterDataManager.currentMove.SequenceStartedWithButton (buttons))
+			&& characterDataManager.GetIlluminationCount () >= drainRateForHeldMoves) {
 			currentFrame = lastExecutedFrame;
 			isLit = currentFrame.isLit || characterDataManager.isSelfIlluminated;
-			// TODO: Drain light from character accordingly.
+			characterDataManager.SubtractFromIllumination (drainRateForHeldMoves);
 		} else {
 			currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);
 		}
