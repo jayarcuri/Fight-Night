@@ -31,7 +31,7 @@ public class InputManager : MonoBehaviour
 	{
 		// read directional inputs
 		int horizontal = (int)Input.GetAxisRaw (horizontalAxis);
-		int vertical = (int)Input.GetAxisRaw (verticalAxis);
+		int vertical = (int)Input.GetAxisRaw (verticalAxis) * -1;
 
 		directionalInput = new DirectionalInput (horizontal, vertical);
 
