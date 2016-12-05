@@ -13,7 +13,6 @@ public class GameDirector : MonoBehaviour {
 	public HitboxController[] pendingAttackHitboxes;
 
 	//	Should be a float > 0f & <= 1f
-	public bool timeOver;
 	private float cornerPushBackModifier = 1f;
 
 	void Start () {
