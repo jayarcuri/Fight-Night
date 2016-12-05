@@ -4,21 +4,19 @@ using System.Collections;
 using Eppy;
 // Tracks all components related to a given player's avatar.
 public class CharacterManager : MonoBehaviour {
-
-	public bool isPlayer1;
-	public HitboxController hitBox;
-	public CharacterMovement characterMovement;
 	public CharacterDataManager characterDataManager;
-	public InputManager inputManager;
+	public CharacterLightController characterLight;
+	public CharacterMovement characterMovement;
 	public CollisionManager collisionManager;
 	public HealthBarController healthBar;
-	public CharacterLightController characterLight;
-	public GameObject victoryWindow;
+	public HitboxController hitBox;
+	public InputManager inputManager;
 
+	public bool isPlayer1;
 	public bool isBot;
 	public int botDirectionalInputRaw;
-	public AttackType botAttackInput;
 	public float overrideWalkSpeed;
+	public AttackType botAttackInput;
 
 	MoveFrame lastExecutedFrame;
 	int drainRateForHeldMoves;
@@ -136,10 +134,6 @@ public class CharacterManager : MonoBehaviour {
 		}
 
 		healthBar.UpdateChargeBar (characterDataManager.GetIlluminationCount ());
-
-		if (characterDataManager.GetCurrentHealth () <= 0) {
-			victoryWindow.SetActive (true);
-		}
 	}
 
 	public void PerformFrame (MoveFrame currentFrame, Vector2 movementDuringFrame)
