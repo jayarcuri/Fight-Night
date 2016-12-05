@@ -9,14 +9,6 @@ public class CharacterMovement : MonoBehaviour
 
 	public bool isFacingRight;
 
-	float initialHeight;
-	float remainingJumpTime;
-	public float currentJumpVelocity;
-	// TODO: Make these get pulled by code
-	float westStageConstraint = -9.5f;
-	float eastStageConstraint = 9.5f;
-
-
 	void Start ()
 	{
 		playerBody = GetComponent<Rigidbody> ();
@@ -26,8 +18,6 @@ public class CharacterMovement : MonoBehaviour
 		if (opponentTransform == null) {
 			throw new UnityException ("Cannot find other player with tag \'" + opponentTag + "\'.");
 		}
-			
-		initialHeight = playerBody.position.y;
 
 		isFacingRight = transform.localPosition.x < opponentTransform.transform.localPosition.x;
 	}
@@ -60,24 +50,7 @@ public class CharacterMovement : MonoBehaviour
 		Vector2 moveTo = playerBody.position;
 
 		moveTo += difference;
-		//moveTo = ConstrainPlayerPosition (moveTo);
 		playerBody.MovePosition (moveTo);
-	}
-
-	Vector2 ConstrainPlayerPosition (Vector2 newPosition)
-	{
-		// Verify player is within bounds of level and constrain them
-		if (newPosition.y < initialHeight) {
-			newPosition.y = initialHeight;
-			//action = CharacterAction.Standing;
-		}
-		// Verify within horizontal bounds
-		if (newPosition.x + transform.localScale.x / 2 > eastStageConstraint) {
-			newPosition.x = eastStageConstraint - transform.localScale.x / 2;
-		} else if (newPosition.x - transform.localScale.x / 2 < westStageConstraint) {
-			newPosition.x = westStageConstraint + transform.localScale.x / 2;
-		}
-		return newPosition;
 	}
 		
 }

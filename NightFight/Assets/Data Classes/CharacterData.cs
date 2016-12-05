@@ -10,10 +10,9 @@ public class CharacterData
 	float walkSpeed = 0.15f;
 	MoveBufferManager moveBufferManager;
 
-
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
-	public MoveFrame forwardStepFrame;
-	public MoveFrame backStepFrame;
+	MoveFrame forwardStepFrame;
+	MoveFrame backStepFrame;
 
 	public CharacterData ()
 	{
@@ -23,8 +22,6 @@ public class CharacterData
 		MoveBuffer forwardDash = new MoveBuffer (8, dashInput, false, dashCode);
 		moveBufferManager.AddMoveBuffer (forwardDash);
 		DashSequence dash = new DashSequence (10, 5);
-
-
 
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);

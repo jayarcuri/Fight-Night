@@ -5,7 +5,6 @@ using System;
 
 public class CharacterDataManager
 {
-
 	CharacterData characterData;
 	int currentHealth;
 	public int illuminationCounter { get; private set; }
