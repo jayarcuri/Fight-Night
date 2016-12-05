@@ -1,0 +1,6 @@
+﻿public enum GameState {
+	INSTRUCTIONS,
+	GAME_RUNNING,
+	HIT_SHAKE,
+	GAME_OVER
+}

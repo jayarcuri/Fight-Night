@@ -1,11 +1,4 @@
-﻿public enum GameState {
-	INSTRUCTIONS,
-	GAME_RUNNING,
-	HIT_SHAKE,
-	GAME_OVER
-}
-
-public class GameStateManager {
+﻿public class GameStateManager {
 
 	public GameState currentGameState;
 	protected static GameStateManager gameStateManagerSingleton;
