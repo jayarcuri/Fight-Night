@@ -24,6 +24,8 @@ public class CharacterData
 		moveBufferManager.AddMoveBuffer (forwardDash);
 		DashSequence dash = new DashSequence (10, 5);
 
+
+
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
 

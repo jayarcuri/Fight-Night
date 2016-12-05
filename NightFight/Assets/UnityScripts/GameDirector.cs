@@ -5,37 +5,36 @@ using System.Collections;
 using Eppy;
 
 public class GameDirector : MonoBehaviour {
-	public GameStateManager stateManager;
-	public EndGameMenuController victoryWindowController;
 	public GameTimer gameTimer;
-	public bool timeOver;
+	public EndGameMenuController victoryWindowController;
 	public HitEffectsManager shaker;
+
 	public CharacterManager[] characters;
 	public HitboxController[] pendingAttackHitboxes;
 
 	//	Should be a float > 0f & <= 1f
+	public bool timeOver;
 	private float cornerPushBackModifier = 1f;
 
 	void Start () {
 		CollisionUtils.SetUp ();
-		timeOver = false;
 		victoryWindowController = GameObject.FindGameObjectWithTag ("VictoryWindow").GetComponent<EndGameMenuController> ();
 		gameTimer = GameObject.FindGameObjectWithTag ("GameTimer").GetComponent<GameTimer> ();
-		stateManager = gameObject.GetComponent<GameStateManager> ();
+		//stateManager = gameObject.GetComponent<GameStateManager> ();
 		victoryWindowController.gameObject.SetActive (false);
 		foreach (CharacterManager characterManager in characters) {
 			if (characterManager == null) {
 				throw new UnityException ("We are missing a player's character.");
 			}
 		}
-		stateManager.SetCurrentGameState (GameState.GAME_RUNNING);
+		GameStateManager.SetCurrentGameState (GameState.GAME_RUNNING);
 		StartCoroutine (SetUpGame());
 	}
 
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-		if (stateManager.GetCurrentGameState () == GameState.GAME_RUNNING) {
+		if (GameStateManager.GetCurrentGameState () == GameState.GAME_RUNNING) {
 			if (shaker.shakeCounter >= 0) {
 				shaker.StepShakeForward ();
 			} else {
@@ -79,6 +78,7 @@ public class GameDirector : MonoBehaviour {
 					}
 				}
 			}
+
 			CheckIfGameHasEnded ();
 		}
 	}
@@ -137,7 +137,7 @@ public class GameDirector : MonoBehaviour {
 	void CheckIfGameHasEnded () {
 		int player1Health = characters [0].characterDataManager.GetCurrentHealth ();
 		int player2Health = characters [1].characterDataManager.GetCurrentHealth ();
-		if (player1Health < 1 || player2Health < 1 || timeOver) {
+		if (player1Health <= 0 || player2Health <= 0 || gameTimer.secondsLeftInRound <= 0) {
 			EndGameWithWinner (GetWinner (player1Health, player2Health));
 		}
 	}
@@ -155,13 +155,13 @@ public class GameDirector : MonoBehaviour {
 	}
 
 	void EndGameWithWinner (WinningPlayer winner) {
-		stateManager.SetCurrentGameState (GameState.GAME_OVER);
+		GameStateManager.SetCurrentGameState (GameState.GAME_OVER);
 		victoryWindowController.gameObject.SetActive (true);
 		victoryWindowController.SetVictoryTitleForWinner (winner);
 	}
 
 	IEnumerator SetUpGame () {
-		while (stateManager.GetCurrentGameState () != GameState.GAME_RUNNING) {
+		while (GameStateManager.GetCurrentGameState () != GameState.GAME_RUNNING) {
 			yield return null;
 		}
 		gameTimer.SetUpTimer ();

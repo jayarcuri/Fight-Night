@@ -19,7 +19,7 @@ public class InstructionScreenController : MonoBehaviour {
 		startGameText.color = newColor;
 
 		if (Input.GetButton ("p1_block") && Input.GetButton ("p1_light") && Input.GetButton ("p2_light") && Input.GetButton ("p2_block")) {
-			stateManager.SetCurrentGameState (GameState.GAME_RUNNING);
+			GameStateManager.SetCurrentGameState (GameState.GAME_RUNNING);
 			gameObject.SetActive (false);
 		}
 	}

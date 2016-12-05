@@ -6,15 +6,13 @@ public class GameTimer : MonoBehaviour {
 	public int roundLengthInSeconds;
 	public int secondsLeftInRound {get; private set; }
 
-	GameDirector gameDirector;
 	Text timerText;
 	float roundStartTime;
 
 	void Start () {		
 		timerText = GetComponent<Text> ();
-		gameDirector = GameObject.FindGameObjectWithTag ("GameDirector").GetComponent<GameDirector> ();
 	}
-	
+
 	public void UpdateTimer () {
 		float currentTime = Time.time;
 		int secondsSinceRoundHasStarted = Mathf.RoundToInt (currentTime - roundStartTime);
@@ -23,15 +21,19 @@ public class GameTimer : MonoBehaviour {
 
 		timerText.text = secondsLeftInRound.ToString().PadLeft(2, '0');
 
-		if (secondsLeftInRound <= 0) {
-			CancelInvoke ();
-			gameDirector.timeOver = true;
+		if (secondsLeftInRound <= 0 || GameStateManager.GetCurrentGameState() == GameState.GAME_OVER) {
+			StopTimer ();
 		}
 	}
 
 	public void SetUpTimer () {
 		timerText.text = roundLengthInSeconds.ToString ();
 		roundStartTime = Time.time;
+		secondsLeftInRound = roundLengthInSeconds;
 		InvokeRepeating ("UpdateTimer", 0f, 1f); 
+	}
+
+	public void StopTimer () {
+		CancelInvoke ();
 	}
 }

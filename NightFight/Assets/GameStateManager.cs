@@ -1,25 +1,35 @@
-﻿using UnityEngine;
-
-public enum GameState {
+﻿public enum GameState {
 	INSTRUCTIONS,
 	GAME_RUNNING,
 	GAME_OVER
 }
 
-public class GameStateManager : MonoBehaviour {
+public class GameStateManager {
 
 	public GameState currentGameState;
+	protected static GameStateManager gameStateManagerSingleton;
 
-	void Start () {
-		currentGameState = GameState.INSTRUCTIONS;
+	protected GameStateManager () {
+		this.currentGameState = GameState.INSTRUCTIONS;
 	}
 
-	public GameState GetCurrentGameState () {
-		return currentGameState;
+	public static GameStateManager GetGameStateManager () {
+		if (gameStateManagerSingleton == null) {
+			gameStateManagerSingleton = new GameStateManager ();
+		}
+
+		return gameStateManagerSingleton;
 	}
 
-	public void SetCurrentGameState (GameState newState) {
-		currentGameState = newState;
+	public static GameState GetCurrentGameState () {
+		GameStateManager singleton = GameStateManager.GetGameStateManager ();
+
+		return singleton.currentGameState;
+	}
+
+	public static void SetCurrentGameState (GameState newState) {
+		GameStateManager singleton = GameStateManager.GetGameStateManager ();
+		singleton.currentGameState = newState;
 	}
 
 }
