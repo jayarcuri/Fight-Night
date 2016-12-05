@@ -130,7 +130,7 @@ public class CharacterDataManager
 			}
 		}
 
-		if (intInput != 5 || AttackType.None != attack)
+		if (intInput != 5 || AttackType.NONE != attack)
 		// Test input in order of what we've defined to be the "priority" of input
 		// 1. Can I jump?
 		if (intInput >= 7) {
@@ -140,7 +140,7 @@ public class CharacterDataManager
 			}
 		}
 		// 2. Can I attack?
-		if (!AttackType.None.Equals (attack)) {
+		if (!AttackType.NONE.Equals (attack)) {
 			string attackEnumString = ((char)attack).ToString ();
 			hasValue = optionDictionary.TryGetValue (attackEnumString, out newMove);
 			if (hasValue) {

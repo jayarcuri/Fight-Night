@@ -4,7 +4,6 @@ using System.Collections;
 public class CharacterMovement : MonoBehaviour
 {
 	Rigidbody playerBody;
-	MovementDirection moveDirection;
 	Transform opponentTransform;
 
 	public bool isFacingRight;

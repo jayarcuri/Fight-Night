@@ -144,11 +144,11 @@ public class GameDirector : MonoBehaviour {
 	WinningPlayer GetWinner (int player1Health, int player2Health) {
 		WinningPlayer winner;
 		if (player1Health < 1 && player2Health < 1 || player1Health == player2Health) {
-			winner = WinningPlayer.None;
+			winner = WinningPlayer.NONE;
 		} else if (player1Health < player2Health) {
-			winner = WinningPlayer.Player2;
+			winner = WinningPlayer.PLAYER_2;
 		} else {
-			winner = WinningPlayer.Player1;
+			winner = WinningPlayer.PLAYER_1;
 		}
 		return winner;
 	}

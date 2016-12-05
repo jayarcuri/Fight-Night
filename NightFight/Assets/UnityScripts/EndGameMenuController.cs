@@ -15,11 +15,11 @@ public class EndGameMenuController : MonoBehaviour {
 
 	public void SetVictoryTitleForWinner(WinningPlayer winner) {
 		switch (winner) {
-		case WinningPlayer.Player1:
+		case WinningPlayer.PLAYER_1:
 			victoryTitle.text = "Player 1 Wins!";
 			victoryText.text = defaultVictoryText;
 			break;
-		case WinningPlayer.Player2:
+		case WinningPlayer.PLAYER_2:
 			victoryTitle.text = "Player 2 Wins!";
 			victoryText.text = defaultVictoryText;
 			break;

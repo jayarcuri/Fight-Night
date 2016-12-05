@@ -14,7 +14,7 @@ public class MoveSequenceTests {
 		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (1f, 0.2f), 
 			new Vector3 (1f, .25f, 1f), 1, jabHitStun, jabBlockStun, HitType.HIT);
 
-		MoveSequence convenienceMS = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 6, jabAttackData, AttackType.Light, false);
+		MoveSequence convenienceMS = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 6, jabAttackData, AttackType.LIGHT, false);
 		MoveFrame neutralFrame = MoveFrame.GetEmptyLitFrame ();
 		MoveFrame jabHitbox =  new MoveFrame (Vector2.zero, MoveType.NONE, jabAttackData);
 
@@ -30,7 +30,7 @@ public class MoveSequenceTests {
 			neutralFrame,
 			neutralFrame,
 			neutralFrame
-		}, AttackType.Light);
+		}, AttackType.LIGHT);
 		int counter = 0;
 		while (oldMS.HasNext () && convenienceMS.HasNext ()) {
 			counter++;

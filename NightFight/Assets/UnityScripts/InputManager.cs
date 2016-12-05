@@ -21,9 +21,9 @@ public class InputManager : MonoBehaviour
 
 	void Start () {
 		buttons = new Tuple<string, AttackType>[] {
-			new Tuple<string, AttackType>(heavyAttack, AttackType.Heavy),
-			new Tuple<string, AttackType>(lightAttack, AttackType.Light),
-			new Tuple<string, AttackType>(block, AttackType.Block)
+			new Tuple<string, AttackType>(heavyAttack, AttackType.HEAVY),
+			new Tuple<string, AttackType>(lightAttack, AttackType.LIGHT),
+			new Tuple<string, AttackType>(block, AttackType.BLOCK)
 		};
 	}
 
@@ -37,19 +37,19 @@ public class InputManager : MonoBehaviour
 
 		if (Input.GetButton (heavyAttack) && !heavyAttackPressed) {
 			heavyAttackPressed = true;
-			attack = AttackType.Heavy;
+			attack = AttackType.HEAVY;
 		} else if (Input.GetButton (lightAttack) && !lightAttackPressed) {
 			if (Input.GetButton (block)) {
 				lightAttackPressed = true;
-				attack = AttackType.Throw;
+				attack = AttackType.THROW;
 			} else {
 				lightAttackPressed = true;
-				attack = AttackType.Light;
+				attack = AttackType.LIGHT;
 			}
 		} else if (Input.GetButton (block)) {
-			attack = AttackType.Block;
+			attack = AttackType.BLOCK;
 		} else {
-			attack = AttackType.None;
+			attack = AttackType.NONE;
 		}
 
 		if (Input.GetButton (illuminateButton) && !illuminateButtonPressed) {
@@ -89,7 +89,7 @@ public class InputManager : MonoBehaviour
 
 		foreach (Tuple<string, AttackType> button in buttons) {
 			ButtonState buttonState = GetCurrentButtonStateForButton (button.Item1);
-			if (buttonState != ButtonState.none) {
+			if (buttonState != ButtonState.NONE) {
 				activeButtonList.Add (new ButtonInput(button.Item2, buttonState));
 			}
 		}
@@ -109,13 +109,13 @@ public class InputManager : MonoBehaviour
 
 	ButtonState GetCurrentButtonStateForButton(string buttonName) {
 		if (Input.GetButtonDown (buttonName)) {
-			return ButtonState.depressed;
+			return ButtonState.DEPRESSED;
 		} else if (Input.GetButtonUp (buttonName)) {
-			return ButtonState.released;
+			return ButtonState.RELEASED;
 		} else if (Input.GetButton (buttonName)) {
-			return ButtonState.sustained;
+			return ButtonState.SUSTAINED;
 		} else {
-			return ButtonState.none;
+			return ButtonState.NONE;
 		}
 	}
 }

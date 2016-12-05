@@ -36,18 +36,18 @@ using NUnit.Framework;
 		bufferManager.AddMoveBuffer (sKickBuffer);
 		bufferManager.AddMoveBuffer (dashBuffer);
 
-		bufferManager.GetReadiedBufferMove (new DirectionalInput (6), AttackType.None);
-		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.None);
-		bufferManager.GetReadiedBufferMove (new DirectionalInput (3), AttackType.None);
-		List<string> readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), AttackType.Heavy);
+		bufferManager.GetReadiedBufferMove (new DirectionalInput (6), AttackType.NONE);
+		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.NONE);
+		bufferManager.GetReadiedBufferMove (new DirectionalInput (3), AttackType.NONE);
+		List<string> readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), AttackType.HEAVY);
 
 		foreach (string s in readyMoveCodes) {
 			Console.WriteLine (s);
 		}
 
-		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.None);
-		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.None);
-		readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.Heavy);
+		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.NONE);
+		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.NONE);
+		readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (2), AttackType.HEAVY);
 
 		Console.WriteLine (readyMoveCodes.Count);
 		Assert.IsTrue (readyMoveCodes.Count == 1);
@@ -55,7 +55,7 @@ using NUnit.Framework;
 
 		//bufferManager.ResetMoveBuffer (readyMoveCodes [0]);
 
-		List<string> readyMoveCodesPostReset = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), AttackType.Heavy);
+		List<string> readyMoveCodesPostReset = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), AttackType.HEAVY);
 		foreach (string s in readyMoveCodesPostReset) {
 			Console.WriteLine (s);
 		}

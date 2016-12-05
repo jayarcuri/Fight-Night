@@ -1,5 +1,5 @@
 ﻿public enum WinningPlayer {
-	Player1,
-	Player2,
-	None
+	PLAYER_1,
+	PLAYER_2,
+	NONE
 }
