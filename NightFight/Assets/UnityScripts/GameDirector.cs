@@ -5,8 +5,8 @@ using System.Collections;
 using Eppy;
 
 public class GameDirector : MonoBehaviour {
-	public GameTimer gameTimer;
 	public EndGameMenuController victoryWindowController;
+	public GameTimer gameTimer;
 	public HitEffectsManager shaker;
 
 	public CharacterManager[] characters;
@@ -34,52 +34,52 @@ public class GameDirector : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
-		if (GameStateManager.GetCurrentGameState () == GameState.GAME_RUNNING) {
-			if (shaker.shakeCounter >= 0) {
-				shaker.StepShakeForward ();
+		GameState currentState = GameStateManager.GetCurrentGameState ();
+
+		if (currentState == GameState.GAME_RUNNING) {
+			bool[] hitsOccurred = new bool[2];
+			Tuple<MoveFrame, bool>[] currentFrames = new  Tuple<MoveFrame, bool>[2];
+			for (int i = 0; i < characters.Length; i++) {
+				// Execute current move
+				currentFrames [i] = characters [i].GetCurrentFrame ();
+			}
+			Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
+			if (!newVelocities.Item1.Equals (CollisionUtils.NaV2)) {
+				characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
+				characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
+
 			} else {
-				bool[] hitsOccurred = new bool[2];
-				Tuple<MoveFrame, bool>[] currentFrames = new  Tuple<MoveFrame, bool>[2];
-				for (int i = 0; i < characters.Length; i++) {
-					// Execute current move
-					currentFrames [i] = characters [i].GetCurrentFrame ();
+				characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, currentFrames [0].Item1.movementDuringFrame, currentFrames [0].Item2);
+				characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
+			}
+
+			for (int i = 0; i < characters.Length; i++) {
+				hitsOccurred [i] = characters [i].ResolveAttackCollisions ();
+
+				if (hitsOccurred [i]) {
+
 				}
-				Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
-				if (!newVelocities.Item1.Equals (CollisionUtils.NaV2)) {
-					characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
-					characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
+			}
 
-				} else {
-					characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, currentFrames [0].Item1.movementDuringFrame, currentFrames [0].Item2);
-					characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
-				}
+			for (int i = 0; i < characters.Length; i++) {
+				characters [i].UpdateCharacterState ();
+			}
 
+			if (hitsOccurred [0] || hitsOccurred [1]) {
+				shaker.SetCameraToShake ();
 				for (int i = 0; i < characters.Length; i++) {
-					hitsOccurred [i] = characters [i].ResolveAttackCollisions ();
-
 					if (hitsOccurred [i]) {
-
-					}
-				}
-
-				for (int i = 0; i < characters.Length; i++) {
-					characters [i].UpdateCharacterState ();
-				}
-
-				if (hitsOccurred [0] || hitsOccurred [1]) {
-					shaker.SetCameraToShake ();
-					for (int i = 0; i < characters.Length; i++) {
-						if (hitsOccurred [i]) {
-							MoveType lastFrameMoveType = characters [i].GetLastFrameMoveType () == MoveType.BLOCKING 
+						MoveType lastFrameMoveType = characters [i].GetLastFrameMoveType () == MoveType.BLOCKING 
 							? MoveType.BLOCKING 
 							: MoveType.IN_HITSTUN;
-							characters [i].SetCharacterLight (true, lastFrameMoveType);
-						}
+						characters [i].SetCharacterLight (true, lastFrameMoveType);
 					}
 				}
 			}
 
 			CheckIfGameHasEnded ();
+		} else if (currentState == GameState.HIT_SHAKE) {
+			shaker.StepShakeForward ();
 		}
 	}
 

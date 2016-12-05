@@ -19,12 +19,14 @@ public class HitEffectsManager : MonoBehaviour {
 			cameraRef.orthographicSize = cameraRef.orthographicSize == originalCameraSize ?
 				originalCameraSize * 98f / 100f : originalCameraSize;
 		} else {
+			GameStateManager.SetCurrentGameState (GameState.GAME_RUNNING);
 			shakeCounter = -1;
 		}
 
 	}
 
 	public void SetCameraToShake () {
+		GameStateManager.SetCurrentGameState (GameState.HIT_SHAKE);
 		shakeCounter = 0;
 	}
 

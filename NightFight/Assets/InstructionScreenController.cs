@@ -4,12 +4,10 @@ using System.Collections;
 
 public class InstructionScreenController : MonoBehaviour {
 	Text startGameText;
-	GameStateManager stateManager;
 
 	// Use this for initialization
 	void Start () {
 		startGameText = GetComponentInChildren<Text> ();
-		stateManager = GameObject.FindGameObjectWithTag ("GameDirector").GetComponent<GameStateManager> ();
 	}
 	
 	// Update is called once per frame
