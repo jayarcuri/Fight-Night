@@ -21,7 +21,7 @@ public class CharacterData
 		string dashCode = "FrD";
 		MoveBuffer forwardDash = new MoveBuffer (8, dashInput, false, dashCode);
 		moveBufferManager.AddMoveBuffer (forwardDash);
-		DashSequence dash = new DashSequence (10, 5);
+		DashSequence dash = new DashSequence (12, 4f);
 
 		string dashPunchCode = "SP1";
 		DirectionalInput[] dashPunchInputCode = DirectionalInput.GetDirectionalInputArray (4, 6);
@@ -32,10 +32,10 @@ public class CharacterData
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
 
-		RecoilSequence jumpAttackHitStun = new RecoilSequence (10, .7f, MoveType.IN_HITSTUN);
-		RecoilSequence jumpAttackBlockStun = new RecoilSequence (8, .7f, MoveType.BLOCKING);
-		AttackFrameData jumpAttackData = new AttackFrameData (new Vector2 (0.25f, -0.625f), 
-			new Vector3 (1.2f, .25f, 1f), 5, jumpAttackHitStun, jumpAttackBlockStun, HitType.HIT);
+		RecoilSequence jumpAttackHitStun = new RecoilSequence (10, 1.15f, MoveType.IN_HITSTUN);
+		RecoilSequence jumpAttackBlockStun = new RecoilSequence (8, 1.15f, MoveType.BLOCKING);
+		AttackFrameData jumpAttackData = new AttackFrameData (new Vector2 (0.5f, -0.625f), 
+			new Vector3 (1.5f, .25f, 1f), 3, jumpAttackHitStun, jumpAttackBlockStun, HitType.HIT);
 		MoveSequence jumpAttack = SupplementaryJumpMove.GetSupplementaryJumpMoveWithFrameData (6, 5, jumpAttackData, AttackType.LIGHT, false);
 		cancelsForJump.Add ("A", jumpAttack);
 
@@ -43,20 +43,20 @@ public class CharacterData
 		JumpSequence forwardJump = new JumpSequence (40, 3.5f, 2.5f, cancelsForJump);
 		JumpSequence backwardJump = new JumpSequence (40, 3.5f, -2.5f, cancelsForJump);
 
-		RecoilSequence jabHitStun = new RecoilSequence (9, .6f, MoveType.IN_HITSTUN);
-		RecoilSequence jabBlockStun = new RecoilSequence (7, .45f, MoveType.BLOCKING);
-		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (1f, 0.2f), 
-			new Vector3 (1f, .25f, 1f), 1, jabHitStun, jabBlockStun, HitType.HIT);
+		RecoilSequence jabHitStun = new RecoilSequence (9, 1f, MoveType.IN_HITSTUN);
+		RecoilSequence jabBlockStun = new RecoilSequence (7, .85f, MoveType.BLOCKING);
+		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (1.25f, 0.2f), 
+			new Vector3 (1.5f, .25f, 1f), 1, jabHitStun, jabBlockStun, HitType.HIT);
 		MoveSequence jab = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 6, jabAttackData, AttackType.LIGHT, true);
 
-		RecoilSequence throwBlockStun = new RecoilSequence (15, 1.5f, MoveType.BLOCKING);
-		AttackFrameData throwAttackData = new AttackFrameData (new Vector2 (0.9f, -0.35f), 
-			new Vector3 (.8f, .3f, 1f), 3, null, throwBlockStun, HitType.THROW);
+		RecoilSequence throwBlockStun = new RecoilSequence (15, 2.5f, MoveType.BLOCKING);
+		AttackFrameData throwAttackData = new AttackFrameData (new Vector2 (1f, -0.35f), 
+			new Vector3 (1f, .3f, 1f), 4, null, throwBlockStun, HitType.THROW);
 		MoveSequence _throw = MoveSequence.GetAttackSequenceWithFrameData (4, 2, 13, throwAttackData, AttackType.LIGHT, true);
 		
-		RecoilSequence aaHitStun = new RecoilSequence (9, 0.6f, MoveType.IN_HITSTUN);
-		RecoilSequence aaBlockStun = new RecoilSequence (7, 0.35f, MoveType.BLOCKING);
-		AttackFrameData aaAttackData = new AttackFrameData (new Vector2 (0.8f, 0.6f), new Vector3 (.6f, .8f, 1f), 4, aaHitStun, aaBlockStun, HitType.HIT);
+		RecoilSequence aaHitStun = new RecoilSequence (9, 1f, MoveType.IN_HITSTUN);
+		RecoilSequence aaBlockStun = new RecoilSequence (7, .5f, MoveType.BLOCKING);
+		AttackFrameData aaAttackData = new AttackFrameData (new Vector2 (0.9f, 0.7f), new Vector3 (.8f, 1f, 1f), 4, aaHitStun, aaBlockStun, HitType.HIT);
 		MoveSequence aa = MoveSequence.GetAttackSequenceWithFrameData (5, 5, 8, aaAttackData, AttackType.HEAVY, true);
 
 		Dictionary<string, IFrameSequence> blockDict = new Dictionary<string, IFrameSequence> ();
@@ -111,11 +111,11 @@ public class CharacterData
 	public MoveSequence GetDashPunch () {
 		MoveFrame nFrame = MoveFrame.GetEmptyLitFrame ();
 		nFrame.moveType = MoveType.SPECIAL;
-		MoveFrame dashFrame = new MoveFrame (new Vector2 (0.2f, 0), MoveType.SPECIAL, true);
+		MoveFrame dashFrame = new MoveFrame (new Vector2 (0.25f, 0), MoveType.SPECIAL, true);
 		RecoilSequence dashPunchHitStun = new RecoilSequence (18, 2f, MoveType.IN_HITSTUN);
-		RecoilSequence dashPunchBlockStun = new RecoilSequence (13, 1f, MoveType.BLOCKING);
+		RecoilSequence dashPunchBlockStun = new RecoilSequence (13, 1.5f, MoveType.BLOCKING);
 		AttackFrameData dashPunchAttackData = new AttackFrameData (new Vector2 (1f, 0.2f), 
-			new Vector3 (1f, .25f, 1f), 1, dashPunchHitStun, dashPunchBlockStun, HitType.HIT);
+			new Vector3 (1f, .25f, 1f), 3, dashPunchHitStun, dashPunchBlockStun, HitType.HIT);
 		MoveFrame dashAttackFrame = new MoveFrame (dashFrame.movementDuringFrame, MoveType.SPECIAL, dashPunchAttackData);
 
 		MoveFrame[] frameArray = new MoveFrame[31];
