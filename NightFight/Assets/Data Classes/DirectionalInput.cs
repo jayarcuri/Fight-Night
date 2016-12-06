@@ -16,6 +16,9 @@ public class DirectionalInput
 
 	public DirectionalInput (int horizontalInput, int verticalInput)
 	{
+		if (horizontalInput < -1 || horizontalInput > 1 || verticalInput < -1 || verticalInput > 1) {
+			throw new UnityException ("Invalid params for DirectionalInput");
+		}
 		this.horizontalInput = horizontalInput;
 		this.verticalInput = verticalInput;
 		numpadValue = GetNumpadNotation (verticalInput, horizontalInput);
@@ -23,6 +26,10 @@ public class DirectionalInput
 
 	public DirectionalInput (int numpadRepresentation)
 	{
+		if (numpadRepresentation < 1 || numpadRepresentation > 9) {
+			throw new UnityException ("Invalid params for DirectionalInput");
+		}
+
 		int horizontal = 0;
 		int vertical;
 
@@ -68,6 +75,15 @@ public class DirectionalInput
 		}
 
 		return (horizontalInput == p.horizontalInput && verticalInput == p.verticalInput);
+	}
+
+	public static DirectionalInput[] GetDirectionalInputArray (params int[] numpadValues) {
+		DirectionalInput[] returnArray = new DirectionalInput[numpadValues.Length];
+		for (int i = 0; i < numpadValues.Length; i++) {
+			returnArray [i] = new DirectionalInput (numpadValues [i]);
+		}
+
+		return returnArray;
 	}
 
 }

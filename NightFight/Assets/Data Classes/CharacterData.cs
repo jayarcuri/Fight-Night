@@ -17,11 +17,17 @@ public class CharacterData
 	public CharacterData ()
 	{
 		moveBufferManager = new MoveBufferManager ();
-		DirectionalInput[] dashInput = new DirectionalInput[] {new DirectionalInput(1,0), new DirectionalInput(0,0), new DirectionalInput(1,0)};
+		DirectionalInput[] dashInput = DirectionalInput.GetDirectionalInputArray (6, 5, 6);
 		string dashCode = "FrD";
 		MoveBuffer forwardDash = new MoveBuffer (8, dashInput, false, dashCode);
 		moveBufferManager.AddMoveBuffer (forwardDash);
 		DashSequence dash = new DashSequence (10, 5);
+
+		string dashPunchCode = "SP1";
+		DirectionalInput[] dashPunchInputCode = DirectionalInput.GetDirectionalInputArray (4, 6);
+		MoveBuffer dashPunchBuffer = new MoveBuffer (12, dashPunchInputCode, true, dashPunchCode);
+		moveBufferManager.AddMoveBuffer (dashPunchBuffer);
+		MoveSequence dashPunch = GetDashPunch ();
 
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
@@ -76,6 +82,7 @@ public class CharacterData
 		neutralMoveOptions.Add ("X", block);
 		neutralMoveOptions.Add ("T", _throw);
 		neutralMoveOptions.Add (dashCode, dash);
+		neutralMoveOptions.Add (dashPunchCode, dashPunch);
 
 		neutralMoveOptions.Add ("THROW", null);
 		neutralMoveOptions.Add ("HIT", null);
@@ -99,6 +106,35 @@ public class CharacterData
 		}
 		this.forwardStepFrame.movementDuringFrame = new Vector2 (newWalkSpeed, 0);
 		this.backStepFrame.movementDuringFrame = new Vector2 (-newWalkSpeed, 0);
+	}
+
+	public MoveSequence GetDashPunch () {
+		MoveFrame nFrame = MoveFrame.GetEmptyLitFrame ();
+		nFrame.moveType = MoveType.SPECIAL;
+		MoveFrame dashFrame = new MoveFrame (new Vector2 (0.2f, 0), MoveType.SPECIAL, true);
+		RecoilSequence dashPunchHitStun = new RecoilSequence (18, 2f, MoveType.IN_HITSTUN);
+		RecoilSequence dashPunchBlockStun = new RecoilSequence (13, 1f, MoveType.BLOCKING);
+		AttackFrameData dashPunchAttackData = new AttackFrameData (new Vector2 (1f, 0.2f), 
+			new Vector3 (1f, .25f, 1f), 1, dashPunchHitStun, dashPunchBlockStun, HitType.HIT);
+		MoveFrame dashAttackFrame = new MoveFrame (dashFrame.movementDuringFrame, MoveType.SPECIAL, dashPunchAttackData);
+
+		MoveFrame[] frameArray = new MoveFrame[31];
+
+		for (int i = 0; i < frameArray.Length; i++) {
+			MoveFrame assignedFrame;
+			if (15 < i) {
+				assignedFrame = nFrame;
+			}
+			else if (11 < i) {
+				assignedFrame = dashAttackFrame;
+			} else {
+				assignedFrame = dashFrame;
+			}
+
+			frameArray [i] = assignedFrame;
+		}
+
+		return new MoveSequence (frameArray, AttackType.LIGHT);
 	}
 
 }

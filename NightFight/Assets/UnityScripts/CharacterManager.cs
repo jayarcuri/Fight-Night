@@ -122,7 +122,7 @@ public class CharacterManager : MonoBehaviour {
 			characterMovement.FlipRotation ();
 		}
 		//	Illumination stuff
-		if (characterLight.LightEnabled () || collisionManager.IsInAnIlluminatedArea ()) {
+		if (lastExecutedFrame.moveType != MoveType.SPECIAL && (characterLight.LightEnabled () || collisionManager.IsInAnIlluminatedArea ())) {
 			characterDataManager.IncrementIlluminationCounter ();
 		}
 
