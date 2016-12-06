@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class HitEffectsManager : MonoBehaviour {
+	public Light floodlight;
 	Camera cameraRef;
 	float originalCameraSize;
 	public int shakeCounter { get; private set; }
@@ -21,6 +22,7 @@ public class HitEffectsManager : MonoBehaviour {
 		} else {
 			GameStateManager.SetCurrentGameState (GameState.GAME_RUNNING);
 			shakeCounter = -1;
+			floodlight.enabled = false;
 		}
 
 	}
@@ -28,6 +30,7 @@ public class HitEffectsManager : MonoBehaviour {
 	public void SetCameraToShake () {
 		GameStateManager.SetCurrentGameState (GameState.HIT_SHAKE);
 		shakeCounter = 0;
+		floodlight.enabled = true;
 	}
 
 }
