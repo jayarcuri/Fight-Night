@@ -5,22 +5,36 @@ public class CollisionManager : MonoBehaviour
 {
 	public HitboxController pendingAttackHitbox { get; private set; }
 	HitboxController hitBox;
-	Collider mostRecentIlluminatedArea;
+	public Collider mostRecentIlluminatedArea;
 	// Use this for initialization
 	void Start ()
 	{
 		hitBox = GetComponentInChildren<HitboxController> ();
 	}
 
+	void OnTriggerExit (Collider other) {
+		if (other.gameObject == hitBox.gameObject) {
+			return;
+		}
+
+		if (other == mostRecentIlluminatedArea) {
+			mostRecentIlluminatedArea = null;
+		}
+	}
+
 	void OnTriggerEnter (Collider other)
 	{
 		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
 			ProcessHitboxCollision (other);
+		} else {
+			ToggleIlluminationStatusAppropriately (other);
 		}
 	}
 
-	void OnTriggerLeave (Collider other) {
-
+	void ToggleIlluminationStatusAppropriately (Collider other) {
+		if (other.tag == "IlluminationArea" && mostRecentIlluminatedArea != other) {
+			mostRecentIlluminatedArea = other;
+		}
 	}
 
 	void ProcessHitboxCollision (Collider hitboxObject)
@@ -35,7 +49,7 @@ public class CollisionManager : MonoBehaviour
 		return (pendingAttackHitbox != null && pendingAttackHitbox.attackData != null);
 	}
 
-	public bool InIlluminatedArea () {
+	public bool IsInAnIlluminatedArea () {
 		return (mostRecentIlluminatedArea != null);
 	}
 
