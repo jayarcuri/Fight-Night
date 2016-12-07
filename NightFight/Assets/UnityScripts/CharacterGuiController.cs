@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class HealthBarController : MonoBehaviour {
+public class CharacterGuiController : MonoBehaviour {
 	public int maxHealth;
 	int maxCharge;
 	float defaultHealthBarLength;

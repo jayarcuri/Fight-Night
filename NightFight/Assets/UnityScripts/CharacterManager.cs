@@ -8,7 +8,7 @@ public class CharacterManager : MonoBehaviour {
 	public CharacterLightController characterLight;
 	public CharacterMovement characterMovement;
 	public TriggerCollisionManager collisionManager;
-	public HealthBarController healthBar;
+	public CharacterGuiController healthBar;
 	public HitboxController hitBox;
 	public InputManager inputManager;
 
