@@ -19,9 +19,9 @@ public class CharacterData
 		moveBufferManager = new MoveBufferManager ();
 		DirectionalInput[] dashInput = DirectionalInput.GetDirectionalInputArray (6, 5, 6);
 		string dashCode = "FrD";
-		MoveBuffer forwardDash = new MoveBuffer (8, dashInput, false, dashCode);
+		MoveBuffer forwardDash = new MoveBuffer (12, dashInput, false, dashCode);
 		moveBufferManager.AddMoveBuffer (forwardDash);
-		DashSequence dash = new DashSequence (12, 4f);
+		DashSequence dash = new DashSequence (16, 4f);
 
 		string dashPunchCode = "SP1";
 		DirectionalInput[] dashPunchInputCode = DirectionalInput.GetDirectionalInputArray (4, 6);

@@ -20,7 +20,7 @@ public class CollisionUtils
 		floorBounds = floor.position.y + floor.localScale.y / 2;
 	}
 
-	public static Tuple<Vector2, Vector2> GetUpdatedVelocities(Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
+	public static Tuple<Vector2, Vector2> GetVelocitiesWithoutCharacterCollisions(Transform p1Transform, Vector2 p1Velocity, Transform p2Transform, Vector2 p2Velocity) {
 		Transform leftCharacterTransform;
 		Vector2 leftCharacterVelocity;
 		Transform rightCharacterTransform;
