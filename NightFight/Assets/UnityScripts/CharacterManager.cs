@@ -70,12 +70,7 @@ public class CharacterManager : MonoBehaviour {
 		// 2: Execute input.
 		MoveFrame currentFrame = null;
 		bool isLit;
-		/*
-		 *	if (the previous moveframe is sustainable && the current move sequence was executed with a button which is still being pressed) {
-		 *		currentFrame = lastExecutedFrame;
-		 *		isLit = currentFrame.isLit || characterDataManager.isCharacterLit ();
-		 *	}
-		 */
+
 		if ((lastExecutedFrame != null && lastExecutedFrame.canBeExtended) 
 			&& (characterDataManager.currentMove != null && characterDataManager.currentMove.SequenceStartedWithButton (buttons))
 			&& characterDataManager.GetIlluminationCount () >= drainRateForHeldMoves) {
