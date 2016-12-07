@@ -7,7 +7,7 @@ public class CharacterManager : MonoBehaviour {
 	public CharacterDataManager characterDataManager;
 	public CharacterLightController characterLight;
 	public CharacterMovement characterMovement;
-	public CollisionManager collisionManager;
+	public TriggerCollisionManager collisionManager;
 	public HealthBarController healthBar;
 	public HitboxController hitBox;
 	public InputManager inputManager;
@@ -32,7 +32,7 @@ public class CharacterManager : MonoBehaviour {
 		characterMovement = GetComponent<CharacterMovement> ();
 		characterLight = GetComponent<CharacterLightController> ();
 		hitBox = GetComponentInChildren<HitboxController> ();
-		collisionManager = GetComponent<CollisionManager> ();
+		collisionManager = GetComponent<TriggerCollisionManager> ();
 		healthBar.maxHealth = characterDataManager.GetCurrentHealth ();
 		characterLight.SetLight (false, MoveType.NONE);
 		if (isPlayer1) {

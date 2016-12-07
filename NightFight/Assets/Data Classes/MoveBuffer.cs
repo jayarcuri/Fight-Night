@@ -9,10 +9,6 @@ public class MoveBuffer {
 	protected bool requiresButtonPress;
 	protected DirectionalInput[] inputSequence;
 
-	public static string bufferMove1 = "BU1";
-	public static string bufferMove2 = "BU2";
-	public static string bufferMove3 = "BU3";
-
 	public MoveBuffer (int maxAllowedBufferLength, DirectionalInput[] inputSequence, bool requiresButtonPress, string moveCode) {
 		this.maxAllowedBufferLength = maxAllowedBufferLength;
 		this.inputSequence = inputSequence;

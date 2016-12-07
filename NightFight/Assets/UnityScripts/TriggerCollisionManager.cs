@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CollisionManager : MonoBehaviour
+public class TriggerCollisionManager : MonoBehaviour
 {
 	public HitboxController pendingAttackHitbox { get; private set; }
 	HitboxController hitBox;
