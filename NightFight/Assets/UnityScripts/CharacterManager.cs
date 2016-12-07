@@ -84,7 +84,7 @@ public class CharacterManager : MonoBehaviour {
 		return new Tuple<MoveFrame, bool>(currentFrame, isLit);
 	}
 
-	public void ExecuteCurrentFrame(MoveFrame currentFrame, Vector2 movementDuringFrame, bool isLit) {
+	public void ExecuteFrame(MoveFrame currentFrame, Vector2 movementDuringFrame, bool isLit) {
 		// 3: Execute frame.
 		if (currentFrame != null) {
 			PerformFrame (currentFrame, movementDuringFrame);

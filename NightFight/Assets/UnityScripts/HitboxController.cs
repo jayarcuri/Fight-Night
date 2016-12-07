@@ -29,10 +29,6 @@ public class HitboxController : MonoBehaviour {
 		return attackData;
 	}
 
-	public int GetCurrentMoveHitStunValue() {
-		return attackData.hitStunFrames;
-	}
-
 	public bool IsLoaded() {
 		return (attackData != null);
 	}

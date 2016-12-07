@@ -44,20 +44,16 @@ public class GameDirector : MonoBehaviour {
 			}
 			Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
 			if (!newVelocities.Item1.Equals (MovementCollisionUtils.NaV2)) {
-				characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
-				characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
+				characters [0].ExecuteFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
+				characters [1].ExecuteFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
 
 			} else {
-				characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, currentFrames [0].Item1.movementDuringFrame, currentFrames [0].Item2);
-				characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
+				characters [0].ExecuteFrame (currentFrames [0].Item1, currentFrames [0].Item1.movementDuringFrame, currentFrames [0].Item2);
+				characters [1].ExecuteFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
 			}
 
 			for (int i = 0; i < characters.Length; i++) {
 				hitsOccurred [i] = characters [i].ResolveAttackCollisions ();
-
-				if (hitsOccurred [i]) {
-
-				}
 			}
 
 			for (int i = 0; i < characters.Length; i++) {
