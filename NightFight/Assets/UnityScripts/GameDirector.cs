@@ -16,7 +16,7 @@ public class GameDirector : MonoBehaviour {
 	private float cornerPushBackModifier = 1f;
 
 	void Start () {
-		CollisionUtils.SetUp ();
+		MovementCollisionUtils.SetUp ();
 		victoryWindowController = GameObject.FindGameObjectWithTag ("VictoryWindow").GetComponent<EndGameMenuController> ();
 		gameTimer = GameObject.FindGameObjectWithTag ("GameTimer").GetComponent<GameTimer> ();
 		//stateManager = gameObject.GetComponent<GameStateManager> ();
@@ -43,7 +43,7 @@ public class GameDirector : MonoBehaviour {
 				currentFrames [i] = characters [i].GetCurrentFrame ();
 			}
 			Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
-			if (!newVelocities.Item1.Equals (CollisionUtils.NaV2)) {
+			if (!newVelocities.Item1.Equals (MovementCollisionUtils.NaV2)) {
 				characters [0].ExecuteCurrentFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
 				characters [1].ExecuteCurrentFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
 
@@ -90,13 +90,13 @@ public class GameDirector : MonoBehaviour {
 		Vector2 newPlayer1Velocity = player1Velocity;
 		Vector2 newPlayer2Velocity = player2Velocity;
 
-		Tuple<Vector2, Vector2> newVelocities = CollisionUtils.GetVelocitiesWithoutCharacterCollisions (player1Location, player1Velocity, player2Location, player2Velocity);
+		Tuple<Vector2, Vector2> newVelocities = MovementCollisionUtils.GetVelocitiesWithoutCharacterCollisions (player1Location, player1Velocity, player2Location, player2Velocity);
 
-		newPlayer1Velocity = !newVelocities.Item1.Equals (CollisionUtils.NaV2) ? newVelocities.Item1 : newPlayer1Velocity;
-		newPlayer2Velocity = !newVelocities.Item2.Equals (CollisionUtils.NaV2) ? newVelocities.Item2 : newPlayer2Velocity;
+		newPlayer1Velocity = !newVelocities.Item1.Equals (MovementCollisionUtils.NaV2) ? newVelocities.Item1 : newPlayer1Velocity;
+		newPlayer2Velocity = !newVelocities.Item2.Equals (MovementCollisionUtils.NaV2) ? newVelocities.Item2 : newPlayer2Velocity;
 
-		Vector2 levelConstrainedP1Velocity = CollisionUtils.GetLevelConstraintedVelocity (player1Location, player1Velocity);
-		Vector2 levelConstrainedP2Velocity = CollisionUtils.GetLevelConstraintedVelocity (player2Location, player2Velocity);
+		Vector2 levelConstrainedP1Velocity = MovementCollisionUtils.GetLevelConstraintedVelocity (player1Location, player1Velocity);
+		Vector2 levelConstrainedP2Velocity = MovementCollisionUtils.GetLevelConstraintedVelocity (player2Location, player2Velocity);
 		bool p1VelocityChanged_X = levelConstrainedP1Velocity.x != newPlayer1Velocity.x && !float.IsNaN (levelConstrainedP1Velocity.x);
 		bool p1VelocityChanged_Y = levelConstrainedP1Velocity.y != newPlayer1Velocity.y && !float.IsNaN (levelConstrainedP1Velocity.y);
 		bool p2VelocityChanged_X = levelConstrainedP2Velocity.x != newPlayer2Velocity.x && !float.IsNaN (levelConstrainedP2Velocity.x);
@@ -106,7 +106,7 @@ public class GameDirector : MonoBehaviour {
 		newPlayer2Velocity = p2VelocityChanged_X || p2VelocityChanged_Y ? levelConstrainedP2Velocity : newPlayer2Velocity;
 
 		if (p1VelocityChanged_X) {
-			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity, player2Location, newPlayer2Velocity);
+			float newXVelocity = MovementCollisionUtils.GetNonOverlappingXVelocity(player1Location, newPlayer1Velocity, player2Location, newPlayer2Velocity);
 
 			if (float.IsNaN (newXVelocity) && characters [0].IsBlockingOrHit ()) {
 				newXVelocity = newPlayer2Velocity.x + (player1Velocity.x - newPlayer1Velocity.x) * cornerPushBackModifier;
@@ -115,7 +115,7 @@ public class GameDirector : MonoBehaviour {
 				newPlayer2Velocity = new Vector2 (newXVelocity, newPlayer2Velocity.y);
 			}
 		} else if (p2VelocityChanged_X) {
-			float newXVelocity = CollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity, player1Location, newPlayer1Velocity);
+			float newXVelocity = MovementCollisionUtils.GetNonOverlappingXVelocity(player2Location, newPlayer2Velocity, player1Location, newPlayer1Velocity);
 
 			if (float.IsNaN (newXVelocity) && characters [1].IsBlockingOrHit ()) {
 				newXVelocity = newPlayer1Velocity.x + (player2Velocity.x - newPlayer2Velocity.x) * cornerPushBackModifier;

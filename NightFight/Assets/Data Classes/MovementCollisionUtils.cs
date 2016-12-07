@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using Eppy;
 
-public class CollisionUtils
+public class MovementCollisionUtils
 {
 	public static readonly Vector2 NaV2 = new Vector2(float.NaN, float.NaN);
 	public static readonly float bufferValue = 0.05f;

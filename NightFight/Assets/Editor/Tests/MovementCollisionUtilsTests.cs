@@ -4,7 +4,7 @@ using System;
 using NUnit.Framework;
 using Eppy;
 
-public class CollisionUtilsTests
+public class MovementCollisionUtilsTests
 {
 	[Test]
 	public void GetUpdatedVelocitiesTest() {
@@ -21,7 +21,7 @@ public class CollisionUtilsTests
 		Vector2 p1Velocity = new Vector2 (0.25f, 0);
 		Vector2 p2Velocity = new Vector2 (-0.25f, 0);
 
-		Tuple<Vector2, Vector2> newVelocities = CollisionUtils.GetVelocitiesWithoutCharacterCollisions (p1.transform, p1Velocity, p2.transform, p2Velocity);
+		Tuple<Vector2, Vector2> newVelocities = MovementCollisionUtils.GetVelocitiesWithoutCharacterCollisions (p1.transform, p1Velocity, p2.transform, p2Velocity);
 
 		Console.WriteLine ("New velocities: " + newVelocities.Item1 + " & " + newVelocities.Item2);
 
@@ -29,7 +29,7 @@ public class CollisionUtilsTests
 		p1Velocity = new Vector2 (0.1f, 0);
 		p2Velocity = new Vector2 (-0.1f, 0);
 
-		newVelocities = CollisionUtils.GetVelocitiesWithoutCharacterCollisions (p1.transform, p1Velocity, p2.transform, p2Velocity);
+		newVelocities = MovementCollisionUtils.GetVelocitiesWithoutCharacterCollisions (p1.transform, p1Velocity, p2.transform, p2Velocity);
 
 		Console.WriteLine ("New velocities: " + newVelocities.Item1 + " & " + newVelocities.Item2);
 
@@ -37,7 +37,7 @@ public class CollisionUtilsTests
 		p1Velocity = new Vector2 (1, 0);
 		p2Velocity = new Vector2 (-2, 0);
 
-		newVelocities = CollisionUtils.GetVelocitiesWithoutCharacterCollisions (p1.transform, p1Velocity, p2.transform, p2Velocity);
+		newVelocities = MovementCollisionUtils.GetVelocitiesWithoutCharacterCollisions (p1.transform, p1Velocity, p2.transform, p2Velocity);
 
 		Console.WriteLine ("New velocities: " + newVelocities.Item1 + " & " + newVelocities.Item2);
 
