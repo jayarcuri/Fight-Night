@@ -2,26 +2,28 @@
 using System.Collections;
 
 public class HitboxController : MonoBehaviour {
-	Transform hitbox;
 	public AttackFrameData attackData { get; private set; }
-	// Use this for initialization
+	public bool hasHit;
+
+	Transform hitboxTransform;
+
 	void Start () {
-		hitbox = GetComponent<Transform> ();
+		hitboxTransform = GetComponent<Transform> ();
 		enabled = false;
 		Reset();
 	}
 	
 	public void ExecuteAttack (AttackFrameData attackFrame) {
 		enabled = true;
-		hitbox.localPosition = attackFrame.offset;
-		hitbox.localScale = attackFrame.size;
+		hitboxTransform.localPosition = attackFrame.offset;
+		hitboxTransform.localScale = attackFrame.size;
 		attackData = attackFrame;
-		attackData.didHit = false;
+		hasHit = false;
 	}
 
 	public void Reset () {
 		enabled = false;
-		hitbox.localPosition = hitbox.localScale = Vector3.zero;
+		hitboxTransform.localPosition = hitboxTransform.localScale = Vector3.zero;
 		attackData = null;
 	}
 

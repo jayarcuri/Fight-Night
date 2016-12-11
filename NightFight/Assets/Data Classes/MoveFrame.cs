@@ -11,12 +11,6 @@ public class MoveFrame {
 	public bool isLit { get; private set; }
 	public bool canBeExtended = false;
 
-	public MoveFrame() {
-		movementDuringFrame = Vector2.zero;
-		isLit = false;
-		cancellableTo = GetDefaultCancellables ();
-	}
-
 	public MoveFrame (MoveType moveType) {
 		this.moveType = moveType;
 		this.movementDuringFrame = Vector2.zero;

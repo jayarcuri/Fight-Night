@@ -11,7 +11,6 @@ public class AttackFrameData
 	public int blockStunFrames {get; private set;}
 	public RecoilSequence blockStunSequence;
 	public HitType hitType {get; private set;}
-	public bool didHit;
 
 	public AttackFrameData (Vector2 offset, Vector3 size, int damage, RecoilSequence hitStun, RecoilSequence blockStun, HitType hitType)
 	{
@@ -24,8 +23,6 @@ public class AttackFrameData
 		blockStunSequence = blockStun;
 		blockStunFrames = blockStunSequence != null ? blockStunSequence.lengthInFrames : 0;
 		this.hitType = hitType;
-
-		didHit = false;
 	}
 
 	public bool Equals(AttackFrameData otherAFD) 

@@ -40,7 +40,7 @@ public class TriggerCollisionManager : MonoBehaviour
 	void ProcessHitboxCollision (Collider hitboxObject)
 	{
 		HitboxController attackingHitbox = hitboxObject.GetComponent <HitboxController> ();
-		if (attackingHitbox.IsLoaded () && !attackingHitbox.attackData.didHit) {
+		if (attackingHitbox.IsLoaded () && !attackingHitbox.hasHit) {
 			pendingAttackHitbox = attackingHitbox;
 		}
 	}
@@ -62,7 +62,7 @@ public class TriggerCollisionManager : MonoBehaviour
 	}
 
 	public void ClearPendingHit() {
-		pendingAttackHitbox.attackData.didHit = true;
+		pendingAttackHitbox.hasHit = true;
 		pendingAttackHitbox = null;
 	}
 }
