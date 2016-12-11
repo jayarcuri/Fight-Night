@@ -34,7 +34,7 @@ public class CharacterDataManager
 		return currentHealth;
 	}
 
-	public MoveFrame GetCurrentFrame (DirectionalInput directionalInput, AttackType attackType, out bool isLit)
+	public MoveFrame GetCurrentFrame (DirectionalInput directionalInput, ButtonInputCommand ButtonInputCommand, out bool isLit)
 	{
 		IFrameSequence newMove = null;
 		IFrameSequence currentMoveSequence = this.currentMove;
@@ -44,12 +44,12 @@ public class CharacterDataManager
 		//
 		// If there is no current Sequence or it would resolve, give input to neutral state to get new Sequence
 		if (currentMoveSequence == null || nextFrameToExecute == null) {
-			newMove = GetNewMove (directionalInput, attackType);
+			newMove = GetNewMove (directionalInput, ButtonInputCommand);
 		} 
 		// Otherwise, if we currently have a move that will not resolve next frame & exists, try to cancel that 
 		// frame to a new Sequence.currentMoveSequence
 		else if (currentMoveSequence != null && nextFrameToExecute.cancellableTo != null) {
-			newMove = GetSequenceFromCancelDictionary (nextFrameToExecute.cancellableTo, directionalInput, attackType);
+			newMove = GetSequenceFromCancelDictionary (nextFrameToExecute.cancellableTo, directionalInput, ButtonInputCommand);
 		}
 
 		if (newMove != null) {
@@ -105,14 +105,14 @@ public class CharacterDataManager
 			return false;
 	}
 
-	public IFrameSequence GetNewMove (DirectionalInput directionalInput, AttackType attack)
+	public IFrameSequence GetNewMove (DirectionalInput directionalInput, ButtonInputCommand attack)
 	{
 		IFrameSequence newMove = GetSequenceFromCancelDictionary (characterData.neutralMoveOptions, directionalInput, attack);
 		return newMove;
 	}
 
 	public IFrameSequence GetSequenceFromCancelDictionary (Dictionary<string, IFrameSequence> optionDictionary,
-	                                          DirectionalInput directionalInput, AttackType attack)
+	                                          DirectionalInput directionalInput, ButtonInputCommand attack)
 	{
 		int intInput = directionalInput.numpadValue;
 		IFrameSequence newMove = null;
@@ -130,7 +130,7 @@ public class CharacterDataManager
 			}
 		}
 
-		if (intInput != 5 || AttackType.NONE != attack)
+		if (intInput != 5 || ButtonInputCommand.NONE != attack)
 		// Test input in order of what we've defined to be the "priority" of input
 		// 1. Can I jump?
 		if (intInput >= 7) {
@@ -140,7 +140,7 @@ public class CharacterDataManager
 			}
 		}
 		// 2. Can I attack?
-		if (!AttackType.NONE.Equals (attack)) {
+		if (!ButtonInputCommand.NONE.Equals (attack)) {
 			string attackEnumString = ((char)attack).ToString ();
 			hasValue = optionDictionary.TryGetValue (attackEnumString, out newMove);
 			if (hasValue) {

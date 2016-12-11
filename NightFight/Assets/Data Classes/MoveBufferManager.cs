@@ -18,10 +18,10 @@ public class MoveBufferManager
 		bufferDictionary.Add (newMoveCode, newMoveBuffer);
 	}
 
-	public List<string> GetReadiedBufferMove (DirectionalInput currentDirectionalInput, AttackType nextButtonInput) {
+	public List<string> GetReadiedBufferMove (DirectionalInput currentDirectionalInput, ButtonInputCommand nextButtonInput) {
 		List<string> moveCodeList = new List<string> ();
 		foreach (MoveBuffer currentBuffer in bufferList) {
-			bool buttonPressOccurred = nextButtonInput != AttackType.NONE && nextButtonInput != AttackType.BLOCK;
+			bool buttonPressOccurred = nextButtonInput != ButtonInputCommand.NONE && nextButtonInput != ButtonInputCommand.BLOCK;
 			string moveCode = currentBuffer.GetMove (currentDirectionalInput, buttonPressOccurred);
 
 			if (moveCode != null) {

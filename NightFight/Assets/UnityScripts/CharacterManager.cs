@@ -16,7 +16,7 @@ public class CharacterManager : MonoBehaviour {
 	public bool isBot;
 	public int botDirectionalInputRaw;
 	public float overrideWalkSpeed;
-	public AttackType botAttackInput;
+	public ButtonInputCommand botAttackInput;
 
 	MoveFrame lastExecutedFrame;
 	int drainRateForHeldMoves;
@@ -43,7 +43,7 @@ public class CharacterManager : MonoBehaviour {
 	}
 
 	public Tuple<MoveFrame, bool> GetCurrentFrame () {
-		AttackType attack;
+		ButtonInputCommand attack;
 		DirectionalInput directionalInput;
 		bool toggleIllumination = false;
 

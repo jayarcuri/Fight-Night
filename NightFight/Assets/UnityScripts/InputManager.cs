@@ -15,19 +15,19 @@ public class InputManager : MonoBehaviour
 	bool illuminateButtonPressed;
 	public string block;
 
-	Tuple<string, AttackType>[] buttons;
+	Tuple<string, ButtonInputCommand>[] buttons;
 
 	// Inputs are represented by an enum which corresponds with an int
 
 	void Start () {
-		buttons = new Tuple<string, AttackType>[] {
-			new Tuple<string, AttackType>(heavyAttack, AttackType.HEAVY),
-			new Tuple<string, AttackType>(lightAttack, AttackType.LIGHT),
-			new Tuple<string, AttackType>(block, AttackType.BLOCK)
+		buttons = new Tuple<string, ButtonInputCommand>[] {
+			new Tuple<string, ButtonInputCommand>(heavyAttack, ButtonInputCommand.HEAVY),
+			new Tuple<string, ButtonInputCommand>(lightAttack, ButtonInputCommand.LIGHT),
+			new Tuple<string, ButtonInputCommand>(block, ButtonInputCommand.BLOCK)
 		};
 	}
 
-	public void GetInputs (out DirectionalInput directionalInput, out AttackType attack, out bool toggleLight)
+	public void GetInputs (out DirectionalInput directionalInput, out ButtonInputCommand attack, out bool toggleLight)
 	{
 		// read directional inputs
 		int horizontal = (int)Input.GetAxisRaw (horizontalAxis);
@@ -37,19 +37,19 @@ public class InputManager : MonoBehaviour
 
 		if (Input.GetButton (heavyAttack) && !heavyAttackPressed) {
 			heavyAttackPressed = true;
-			attack = AttackType.HEAVY;
+			attack = ButtonInputCommand.HEAVY;
 		} else if (Input.GetButton (lightAttack) && !lightAttackPressed) {
 			if (Input.GetButton (block)) {
 				lightAttackPressed = true;
-				attack = AttackType.THROW;
+				attack = ButtonInputCommand.THROW;
 			} else {
 				lightAttackPressed = true;
-				attack = AttackType.LIGHT;
+				attack = ButtonInputCommand.LIGHT;
 			}
 		} else if (Input.GetButton (block)) {
-			attack = AttackType.BLOCK;
+			attack = ButtonInputCommand.BLOCK;
 		} else {
-			attack = AttackType.NONE;
+			attack = ButtonInputCommand.NONE;
 		}
 
 		if (Input.GetButton (illuminateButton) && !illuminateButtonPressed) {
@@ -87,7 +87,7 @@ public class InputManager : MonoBehaviour
 		directionalInput = new DirectionalInput (horizontal, vertical);
 		*/
 
-		foreach (Tuple<string, AttackType> button in buttons) {
+		foreach (Tuple<string, ButtonInputCommand> button in buttons) {
 			ButtonState buttonState = GetCurrentButtonStateForButton (button.Item1);
 			if (buttonState != ButtonState.NONE) {
 				activeButtonList.Add (new ButtonInput(button.Item2, buttonState));

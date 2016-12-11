@@ -4,15 +4,15 @@ using System.Collections;
 public class MoveSequence : IFrameSequence {
 	int index;
 	MoveFrame[] moveSequence;
-	AttackType startedByButton;
+	ButtonInputCommand startedByButton;
 
-	public MoveSequence(MoveFrame[] moveSequence, AttackType startedByButton) {
+	public MoveSequence(MoveFrame[] moveSequence, ButtonInputCommand startedByButton) {
 		index = -1;
 		this.moveSequence = moveSequence;
 		this.startedByButton = startedByButton;
 	}
 
-	public static MoveSequence GetAttackSequenceWithFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData, AttackType mappedToButton, bool canBeExtended) {
+	public static MoveSequence GetAttackSequenceWithFrameData (int startUp, int activeFrames, int recoveryFrames, AttackFrameData hitData, ButtonInputCommand mappedToButton, bool canBeExtended) {
 		MoveSequence newMoveSequence = new MoveSequence (new MoveFrame[0], mappedToButton);
 		newMoveSequence.PopulateMoveSequenceUsingFrameData (startUp, activeFrames, recoveryFrames, hitData, canBeExtended);
 
