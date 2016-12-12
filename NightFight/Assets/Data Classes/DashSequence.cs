@@ -12,7 +12,7 @@ public class DashSequence : IFrameSequence {
 		currFrame = 0; 
 		this.maxFrame = dashLengthInFrames; 
 		this.velocity = new Vector2 (dashDistance / dashLengthInFrames, 0.0f);
-		this.returnFrame = new MoveFrame (this.velocity, MoveType.RECOVERY);
+		this.returnFrame = new MoveFrame (this.velocity, MoveType.NONE);
 
 	}
 

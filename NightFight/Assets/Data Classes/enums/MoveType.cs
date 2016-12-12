@@ -1,7 +1,5 @@
 ﻿public enum MoveType {
 	NONE,
-	STARTUP,
-	RECOVERY,
 	AIRBORNE,
 	SPECIAL,
 	BLOCKING,

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class MoveFrame {
-	public MoveType moveType = MoveType.RECOVERY;
+	public MoveType moveType = MoveType.NONE;
 	public Vector2 movementDuringFrame;
 	public Dictionary<string, IFrameSequence> cancellableTo;
 	public AttackFrameData attackData = null;
