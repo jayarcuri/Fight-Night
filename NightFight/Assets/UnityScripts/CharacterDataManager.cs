@@ -1,4 +1,4 @@
-﻿	using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -6,6 +6,7 @@ using System;
 public class CharacterDataManager
 {
 	CharacterData characterData;
+	MoveBufferManager moveBufferManager;
 	int currentHealth;
 	public int illuminationCounter { get; private set; }
 	public bool isSelfIlluminated { get; private set; }
@@ -14,6 +15,7 @@ public class CharacterDataManager
 	public CharacterDataManager ()
 	{
 		this.characterData = new CharacterData ();
+		this.moveBufferManager = characterData.GetMoveBufferManager ();
 		this.currentHealth = characterData.maxHealth;
 		illuminationCounter = 0;
 		currentMove = null;
@@ -119,12 +121,12 @@ public class CharacterDataManager
 		bool hasValue = false;
 
 		//	Check if any special moves are currently executable, & if those special moves are currently in the cancel dictionary
-		List<string> executableSpecialMoves = characterData.GetMoveCodesForReadyBufferMoves(directionalInput, attack);
+		List<string> executableSpecialMoves = GetMoveCodesForReadyBufferMoves(directionalInput, attack);
 		if (executableSpecialMoves.Count > 0) {
 			foreach (string moveCode in executableSpecialMoves) {
 				if (optionDictionary.TryGetValue (moveCode, out newMove)) {
 					newMove.Reset ();
-					characterData.ResetMoveBuffer (moveCode);
+					ResetMoveBuffer (moveCode);
 					return newMove;
 				}
 			}
@@ -156,6 +158,14 @@ public class CharacterDataManager
 		}
 
 		return newMove;
+	}
+
+	public List<string> GetMoveCodesForReadyBufferMoves(DirectionalInput currentDirectionalInput, ButtonInputCommand currentButton) {
+		return moveBufferManager.GetReadiedBufferMove (currentDirectionalInput, currentButton);
+	}
+
+	public void ResetMoveBuffer(string forMove) {
+		moveBufferManager.ResetMoveBuffer (forMove);
 	}
 
 	public void ToggleCharacterIllumination () {

@@ -57,7 +57,7 @@ public class CharacterManager : MonoBehaviour {
 			toggleIllumination = true;
 		} else {
 			inputManager.GetInputs (out directionalInput, out attack, out toggleIllumination);
-			inputManager.NewGetInputs (out buttons, out hey);
+			//inputManager.NewGetInputs (out buttons, out hey);
 		}
 
 		if (toggleIllumination) {

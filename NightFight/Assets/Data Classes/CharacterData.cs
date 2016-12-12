@@ -5,10 +5,14 @@ public class CharacterData
 {
 	public static int maxCharge = 600;
 
+	protected static string dashCode = "FrD";
+	protected static string dashPunchCode = "SP1";
+	protected static DirectionalInput[] dashInput = DirectionalInput.GetDirectionalInputArray (6, 5, 6);
+	protected static DirectionalInput[] dashPunchInput = DirectionalInput.GetDirectionalInputArray (4, 6);
+
 	public readonly int drainRateForHeldMoves = 2;
 	public readonly int maxHealth = 15;
 	float walkSpeed = 0.15f;
-	MoveBufferManager moveBufferManager;
 
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
 	MoveFrame forwardStepFrame;
@@ -16,17 +20,8 @@ public class CharacterData
 
 	public CharacterData ()
 	{
-		moveBufferManager = new MoveBufferManager ();
-		DirectionalInput[] dashInput = DirectionalInput.GetDirectionalInputArray (6, 5, 6);
-		string dashCode = "FrD";
-		MoveBuffer forwardDash = new MoveBuffer (12, dashInput, false, dashCode);
-		moveBufferManager.AddMoveBuffer (forwardDash);
 		DashSequence dash = new DashSequence (16, 4f);
 
-		string dashPunchCode = "SP1";
-		DirectionalInput[] dashPunchInputCode = DirectionalInput.GetDirectionalInputArray (4, 6);
-		MoveBuffer dashPunchBuffer = new MoveBuffer (12, dashPunchInputCode, true, dashPunchCode);
-		moveBufferManager.AddMoveBuffer (dashPunchBuffer);
 		MoveSequence dashPunch = GetDashPunch ();
 
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
@@ -88,12 +83,15 @@ public class CharacterData
 		neutralMoveOptions.Add ("HIT", null);
 	}
 
-	public List<string> GetMoveCodesForReadyBufferMoves(DirectionalInput currentDirectionalInput, ButtonInputCommand currentButton) {
-		return moveBufferManager.GetReadiedBufferMove (currentDirectionalInput, currentButton);
-	}
+	public MoveBufferManager GetMoveBufferManager () {
+		MoveBufferManager moveBufferManager = new MoveBufferManager ();
 
-	public void ResetMoveBuffer(string forMove) {
-		moveBufferManager.ResetMoveBuffer (forMove);
+		MoveBuffer forwardDash = new MoveBuffer (12, dashInput, false, dashCode);
+		moveBufferManager.AddMoveBuffer (forwardDash);
+		MoveBuffer dashPunchBuffer = new MoveBuffer (12, dashPunchInput, true, dashPunchCode);
+		moveBufferManager.AddMoveBuffer (dashPunchBuffer);
+
+		return moveBufferManager;
 	}
 
 	public MoveFrame GetEmptyMoveFrame() {
@@ -108,7 +106,7 @@ public class CharacterData
 		this.backStepFrame.movementDuringFrame = new Vector2 (-newWalkSpeed, 0);
 	}
 
-	public MoveSequence GetDashPunch () {
+	MoveSequence GetDashPunch () {
 		MoveFrame nFrame = MoveFrame.GetEmptyLitFrame ();
 		nFrame.moveType = MoveType.SPECIAL;
 		MoveFrame dashFrame = new MoveFrame (new Vector2 (0.25f, 0), MoveType.SPECIAL, true);
