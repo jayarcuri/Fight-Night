@@ -10,7 +10,6 @@ public class GameDirector : MonoBehaviour {
 	public HitEffectsManager shaker;
 
 	public CharacterManager[] characters;
-	public HitboxController[] pendingAttackHitboxes;
 
 	//	Should be a float > 0f & <= 1f
 	private float cornerPushBackModifier = 1f;
@@ -38,28 +37,29 @@ public class GameDirector : MonoBehaviour {
 		if (currentState == GameState.GAME_RUNNING) {
 			bool[] hitsOccurred = new bool[2];
 			Tuple<MoveFrame, bool>[] currentFrames = new  Tuple<MoveFrame, bool>[2];
+
+			//	Get what each player is trying to do this turn.
 			for (int i = 0; i < characters.Length; i++) {
-				// Execute current move
 				currentFrames [i] = characters [i].GetCurrentFrame ();
 			}
+			//	Attempt to get modified character velocities, & if any exist use those to move.
 			Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
 			if (!newVelocities.Item1.Equals (MovementCollisionUtils.NaV2)) {
 				characters [0].ExecuteFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
 				characters [1].ExecuteFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
-
 			} else {
 				characters [0].ExecuteFrame (currentFrames [0].Item1, currentFrames [0].Item1.movementDuringFrame, currentFrames [0].Item2);
 				characters [1].ExecuteFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
 			}
-
+			//	Resolve any attack which should be hitting a character right now.
 			for (int i = 0; i < characters.Length; i++) {
 				hitsOccurred [i] = characters [i].ResolveAttackCollisions ();
 			}
-
+			//	Update character states.
 			for (int i = 0; i < characters.Length; i++) {
 				characters [i].UpdateCharacterState ();
 			}
-
+			//	If a hit connected, alert HitEffects.
 			if (hitsOccurred [0] || hitsOccurred [1]) {
 				shaker.SetCameraToShake ();
 				for (int i = 0; i < characters.Length; i++) {
@@ -71,7 +71,7 @@ public class GameDirector : MonoBehaviour {
 					}
 				}
 			}
-
+			//	Check for a winner.
 			CheckIfGameHasEnded ();
 		} else if (currentState == GameState.HIT_SHAKE) {
 			shaker.StepShakeForward ();
