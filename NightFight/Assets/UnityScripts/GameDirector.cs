@@ -37,20 +37,22 @@ public class GameDirector : MonoBehaviour {
 		if (currentState == GameState.GAME_RUNNING) {
 			bool[] hitsOccurred = new bool[2];
 			Tuple<MoveFrame, bool>[] currentFrames = new  Tuple<MoveFrame, bool>[2];
+			Tuple<Vector2, Vector2> characterVelocities;
 
 			//	Get what each player is trying to do this turn.
 			for (int i = 0; i < characters.Length; i++) {
 				currentFrames [i] = characters [i].GetCurrentFrame ();
 			}
-			//	Attempt to get modified character velocities, & if any exist use those to move.
+			characterVelocities = new Tuple<Vector2, Vector2> (currentFrames [0].Item1.movementDuringFrame, currentFrames [1].Item1.movementDuringFrame);
+			//	Attempt to get modified character velocities
 			Tuple<Vector2, Vector2> newVelocities = ResolveCharacterCollisions (currentFrames [0].Item1, currentFrames [1].Item1);
+
 			if (!newVelocities.Item1.Equals (MovementCollisionUtils.NaV2)) {
-				characters [0].ExecuteFrame (currentFrames [0].Item1, newVelocities.Item1, currentFrames [0].Item2);
-				characters [1].ExecuteFrame (currentFrames [1].Item1, newVelocities.Item2, currentFrames [1].Item2);
-			} else {
-				characters [0].ExecuteFrame (currentFrames [0].Item1, currentFrames [0].Item1.movementDuringFrame, currentFrames [0].Item2);
-				characters [1].ExecuteFrame (currentFrames [1].Item1, currentFrames [1].Item1.movementDuringFrame, currentFrames [1].Item2);
+				characterVelocities = newVelocities;
 			}
+
+			characters [0].ExecuteFrame (currentFrames [0].Item1, characterVelocities.Item1, currentFrames [0].Item2);
+			characters [1].ExecuteFrame (currentFrames [1].Item1, characterVelocities.Item2, currentFrames [1].Item2);
 			//	Resolve any attack which should be hitting a character right now.
 			for (int i = 0; i < characters.Length; i++) {
 				hitsOccurred [i] = characters [i].ResolveAttackCollisions ();
