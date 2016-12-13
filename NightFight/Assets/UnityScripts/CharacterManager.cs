@@ -129,15 +129,11 @@ public class CharacterManager : MonoBehaviour {
 		if (movementDuringFrame != Vector2.zero) {
 			characterMovement.MoveByVector (movementDuringFrame);
 		} 
-		// Smelly Code Below
-		if (currentFrame.attackData != null) { 
-			if (lastExecutedFrame == null || !currentFrame.attackData.Equals (lastExecutedFrame.attackData)) {
+
+		if (currentFrame.attackData != null && (lastExecutedFrame == null || !currentFrame.attackData.Equals (lastExecutedFrame.attackData))) { 
 				hitBox.ExecuteAttack (currentFrame.attackData);
-			}
-		} else {
-			if (hitBox.IsLoaded ()) {
+		} else if (currentFrame.attackData == null && hitBox.IsLoaded ()) {
 				hitBox.Reset ();
-			}
 		}
 
 		lastExecutedFrame = currentFrame;
