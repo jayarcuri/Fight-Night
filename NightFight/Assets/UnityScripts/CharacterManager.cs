@@ -101,9 +101,8 @@ public class CharacterManager : MonoBehaviour {
 			bool wasHit = characterDataManager.ProcessHitFrame (hit, lastExecutedFrame);
 
 			if (wasHit) {
-				guiController.UpdateguiController (characterDataManager.GetCurrentHealth ());
+				guiController.UpdateHealthBar (characterDataManager.GetCurrentHealth ());
 				collisionManager.ClearPendingHit ();
-
 				return true;
 			}
 		}

@@ -45,7 +45,7 @@ public class CharacterDataManager
 		// ---Attempt to enqueue a new move using input---
 		//
 		// If there is no current Sequence or it would resolve, give input to neutral state to get new Sequence
-		if (currentMoveSequence == null || nextFrameToExecute == null) {
+		if (nextFrameToExecute == null) {
 			newMove = GetNewMove (directionalInput, ButtonInputCommand);
 		} 
 		// Otherwise, if we currently have a move that will not resolve next frame & exists, try to cancel that 
