@@ -76,7 +76,6 @@ public class CharacterDataManager
 
 	public bool ProcessHitFrame (AttackFrameData hit, MoveFrame previousFrame)
 	{
-		IFrameSequence currentMoveSequence = this.currentMove;
 		MoveType previousMoveType = previousFrame != null ? previousFrame.moveType : MoveType.NONE;
 		Dictionary<string, IFrameSequence> optionDictionary = previousFrame != null ? 
 			previousFrame.cancellableTo : 
@@ -84,7 +83,7 @@ public class CharacterDataManager
 
 		if (HitType.HIT == hit.hitType && optionDictionary.ContainsKey ("HIT")) {
 			if (previousMoveType == MoveType.AIRBORNE) {
-				JumpSequence currentJumpSequence = (JumpSequence)currentMoveSequence;
+				JumpSequence currentJumpSequence = (JumpSequence)this.currentMove;
 				JumpSequence recoverySequence = currentJumpSequence.GetAirRecoverySequence ();
 				QueueMoveWithoutReset (recoverySequence);
 				TakeDamage (hit.damage);

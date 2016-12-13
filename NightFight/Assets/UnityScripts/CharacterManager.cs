@@ -8,7 +8,7 @@ public class CharacterManager : MonoBehaviour {
 	public CharacterLightController characterLight;
 	public CharacterMovement characterMovement;
 	public TriggerCollisionManager collisionManager;
-	public CharacterGuiController healthBar;
+	public CharacterGuiController guiController;
 	public HitboxController hitBox;
 	public InputManager inputManager;
 
@@ -33,7 +33,7 @@ public class CharacterManager : MonoBehaviour {
 		characterLight = GetComponent<CharacterLightController> ();
 		hitBox = GetComponentInChildren<HitboxController> ();
 		collisionManager = GetComponent<TriggerCollisionManager> ();
-		healthBar.maxHealth = characterDataManager.GetCurrentHealth ();
+		guiController.maxHealth = characterDataManager.GetCurrentHealth ();
 		characterLight.SetLight (false, MoveType.NONE);
 		if (isPlayer1) {
 			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
@@ -98,11 +98,10 @@ public class CharacterManager : MonoBehaviour {
 		if (collisionManager.HasPendingHit ()) {
 			AttackFrameData hit = collisionManager.GetPendingHit ();
 
-			// put this on CharacterManager
 			bool wasHit = characterDataManager.ProcessHitFrame (hit, lastExecutedFrame);
 
 			if (wasHit) {
-				healthBar.UpdateHealthBar (characterDataManager.GetCurrentHealth ());
+				guiController.UpdateguiController (characterDataManager.GetCurrentHealth ());
 				collisionManager.ClearPendingHit ();
 
 				return true;
@@ -121,7 +120,7 @@ public class CharacterManager : MonoBehaviour {
 			characterDataManager.IncrementIlluminationCounter ();
 		}
 
-		healthBar.UpdateChargeBar (characterDataManager.GetIlluminationCount ());
+		guiController.UpdateChargeBar (characterDataManager.GetIlluminationCount ());
 	}
 
 	public void PerformFrame (MoveFrame currentFrame, Vector2 movementDuringFrame)
