@@ -33,13 +33,21 @@ public class CharacterManager : MonoBehaviour {
 		characterLight = GetComponent<CharacterLightController> ();
 		hitBox = GetComponentInChildren<HitboxController> ();
 		collisionManager = GetComponent<TriggerCollisionManager> ();
-		guiController.maxHealth = characterDataManager.GetCurrentHealth ();
 		characterLight.SetLight (false, MoveType.NONE);
+
+		string opponentCharacterTag;
+		string characterGuiTag;
 		if (isPlayer1) {
-			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player2").GetComponent <Transform> ());
+			opponentCharacterTag = "Player2";
+			characterGuiTag = "Player1Gui";
 		} else {
-			characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag ("Player1").GetComponent <Transform> ());
+			opponentCharacterTag = "Player1";
+			characterGuiTag = "Player2Gui";
 		}
+		characterMovement.SetOpponentTransform (GameObject.FindGameObjectWithTag (opponentCharacterTag).GetComponent <Transform> ());
+		guiController = GameObject.FindGameObjectWithTag (characterGuiTag).GetComponentInChildren <CharacterGuiController> ();
+
+		guiController.maxHealth = characterDataManager.GetCurrentHealth ();
 	}
 
 	public Tuple<MoveFrame, bool> GetCurrentFrame () {
