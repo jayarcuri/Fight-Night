@@ -38,21 +38,21 @@ public class CharacterData
 		JumpSequence forwardJump = new JumpSequence (40, 3.5f, 2.5f, cancelsForJump);
 		JumpSequence backwardJump = new JumpSequence (40, 3.5f, -2.5f, cancelsForJump);
 
-		RecoilSequence jabHitStun = new RecoilSequence (9, 1f, MoveType.IN_HITSTUN);
-		RecoilSequence jabBlockStun = new RecoilSequence (7, .85f, MoveType.BLOCKING);
+		RecoilSequence jabHitStun = new RecoilSequence (13, 1f, MoveType.IN_HITSTUN);
+		RecoilSequence jabBlockStun = new RecoilSequence (10, .85f, MoveType.BLOCKING);
 		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (1.25f, 0.2f), 
 			new Vector3 (1.5f, .25f, 1f), 1, jabHitStun, jabBlockStun, HitType.HIT);
-		MoveSequence jab = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 6, jabAttackData, ButtonInputCommand.LIGHT, true);
+		MoveSequence jab = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 12, jabAttackData, ButtonInputCommand.LIGHT, true);
 
 		RecoilSequence throwBlockStun = new RecoilSequence (15, 2.5f, MoveType.BLOCKING);
 		AttackFrameData throwAttackData = new AttackFrameData (new Vector2 (1f, -0.35f), 
 			new Vector3 (1f, .3f, 1f), 4, null, throwBlockStun, HitType.THROW);
 		MoveSequence _throw = MoveSequence.GetAttackSequenceWithFrameData (4, 2, 13, throwAttackData, ButtonInputCommand.LIGHT, true);
 		
-		RecoilSequence aaHitStun = new RecoilSequence (9, 1f, MoveType.IN_HITSTUN);
-		RecoilSequence aaBlockStun = new RecoilSequence (7, .5f, MoveType.BLOCKING);
-		AttackFrameData aaAttackData = new AttackFrameData (new Vector2 (0.9f, 0.7f), new Vector3 (.8f, 1f, 1f), 4, aaHitStun, aaBlockStun, HitType.HIT);
-		MoveSequence aa = MoveSequence.GetAttackSequenceWithFrameData (5, 5, 8, aaAttackData, ButtonInputCommand.HEAVY, true);
+		RecoilSequence aaHitStun = new RecoilSequence (11, 1f, MoveType.IN_HITSTUN);
+		RecoilSequence aaBlockStun = new RecoilSequence (9, .5f, MoveType.BLOCKING);
+		AttackFrameData aaAttackData = new AttackFrameData (new Vector2 (0.9f, 0.7f), new Vector3 (.8f, 1f, 1f), 3, aaHitStun, aaBlockStun, HitType.HIT);
+		MoveSequence aa = MoveSequence.GetAttackSequenceWithFrameData (5, 5, 9, aaAttackData, ButtonInputCommand.HEAVY, true);
 
 		Dictionary<string, IFrameSequence> blockDict = new Dictionary<string, IFrameSequence> ();
 		blockDict.Add ("HIT", null);
