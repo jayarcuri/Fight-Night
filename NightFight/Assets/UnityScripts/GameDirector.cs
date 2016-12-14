@@ -25,7 +25,7 @@ public class GameDirector : MonoBehaviour {
 				throw new UnityException ("We are missing a player's character.");
 			}
 		}
-		GameStateManager.SetCurrentGameState (GameState.GAME_RUNNING);
+		// GameStateManager.SetCurrentGameState (GameState.GAME_RUNNING);
 		StartCoroutine (SetUpGame());
 	}
 
