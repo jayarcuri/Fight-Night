@@ -65,7 +65,7 @@ public class CharacterManager : MonoBehaviour {
 			toggleIllumination = true;
 		} else {
 			inputManager.GetInputs (out directionalInput, out attack, out toggleIllumination);
-			//inputManager.NewGetInputs (out buttons, out hey);
+			inputManager.NewGetInputs (out buttons, out hey);
 		}
 
 		if (toggleIllumination) {
@@ -79,9 +79,18 @@ public class CharacterManager : MonoBehaviour {
 		MoveFrame currentFrame = null;
 		bool isLit;
 
-		if ((lastExecutedFrame != null && lastExecutedFrame.canBeExtended) 
-			&& (characterDataManager.currentMove != null && characterDataManager.currentMove.SequenceStartedWithButton (buttons))
-			&& characterDataManager.GetIlluminationCount () >= drainRateForHeldMoves) {
+		bool previousFrameIsExtendable = lastExecutedFrame != null && lastExecutedFrame.canBeExtended;
+		if (previousFrameIsExtendable) {
+
+			Debug.Log ("Is extendable");
+		}
+		bool playerIsPressingButtonWhichStartedMove = characterDataManager.currentMove != null 
+			&& characterDataManager.currentMove.SequenceStartedWithButton (buttons);
+		bool characterHasEnoughCharge = characterDataManager.GetIlluminationCount () >= drainRateForHeldMoves;
+
+		if (previousFrameIsExtendable
+			&& playerIsPressingButtonWhichStartedMove
+			&& characterHasEnoughCharge) {
 			currentFrame = lastExecutedFrame;
 			isLit = currentFrame.isLit || characterDataManager.isSelfIlluminated;
 			characterDataManager.SubtractFromIllumination (drainRateForHeldMoves);
