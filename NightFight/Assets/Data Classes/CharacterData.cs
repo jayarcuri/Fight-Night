@@ -3,14 +3,8 @@ using System.Collections.Generic;
 
 public class CharacterData
 {
-	public static int maxCharge = 600;
 
-	protected static string dashCode = "FrD";
-	protected static string dashPunchCode = "SP1";
-	protected static DirectionalInput[] dashInput = DirectionalInput.GetDirectionalInputArray (6, 5, 6);
-	protected static DirectionalInput[] dashPunchInput = DirectionalInput.GetDirectionalInputArray (4, 6);
-
-	public readonly int maxHealth = 15;
+	public readonly int maxHealth = 3;
 	float walkSpeed = 0.15f;
 
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
@@ -19,9 +13,6 @@ public class CharacterData
 
 	public CharacterData ()
 	{
-		DashSequence dash = new DashSequence (16, 4f);
-
-		MoveSequence dashPunch = GetDashPunch ();
 
 		Dictionary<string, IFrameSequence> cancelsForJump = new Dictionary<string, IFrameSequence> ();
 		cancelsForJump.Add ("HIT", null);
@@ -43,16 +34,6 @@ public class CharacterData
 			new Vector3 (1.5f, .25f, 1f), 1, jabHitStun, jabBlockStun, HitType.HIT);
 		MoveSequence jab = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 12, jabAttackData, ButtonInputCommand.LIGHT, true);
 
-		RecoilSequence throwBlockStun = new RecoilSequence (15, 2.5f, MoveType.BLOCKING);
-		AttackFrameData throwAttackData = new AttackFrameData (new Vector2 (1f, -0.35f), 
-			new Vector3 (1f, .3f, 1f), 4, null, throwBlockStun, HitType.THROW);
-		MoveSequence _throw = MoveSequence.GetAttackSequenceWithFrameData (4, 2, 13, throwAttackData, ButtonInputCommand.LIGHT, true);
-		
-		RecoilSequence aaHitStun = new RecoilSequence (11, 1f, MoveType.IN_HITSTUN);
-		RecoilSequence aaBlockStun = new RecoilSequence (9, .5f, MoveType.BLOCKING);
-		AttackFrameData aaAttackData = new AttackFrameData (new Vector2 (0.9f, 0.7f), new Vector3 (.8f, 1f, 1f), 3, aaHitStun, aaBlockStun, HitType.HIT);
-		MoveSequence aa = MoveSequence.GetAttackSequenceWithFrameData (5, 5, 9, aaAttackData, ButtonInputCommand.HEAVY, true);
-
 		Dictionary<string, IFrameSequence> blockDict = new Dictionary<string, IFrameSequence> ();
 		blockDict.Add ("HIT", null);
 		MoveSequence block = new MoveSequence (new MoveFrame[] {
@@ -72,11 +53,7 @@ public class CharacterData
 		neutralMoveOptions.Add ("8", verticalJump);
 		neutralMoveOptions.Add ("9", forwardJump);
 		neutralMoveOptions.Add ("A", jab);
-		neutralMoveOptions.Add ("C", aa);
 		neutralMoveOptions.Add ("X", block);
-		neutralMoveOptions.Add ("T", _throw);
-		neutralMoveOptions.Add (dashCode, dash);
-		neutralMoveOptions.Add (dashPunchCode, dashPunch);
 
 		neutralMoveOptions.Add ("THROW", null);
 		neutralMoveOptions.Add ("HIT", null);
@@ -84,11 +61,6 @@ public class CharacterData
 
 	public MoveBufferManager GetMoveBufferManager () {
 		MoveBufferManager moveBufferManager = new MoveBufferManager ();
-
-		MoveBuffer forwardDash = new MoveBuffer (12, dashInput, false, dashCode);
-		moveBufferManager.AddMoveBuffer (forwardDash);
-		MoveBuffer dashPunchBuffer = new MoveBuffer (12, dashPunchInput, true, dashPunchCode);
-		moveBufferManager.AddMoveBuffer (dashPunchBuffer);
 
 		return moveBufferManager;
 	}

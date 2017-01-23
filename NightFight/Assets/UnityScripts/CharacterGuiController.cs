@@ -4,7 +4,6 @@ using System.Collections;
 
 public class CharacterGuiController : MonoBehaviour {
 	public int maxHealth;
-	int maxCharge;
 	float defaultHealthBarLength;
 	public RectTransform healthBarTransform;
 	bool isPlayer1;
@@ -12,7 +11,6 @@ public class CharacterGuiController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		defaultHealthBarLength = healthBarTransform.rect.width;
-		maxCharge = CharacterData.maxCharge;
 	}
 
 	public void UpdateHealthBar(int currentHealth) {
