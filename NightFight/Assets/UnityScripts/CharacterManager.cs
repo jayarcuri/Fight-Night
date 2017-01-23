@@ -19,7 +19,6 @@ public class CharacterManager : MonoBehaviour {
 	public ButtonInputCommand botAttackInput;
 
 	MoveFrame lastExecutedFrame;
-	int drainRateForHeldMoves;
 
 	// Use this for initialization
 	void Start () {
@@ -27,7 +26,6 @@ public class CharacterManager : MonoBehaviour {
 		if (overrideWalkSpeed > 0) {
 			characterDataManager.SetWalkSpeed (overrideWalkSpeed);
 		}
-		drainRateForHeldMoves = characterDataManager.GetDrainRateForHeldMoves ();
 		inputManager = GetComponent<InputManager> ();
 		characterMovement = GetComponent<CharacterMovement> ();
 		characterLight = GetComponent<CharacterLightController> ();
@@ -79,24 +77,7 @@ public class CharacterManager : MonoBehaviour {
 		MoveFrame currentFrame = null;
 		bool isLit;
 
-		bool previousFrameIsExtendable = lastExecutedFrame != null && lastExecutedFrame.canBeExtended;
-		if (previousFrameIsExtendable) {
-
-			Debug.Log ("Is extendable");
-		}
-		bool playerIsPressingButtonWhichStartedMove = characterDataManager.currentMove != null 
-			&& characterDataManager.currentMove.SequenceStartedWithButton (buttons);
-		bool characterHasEnoughCharge = characterDataManager.GetIlluminationCount () >= drainRateForHeldMoves;
-
-		if (previousFrameIsExtendable
-			&& playerIsPressingButtonWhichStartedMove
-			&& characterHasEnoughCharge) {
-			currentFrame = lastExecutedFrame;
-			isLit = currentFrame.isLit || characterDataManager.isSelfIlluminated;
-			characterDataManager.SubtractFromIllumination (drainRateForHeldMoves);
-		} else {
-			currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);
-		}
+		currentFrame = characterDataManager.GetCurrentFrame (directionalInput, attack, out isLit);
 
 		return new Tuple<MoveFrame, bool>(currentFrame, isLit);
 	}
@@ -131,12 +112,6 @@ public class CharacterManager : MonoBehaviour {
 		if (lastExecutedFrame.moveType == MoveType.NONE) {
 			characterMovement.FlipRotation ();
 		}
-		//	Illumination stuff
-		if (lastExecutedFrame.moveType != MoveType.SPECIAL && (characterLight.LightEnabled () || collisionManager.IsInAnIlluminatedArea ())) {
-			characterDataManager.IncrementIlluminationCounter ();
-		}
-
-		guiController.UpdateChargeBar (characterDataManager.GetIlluminationCount ());
 	}
 
 	public void PerformFrame (MoveFrame currentFrame, Vector2 movementDuringFrame)

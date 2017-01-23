@@ -10,7 +10,6 @@ public class CharacterData
 	protected static DirectionalInput[] dashInput = DirectionalInput.GetDirectionalInputArray (6, 5, 6);
 	protected static DirectionalInput[] dashPunchInput = DirectionalInput.GetDirectionalInputArray (4, 6);
 
-	public readonly int drainRateForHeldMoves = 2;
 	public readonly int maxHealth = 15;
 	float walkSpeed = 0.15f;
 

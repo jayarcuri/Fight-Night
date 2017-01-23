@@ -8,7 +8,6 @@ public class CharacterDataManager
 	CharacterData characterData;
 	MoveBufferManager moveBufferManager;
 	int currentHealth;
-	public int illuminationCounter { get; private set; }
 	public bool isSelfIlluminated { get; private set; }
 	public IFrameSequence currentMove { get; private set; }
 
@@ -17,7 +16,6 @@ public class CharacterDataManager
 		this.characterData = new CharacterData ();
 		this.moveBufferManager = characterData.GetMoveBufferManager ();
 		this.currentHealth = characterData.maxHealth;
-		illuminationCounter = 0;
 		currentMove = null;
 	}
 
@@ -173,25 +171,6 @@ public class CharacterDataManager
 
 	public void SetWalkSpeed(float newWalkSpeed) {
 		characterData.SetWalkSpeed (newWalkSpeed);
-	}
-
-	public void IncrementIlluminationCounter () {
-		if (illuminationCounter + 1 <= CharacterData.maxCharge) {
-			illuminationCounter++;
-		}
-	}
-
-	public void SubtractFromIllumination (int drainValue) {
-		int valueAfterDrain = illuminationCounter - drainValue;
-		illuminationCounter = valueAfterDrain >= 0 ? valueAfterDrain : 0;
-	}
-
-	public int GetIlluminationCount () {
-		return illuminationCounter;
-	}
-
-	public int GetDrainRateForHeldMoves () {
-		return characterData.drainRateForHeldMoves;
 	}
 
 	void QueueMove (IFrameSequence newMove)
