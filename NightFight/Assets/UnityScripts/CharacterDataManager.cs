@@ -9,6 +9,7 @@ public class CharacterDataManager
 	MoveBufferManager moveBufferManager;
 	int currentHealth;
 	public bool isSelfIlluminated { get; private set; }
+	public bool isCarryingOrb = false;
 	public IFrameSequence currentMove { get; private set; }
 
 	public CharacterDataManager ()
@@ -67,7 +68,7 @@ public class CharacterDataManager
 			returnFrame = characterData.GetEmptyMoveFrame ();
 		}
 
-		isLit = isSelfIlluminated || returnFrame.isLit;
+		isLit = isSelfIlluminated || returnFrame.isLit || isCarryingOrb;
 
 		return returnFrame;
 	}
@@ -169,8 +170,16 @@ public class CharacterDataManager
 		isSelfIlluminated = !isSelfIlluminated;
 	}
 
+	public bool IsInIlluminatedState () {
+		return isCarryingOrb || isSelfIlluminated;
+	}
+
 	public void SetWalkSpeed(float newWalkSpeed) {
 		characterData.SetWalkSpeed (newWalkSpeed);
+	}
+
+	public void MultiplyWalkSpeedByFactor (float factor) {
+		characterData.SetWalkSpeed (characterData.walkSpeed * factor);
 	}
 
 	void QueueMove (IFrameSequence newMove)

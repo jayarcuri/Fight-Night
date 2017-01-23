@@ -6,6 +6,7 @@ public class TriggerCollisionManager : MonoBehaviour
 	public HitboxController pendingAttackHitbox { get; private set; }
 	HitboxController hitBox;
 	public Collider mostRecentIlluminatedArea;
+	public CharacterManager parentCharacter;
 	// Use this for initialization
 	void Start ()
 	{
@@ -39,11 +40,10 @@ public class TriggerCollisionManager : MonoBehaviour
 
 			if (currentOrbState == OrbState.THROWN && !orb.WasLastOwner (gameObject)) {
 				//  is being hit by orb, 
+				//  ProcessHitboxCollision
 			} else if (currentOrbState == OrbState.NORMAL) {
-				Debug.Log ("Orb was equipped");
-				orb.currentState = OrbState.EQUIPPED;
-				orb.lastOwner = gameObject;
 				//  Equip orb
+				parentCharacter.EquipOrb (orb);
 			}
 
 		} 

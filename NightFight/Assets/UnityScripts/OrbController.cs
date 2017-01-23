@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OrbController : MonoBehaviour {
 	public OrbState currentState;
-	public GameObject lastOwner;
+	public CharacterManager lastOwner;
 	public 
 	// Use this for initialization
 	void Start () {

@@ -5,7 +5,7 @@ public class CharacterData
 {
 
 	public readonly int maxHealth = 3;
-	float walkSpeed = 0.15f;
+	public readonly float walkSpeed = 0.15f;
 
 	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
 	MoveFrame forwardStepFrame;

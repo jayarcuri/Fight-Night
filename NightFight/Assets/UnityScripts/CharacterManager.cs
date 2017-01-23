@@ -31,6 +31,7 @@ public class CharacterManager : MonoBehaviour {
 		characterLight = GetComponent<CharacterLightController> ();
 		hitBox = GetComponentInChildren<HitboxController> ();
 		collisionManager = GetComponent<TriggerCollisionManager> ();
+		collisionManager.parentCharacter = this;
 		characterLight.SetLight (false, MoveType.NONE);
 
 		string opponentCharacterTag;
@@ -88,8 +89,8 @@ public class CharacterManager : MonoBehaviour {
 			PerformFrame (currentFrame, movementDuringFrame);
 		}
 
-		MoveType currentMoveType = currentFrame != null ? currentFrame.moveType : MoveType.NONE;
-		characterLight.SetLight(isLit, currentMoveType);
+//		MoveType currentMoveType = currentFrame != null ? currentFrame.moveType : MoveType.NONE;
+//		characterLight.SetLight(isLit, currentMoveType);
 	}
 
 	public bool ResolveAttackCollisions () {
@@ -130,19 +131,28 @@ public class CharacterManager : MonoBehaviour {
 	}
 
 	public void UpdateCharacterLight() {
-		bool isLit;
+		bool isSelfIlluminated = characterDataManager.IsInIlluminatedState ();
 		if (lastExecutedFrame != null) {
-			isLit = characterDataManager.isSelfIlluminated || lastExecutedFrame.isLit;
-		} else {
-			isLit = characterDataManager.isSelfIlluminated;
+			isSelfIlluminated = isSelfIlluminated || lastExecutedFrame.isLit;
 		}
+
 		MoveType currentMoveType = lastExecutedFrame != null ? lastExecutedFrame.moveType : MoveType.NONE;
 
-		characterLight.SetLight (isLit, currentMoveType);
+		characterLight.SetLight (isSelfIlluminated, currentMoveType);
 	}
 
 	public void SetCharacterLight(bool lightShouldBeOn, MoveType forMoveType) {
 		characterLight.SetLight (lightShouldBeOn, forMoveType);
+	}
+
+	public void EquipOrb (OrbController orb) {
+		Debug.Log ("Orb was equipped");
+		orb.currentState = OrbState.EQUIPPED;
+		orb.lastOwner = this;
+		orb.gameObject.SetActive (false);
+		characterDataManager.isCarryingOrb = true;
+		//  Replace magic figure with predefined variable within characterDataManager
+		characterDataManager.MultiplyWalkSpeedByFactor (0.75f);
 	}
 
 	public MoveType GetLastFrameMoveType () {
