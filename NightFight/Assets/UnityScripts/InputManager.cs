@@ -9,8 +9,6 @@ public class InputManager : MonoBehaviour
 	public string verticalAxis;
 	public string lightAttack;
 	bool lightAttackPressed;
-	public string heavyAttack;
-	bool heavyAttackPressed;
 	public string illuminateButton;
 	bool illuminateButtonPressed;
 	public string block;
@@ -21,9 +19,7 @@ public class InputManager : MonoBehaviour
 
 	void Start () {
 		buttons = new Tuple<string, ButtonInputCommand>[] {
-			new Tuple<string, ButtonInputCommand>(heavyAttack, ButtonInputCommand.HEAVY),
-			new Tuple<string, ButtonInputCommand>(lightAttack, ButtonInputCommand.LIGHT),
-			new Tuple<string, ButtonInputCommand>(block, ButtonInputCommand.BLOCK)
+			new Tuple<string, ButtonInputCommand>(lightAttack, ButtonInputCommand.LIGHT)
 		};
 	}
 
@@ -35,19 +31,9 @@ public class InputManager : MonoBehaviour
 
 		directionalInput = new DirectionalInput (horizontal, vertical);
 
-		if (Input.GetButton (heavyAttack) && !heavyAttackPressed) {
-			heavyAttackPressed = true;
-			attack = ButtonInputCommand.HEAVY;
-		} else if (Input.GetButton (lightAttack) && !lightAttackPressed) {
-			if (Input.GetButton (block)) {
-				lightAttackPressed = true;
-				attack = ButtonInputCommand.THROW;
-			} else {
-				lightAttackPressed = true;
-				attack = ButtonInputCommand.LIGHT;
-			}
-		} else if (Input.GetButton (block)) {
-			attack = ButtonInputCommand.BLOCK;
+		if (Input.GetButton (lightAttack) && !lightAttackPressed) {
+			lightAttackPressed = true;
+			attack = ButtonInputCommand.LIGHT;
 		} else {
 			attack = ButtonInputCommand.NONE;
 		}
@@ -64,9 +50,6 @@ public class InputManager : MonoBehaviour
 
 	void RecordDisengagedButtons ()
 	{
-		if (!Input.GetButton (heavyAttack)) {
-			heavyAttackPressed = false;
-		}
 		if (!Input.GetButton (lightAttack)) {
 			lightAttackPressed = false;
 		}
