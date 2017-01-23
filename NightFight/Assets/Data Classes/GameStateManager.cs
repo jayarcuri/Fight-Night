@@ -4,7 +4,7 @@
 	protected static GameStateManager gameStateManagerSingleton;
 
 	protected GameStateManager () {
-		this.currentGameState = GameState.INSTRUCTIONS;
+		this.currentGameState = GameState.GAME_RUNNING;
 	}
 
 	public static GameStateManager GetGameStateManager () {
