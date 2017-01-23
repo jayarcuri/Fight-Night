@@ -4,6 +4,7 @@ using System.Collections;
 public class CharacterMovement : MonoBehaviour
 {
 	Rigidbody playerBody;
+	GameObject playerLightObject;
 	Transform opponentTransform;
 
 	public bool isFacingRight;
@@ -11,6 +12,7 @@ public class CharacterMovement : MonoBehaviour
 	void Start ()
 	{
 		playerBody = GetComponent<Rigidbody> ();
+		playerLightObject = GetComponentInChildren<Light> ().gameObject;
 		string opponentTag = gameObject.tag.Equals ("Player1") ? "Player2" : "Player1";
 		opponentTransform = GameObject.FindGameObjectWithTag (opponentTag).GetComponent<Transform> ();
 
@@ -35,10 +37,20 @@ public class CharacterMovement : MonoBehaviour
 		} else {
 			return;
 		}
+
+		float rotationDegrees = 180;
 		
-		Vector2 newRotation = transform.localEulerAngles; 
-		newRotation.y -= 180; 
-		transform.localEulerAngles = newRotation; 
+		Vector2 newPlayerRotation = transform.localEulerAngles; 
+		newPlayerRotation.y -= rotationDegrees; 
+		transform.localEulerAngles = newPlayerRotation;
+
+		Vector2 newLightRotation = playerLightObject.transform.localEulerAngles;
+		newLightRotation.y -= rotationDegrees;
+		playerLightObject.transform.localEulerAngles = newLightRotation;
+
+		Vector3 lightPosition = playerLightObject.transform.localPosition;
+		Vector3 newLightPosition = new Vector3 (lightPosition.x, lightPosition.y, lightPosition.z * -1);
+		playerLightObject.transform.localPosition = newLightPosition;
 	}
 
 	public void MoveByVector (Vector2 difference)
