@@ -26,6 +26,8 @@ public class TriggerCollisionManager : MonoBehaviour
 	{
 		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
 			ProcessHitboxCollision (other);
+		} else if (other.tag == "Orb") {
+			
 		} else {
 			ToggleIlluminationStatusAppropriately (other);
 		}
