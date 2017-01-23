@@ -26,11 +26,27 @@ public class TriggerCollisionManager : MonoBehaviour
 	{
 		if (other.tag == "Hitbox" && other.gameObject != hitBox.gameObject) {
 			ProcessHitboxCollision (other);
-		} else if (other.tag == "Orb") {
-			
 		} else {
 			ToggleIlluminationStatusAppropriately (other);
 		}
+	}
+
+	void OnCollisionEnter(Collision collision) {
+		GameObject other = collision.collider.gameObject;
+		if (other.tag == "Orb") {
+			OrbController orb = other.GetComponent <OrbController> ();
+			OrbState currentOrbState = orb.currentState;
+
+			if (currentOrbState == OrbState.THROWN && !orb.WasLastOwner (gameObject)) {
+				//  is being hit by orb, 
+			} else if (currentOrbState == OrbState.NORMAL) {
+				Debug.Log ("Orb was equipped");
+				orb.currentState = OrbState.EQUIPPED;
+				orb.lastOwner = gameObject;
+				//  Equip orb
+			}
+
+		} 
 	}
 
 	void ToggleIlluminationStatusAppropriately (Collider other) {
