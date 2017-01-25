@@ -11,7 +11,6 @@ public class InputManager : MonoBehaviour
 	bool lightAttackPressed;
 	public string illuminateButton;
 	bool illuminateButtonPressed;
-	public string block;
 
 	Tuple<string, ButtonInputCommand>[] buttons;
 

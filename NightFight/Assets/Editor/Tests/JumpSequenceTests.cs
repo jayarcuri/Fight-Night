@@ -8,13 +8,13 @@ public class JumpSequenceTests {
 
 	[Test]
 	public void TestResolvesInExpectedTime() {
-		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null);
+		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null, false);
 		TestAppropriateResolution (testRunner, 10);
 	}
 
 	[Test]
 	public void TestJumpSequenceReset() {
-		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null);
+		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null, false);
 		for (int i = 0; i < 10; i++) {
 			testRunner.GetNext ();
 		}
@@ -45,7 +45,7 @@ public class JumpSequenceTests {
 			jabHitbox,
 			jabHitbox
 		}, ButtonInputCommand.LIGHT);
-		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null);
+		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null, false);
 		for (int i = 0; i < 10; i++) {
 			MoveFrame frame = testRunner.GetNext ();
 			Console.WriteLine(i);

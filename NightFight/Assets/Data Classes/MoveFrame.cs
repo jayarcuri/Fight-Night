@@ -8,7 +8,7 @@ public class MoveFrame {
 	public Vector2 movementDuringFrame;
 	public Dictionary<string, IFrameSequence> cancellableTo;
 	public AttackFrameData attackData = null;
-	public bool isLit { get; private set; }
+	public bool isLit;
 	public bool canBeExtended = false;
 
 	public MoveFrame (MoveType moveType) {

@@ -10,10 +10,12 @@ public class JumpSequence : IFrameSequence
 	int jumpLengthInFrames;
 	protected int currentFrameCount;
 	Dictionary<string, IFrameSequence> cancelsTo;
+	private bool isLit;
 
-	public JumpSequence (int jumpLengthInFrames, float jumpHeight, float horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancelsTo)
+	public JumpSequence (int jumpLengthInFrames, float jumpHeight, float horizontalDistanceCovered, Dictionary<string, IFrameSequence> cancelsTo, bool isLit)
 	{
 		Reset ();
+		this.isLit = isLit;
 		this.maxJumpHeight = jumpHeight;
 		this.jumpLengthInFrames = jumpLengthInFrames;
 		horizontalVelocity = horizontalDistanceCovered / jumpLengthInFrames;
@@ -67,7 +69,7 @@ public class JumpSequence : IFrameSequence
 		float maxHeightForRS = GetCurrentHeight () /*/ Mathf.Sin (11f / 13f * Mathf.PI * 0.5f)*/;		
 		float newHorizontalVelocity = /*horizontalVelocity != 0 ? -Mathf.Abs(horizontalVelocity / 2f) :*/ -2.5f;
 
-		JumpSequence recoverySequence = new JumpSequence (recoverySequenceLength * 2, maxHeightForRS, newHorizontalVelocity, new Dictionary<string, IFrameSequence> ());
+		JumpSequence recoverySequence = new JumpSequence (recoverySequenceLength * 2, maxHeightForRS, newHorizontalVelocity, new Dictionary<string, IFrameSequence> (), true);
 		recoverySequence.currentFrameCount = spoofLength / 2 - framesBeforeDescent;
 		return recoverySequence;
 	}
@@ -116,6 +118,11 @@ public class JumpSequence : IFrameSequence
 			returnFrame = new MoveFrame (nextVelocity, MoveType.AIRBORNE);
 			returnFrame.cancellableTo = cancelsTo;
 		}
+
+		if (isLit) {
+			returnFrame.isLit = true;
+		}
+
 		return returnFrame;
 	}
 		

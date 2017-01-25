@@ -24,9 +24,9 @@ public class CharacterData
 		MoveSequence jumpAttack = SupplementaryJumpMove.GetSupplementaryJumpMoveWithFrameData (6, 5, jumpAttackData, ButtonInputCommand.LIGHT, false);
 		cancelsForJump.Add ("A", jumpAttack);
 
-		JumpSequence verticalJump = new JumpSequence (40, 3.5f, 0.0f, cancelsForJump);
-		JumpSequence forwardJump = new JumpSequence (40, 3.5f, 2.5f, cancelsForJump);
-		JumpSequence backwardJump = new JumpSequence (40, 3.5f, -2.5f, cancelsForJump);
+		JumpSequence verticalJump = new JumpSequence (40, 3.5f, 0.0f, cancelsForJump, false);
+		JumpSequence forwardJump = new JumpSequence (40, 3.5f, 2.5f, cancelsForJump, true);
+		JumpSequence backwardJump = new JumpSequence (40, 3.5f, -2.5f, cancelsForJump, false);
 
 		RecoilSequence jabHitStun = new RecoilSequence (13, 1f, MoveType.IN_HITSTUN);
 		RecoilSequence jabBlockStun = new RecoilSequence (10, .85f, MoveType.BLOCKING);
