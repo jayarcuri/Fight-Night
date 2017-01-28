@@ -7,7 +7,8 @@ public class CharacterData
 	public readonly int maxHealth = 3;
 	public readonly float walkSpeed = 0.15f;
 
-	public Dictionary<string, IFrameSequence> neutralMoveOptions { get; private set; }
+	public Dictionary<string, IFrameSequence> defaultNeutralMovesDict { get; private set; }
+	public Dictionary<string, IFrameSequence> orbCarryMovesDict { get; private set; }
 	MoveFrame forwardStepFrame;
 	MoveFrame backStepFrame;
 
@@ -45,18 +46,20 @@ public class CharacterData
 		MoveSequence forwardStep = new MoveSequence (new MoveFrame[] { forwardStepFrame }, ButtonInputCommand.NONE);
 		MoveSequence backwardStep = new MoveSequence (new MoveFrame[] { backStepFrame }, ButtonInputCommand.NONE);
 
-		neutralMoveOptions = new Dictionary<string, IFrameSequence> ();
+		defaultNeutralMovesDict = new Dictionary<string, IFrameSequence> ();
 		// Adding moves to default FSM
-		neutralMoveOptions.Add ("4", backwardStep);
-		neutralMoveOptions.Add ("6", forwardStep);
-		neutralMoveOptions.Add ("7", backwardJump);
-		neutralMoveOptions.Add ("8", verticalJump);
-		neutralMoveOptions.Add ("9", forwardJump);
-		neutralMoveOptions.Add ("A", jab);
-		neutralMoveOptions.Add ("X", block);
+		defaultNeutralMovesDict.Add ("4", backwardStep);
+		defaultNeutralMovesDict.Add ("6", forwardStep);
+		defaultNeutralMovesDict.Add ("7", backwardJump);
+		defaultNeutralMovesDict.Add ("8", verticalJump);
+		defaultNeutralMovesDict.Add ("9", forwardJump);
+		defaultNeutralMovesDict.Add ("A", jab);
+		defaultNeutralMovesDict.Add ("X", block);
 
-		neutralMoveOptions.Add ("THROW", null);
-		neutralMoveOptions.Add ("HIT", null);
+		defaultNeutralMovesDict.Add ("THROW", null);
+		defaultNeutralMovesDict.Add("HIT", null);
+		//  Test code
+		orbCarryMovesDict = defaultNeutralMovesDict;
 	}
 
 	public MoveBufferManager GetMoveBufferManager () {

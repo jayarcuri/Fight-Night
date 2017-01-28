@@ -76,9 +76,13 @@ public class CharacterDataManager
 	public bool ProcessHitFrame (AttackFrameData hit, MoveFrame previousFrame)
 	{
 		MoveType previousMoveType = previousFrame != null ? previousFrame.moveType : MoveType.NONE;
-		Dictionary<string, IFrameSequence> optionDictionary = previousFrame != null ? 
-			previousFrame.cancellableTo : 
-			characterData.neutralMoveOptions;
+		Dictionary<string, IFrameSequence> optionDictionary;
+
+		if (previousFrame != null) {
+			optionDictionary = previousFrame.cancellableTo;
+		} else {
+			optionDictionary = !isCarryingOrb ? characterData.defaultNeutralMovesDict : characterData.orbCarryMovesDict;
+		}
 
 		if (HitType.HIT == hit.hitType && optionDictionary.ContainsKey ("HIT")) {
 			if (previousMoveType == MoveType.AIRBORNE) {
@@ -107,7 +111,8 @@ public class CharacterDataManager
 
 	public IFrameSequence GetNewMove (DirectionalInput directionalInput, ButtonInputCommand attack)
 	{
-		IFrameSequence newMove = GetSequenceFromCancelDictionary (characterData.neutralMoveOptions, directionalInput, attack);
+		Dictionary<string, IFrameSequence> optionDictionary = !isCarryingOrb ? characterData.defaultNeutralMovesDict : characterData.orbCarryMovesDict;
+		IFrameSequence newMove = GetSequenceFromCancelDictionary (optionDictionary, directionalInput, attack);
 		return newMove;
 	}
 
