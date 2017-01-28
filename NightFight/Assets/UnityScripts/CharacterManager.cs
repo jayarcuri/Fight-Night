@@ -11,6 +11,7 @@ public class CharacterManager : MonoBehaviour {
 	CharacterGuiController guiController;
 	HitboxController hitBox;
 	InputManager inputManager;
+	OrbController orbController;
 
 	public bool isPlayer1;
 	public bool isBot;
@@ -71,7 +72,7 @@ public class CharacterManager : MonoBehaviour {
 				characterDataManager.ToggleCharacterIllumination ();
 			} else {
 				//  Throw orb
-
+				ThrowOrb ();
 			}
 		}
 
@@ -153,8 +154,23 @@ public class CharacterManager : MonoBehaviour {
 		orb.lastOwner = this;
 		orb.gameObject.SetActive (false);
 		characterDataManager.isCarryingOrb = true;
-		//  Replace magic figure with predefined variable within characterDataManager
-		//  characterDataManager.MultiplyWalkSpeedByFactor (0.75f);
+		orbController = orb;
+	}
+
+	void ThrowOrb () {
+		orbController.gameObject.SetActive (true);
+		orbController.currentState = OrbState.NORMAL;
+		characterDataManager.isCarryingOrb = false;
+		//  Activate Hitbox
+		//  Place in front of character
+		//  Add force
+		Rigidbody orbRigidbody = orbController.gameObject.GetComponent<Rigidbody> ();
+		orbRigidbody.velocity = Vector3.zero;
+		float directionalModifier = characterMovement.isFacingRight ? 1.0f : -1.0f;
+
+		orbRigidbody.AddForce(new Vector2(10 * directionalModifier, 6), ForceMode.Impulse);
+
+		orbController = null;
 	}
 
 	public MoveType GetLastFrameMoveType () {
