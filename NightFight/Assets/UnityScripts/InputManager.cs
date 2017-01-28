@@ -18,7 +18,7 @@ public class InputManager : MonoBehaviour
 
 	void Start () {
 		buttons = new Tuple<string, ButtonInputCommand>[] {
-			new Tuple<string, ButtonInputCommand>(lightAttack, ButtonInputCommand.LIGHT)
+			new Tuple<string, ButtonInputCommand>(lightAttack, ButtonInputCommand.ATTACK)
 		};
 	}
 
@@ -32,7 +32,7 @@ public class InputManager : MonoBehaviour
 
 		if (Input.GetButton (lightAttack) && !lightAttackPressed) {
 			lightAttackPressed = true;
-			attack = ButtonInputCommand.LIGHT;
+			attack = ButtonInputCommand.ATTACK;
 		} else {
 			attack = ButtonInputCommand.NONE;
 		}

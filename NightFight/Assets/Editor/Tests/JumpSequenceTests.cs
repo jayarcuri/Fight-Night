@@ -44,7 +44,7 @@ public class JumpSequenceTests {
 			neutralFrame,
 			jabHitbox,
 			jabHitbox
-		}, ButtonInputCommand.LIGHT);
+		}, ButtonInputCommand.ATTACK);
 		JumpSequence testRunner = new JumpSequence (10, 2.0f, 1.5f, null, false);
 		for (int i = 0; i < 10; i++) {
 			MoveFrame frame = testRunner.GetNext ();

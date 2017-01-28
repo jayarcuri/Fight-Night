@@ -22,7 +22,7 @@ public class CharacterData
 		RecoilSequence jumpAttackBlockStun = new RecoilSequence (8, 1.15f, MoveType.BLOCKING);
 		AttackFrameData jumpAttackData = new AttackFrameData (new Vector2 (0.5f, -0.625f), 
 			new Vector3 (1.5f, .25f, 1f), 3, jumpAttackHitStun, jumpAttackBlockStun, HitType.HIT);
-		MoveSequence jumpAttack = SupplementaryJumpMove.GetSupplementaryJumpMoveWithFrameData (6, 5, jumpAttackData, ButtonInputCommand.LIGHT, false);
+		MoveSequence jumpAttack = SupplementaryJumpMove.GetSupplementaryJumpMoveWithFrameData (6, 5, jumpAttackData, ButtonInputCommand.ATTACK, false);
 		cancelsForJump.Add ("A", jumpAttack);
 
 		JumpSequence verticalJump = new JumpSequence (40, 3.5f, 0.0f, cancelsForJump, false);
@@ -33,14 +33,11 @@ public class CharacterData
 		RecoilSequence jabBlockStun = new RecoilSequence (10, .85f, MoveType.BLOCKING);
 		AttackFrameData jabAttackData = new AttackFrameData (new Vector2 (1.25f, 0.2f), 
 			new Vector3 (1.5f, .25f, 1f), 1, jabHitStun, jabBlockStun, HitType.HIT);
-		MoveSequence jab = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 12, jabAttackData, ButtonInputCommand.LIGHT, true);
+		MoveSequence jab = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 12, jabAttackData, ButtonInputCommand.ATTACK, true);
 
 		Dictionary<string, IFrameSequence> blockDict = new Dictionary<string, IFrameSequence> ();
 		blockDict.Add ("HIT", null);
-		MoveSequence block = new MoveSequence (new MoveFrame[] {
-			new MoveFrame (MoveType.BLOCKING)
-		}, ButtonInputCommand.BLOCK
-		);
+
 		this.forwardStepFrame = new MoveFrame (new Vector2 (walkSpeed, 0), MoveType.NONE);
 		this.backStepFrame = new MoveFrame (new Vector2 (-walkSpeed, 0), MoveType.NONE);
 		MoveSequence forwardStep = new MoveSequence (new MoveFrame[] { forwardStepFrame }, ButtonInputCommand.NONE);
@@ -54,9 +51,7 @@ public class CharacterData
 		defaultNeutralMovesDict.Add ("8", verticalJump);
 		defaultNeutralMovesDict.Add ("9", forwardJump);
 		defaultNeutralMovesDict.Add ("A", jab);
-		defaultNeutralMovesDict.Add ("X", block);
 
-		defaultNeutralMovesDict.Add ("THROW", null);
 		defaultNeutralMovesDict.Add("HIT", null);
 		//  Test code
 		orbCarryMovesDict = defaultNeutralMovesDict;
@@ -106,7 +101,7 @@ public class CharacterData
 			frameArray [i] = assignedFrame;
 		}
 
-		return new MoveSequence (frameArray, ButtonInputCommand.LIGHT);
+		return new MoveSequence (frameArray, ButtonInputCommand.ATTACK);
 	}
 
 }

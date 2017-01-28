@@ -7,7 +7,7 @@ public class EnumerationTests
 {
 	[Test]
 	public void AttackAndDirectionalConversionToString () {
-		char lightAttackCharacter = (char)ButtonInputCommand.LIGHT;
+		char lightAttackCharacter = (char)ButtonInputCommand.ATTACK;
 		Assert.IsTrue ('A'.Equals (lightAttackCharacter));
 		string directionalCharacter = DirectionalInput.Down.numpadValue.ToString();
 		Console.WriteLine (directionalCharacter);

@@ -21,7 +21,7 @@ public class MoveBufferManager
 	public List<string> GetReadiedBufferMove (DirectionalInput currentDirectionalInput, ButtonInputCommand nextButtonInput) {
 		List<string> moveCodeList = new List<string> ();
 		foreach (MoveBuffer currentBuffer in bufferList) {
-			bool buttonPressOccurred = nextButtonInput != ButtonInputCommand.NONE && nextButtonInput != ButtonInputCommand.BLOCK;
+			bool buttonPressOccurred = nextButtonInput != ButtonInputCommand.NONE;
 			string moveCode = currentBuffer.GetMove (currentDirectionalInput, buttonPressOccurred);
 
 			if (moveCode != null) {

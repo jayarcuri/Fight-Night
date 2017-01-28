@@ -16,7 +16,7 @@ public class CharacterDataManagerTests {
 	public void LightAttackTest () {
 		CharacterDataManager tester = new CharacterDataManager ();
 		bool x = false;
-		tester.GetCurrentFrame (DirectionalInput.Neutral, ButtonInputCommand.LIGHT, out x);
+		tester.GetCurrentFrame (DirectionalInput.Neutral, ButtonInputCommand.ATTACK, out x);
 		Assert.IsNotNull (tester.currentMove);
 	}
 
@@ -34,8 +34,8 @@ public class CharacterDataManagerTests {
 		Assert.IsTrue (MoveType.AIRBORNE.Equals (currentFrame.moveType));
 		// Make jump get enqueued
 		// test that jump is currently occurring.
-		tester.GetCurrentFrame (DirectionalInput.Neutral, ButtonInputCommand.LIGHT, out x);
-		Console.WriteLine ((char)ButtonInputCommand.LIGHT);
+		tester.GetCurrentFrame (DirectionalInput.Neutral, ButtonInputCommand.ATTACK, out x);
+		Console.WriteLine ((char)ButtonInputCommand.ATTACK);
 		// Make jump attack become enqueued
 		// test that attack is actually enqueued (hit frame on appropriate frame)
 	}

@@ -39,7 +39,7 @@ using NUnit.Framework;
 		bufferManager.GetReadiedBufferMove (new DirectionalInput (6), ButtonInputCommand.NONE);
 		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), ButtonInputCommand.NONE);
 		bufferManager.GetReadiedBufferMove (new DirectionalInput (3), ButtonInputCommand.NONE);
-		List<string> readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), ButtonInputCommand.HEAVY);
+		List<string> readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), ButtonInputCommand.ATTACK);
 
 		foreach (string s in readyMoveCodes) {
 			Console.WriteLine (s);
@@ -47,7 +47,7 @@ using NUnit.Framework;
 
 		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), ButtonInputCommand.NONE);
 		bufferManager.GetReadiedBufferMove (new DirectionalInput (2), ButtonInputCommand.NONE);
-		readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (2), ButtonInputCommand.HEAVY);
+		readyMoveCodes = bufferManager.GetReadiedBufferMove (new DirectionalInput (2), ButtonInputCommand.ATTACK);
 
 		Console.WriteLine (readyMoveCodes.Count);
 		Assert.IsTrue (readyMoveCodes.Count == 1);
@@ -55,7 +55,7 @@ using NUnit.Framework;
 
 		//bufferManager.ResetMoveBuffer (readyMoveCodes [0]);
 
-		List<string> readyMoveCodesPostReset = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), ButtonInputCommand.HEAVY);
+		List<string> readyMoveCodesPostReset = bufferManager.GetReadiedBufferMove (new DirectionalInput (6), ButtonInputCommand.ATTACK);
 		foreach (string s in readyMoveCodesPostReset) {
 			Console.WriteLine (s);
 		}

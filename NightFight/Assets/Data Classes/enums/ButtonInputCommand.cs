@@ -1,7 +1,6 @@
 ﻿public enum ButtonInputCommand {
-	LIGHT = 'A', 
-	HEAVY = 'C',
-	THROW = 'T',
-	BLOCK = 'X',
+	ATTACK = 'A',
+	ILLUMINATE = 'I',
+	JUMP = 'J',
 	NONE = 'Z'
 }
