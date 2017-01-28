@@ -11,6 +11,7 @@ public class CharacterData
 	public Dictionary<string, IFrameSequence> orbCarryMovesDict { get; private set; }
 	MoveFrame forwardStepFrame;
 	MoveFrame backStepFrame;
+	float orbSpeedModifier = 0.75f;
 
 	public CharacterData ()
 	{
@@ -35,9 +36,6 @@ public class CharacterData
 			new Vector3 (1.5f, .25f, 1f), 1, jabHitStun, jabBlockStun, HitType.HIT);
 		MoveSequence jab = MoveSequence.GetAttackSequenceWithFrameData (3, 3, 12, jabAttackData, ButtonInputCommand.ATTACK, true);
 
-		Dictionary<string, IFrameSequence> blockDict = new Dictionary<string, IFrameSequence> ();
-		blockDict.Add ("HIT", null);
-
 		this.forwardStepFrame = new MoveFrame (new Vector2 (walkSpeed, 0), MoveType.NONE);
 		this.backStepFrame = new MoveFrame (new Vector2 (-walkSpeed, 0), MoveType.NONE);
 		MoveSequence forwardStep = new MoveSequence (new MoveFrame[] { forwardStepFrame }, ButtonInputCommand.NONE);
@@ -53,8 +51,23 @@ public class CharacterData
 		defaultNeutralMovesDict.Add ("A", jab);
 
 		defaultNeutralMovesDict.Add("HIT", null);
-		//  Test code
-		orbCarryMovesDict = defaultNeutralMovesDict;
+		//	
+		//  Orb Move Dict Below
+		orbCarryMovesDict = new Dictionary<string, IFrameSequence> ();
+
+		MoveFrame orbForwardStepFrame = new MoveFrame (new Vector2 (walkSpeed * orbSpeedModifier, 0), MoveType.NONE);
+		MoveFrame orbBackStepFrame = new MoveFrame (new Vector2 (-walkSpeed * orbSpeedModifier, 0), MoveType.NONE);
+		MoveSequence orbForwardStep = new MoveSequence (new MoveFrame[] { orbForwardStepFrame }, ButtonInputCommand.NONE);
+		MoveSequence orbBackwardStep = new MoveSequence (new MoveFrame[] { orbBackStepFrame }, ButtonInputCommand.NONE);
+
+		orbCarryMovesDict.Add ("6", orbForwardStep);
+		orbCarryMovesDict.Add ("4", orbBackwardStep);
+		orbCarryMovesDict.Add ("7", backwardJump);
+		orbCarryMovesDict.Add ("8", verticalJump);
+		orbCarryMovesDict.Add ("9", forwardJump);
+		orbCarryMovesDict.Add ("A", jab);
+
+		orbCarryMovesDict.Add("HIT", null);
 	}
 
 	public MoveBufferManager GetMoveBufferManager () {

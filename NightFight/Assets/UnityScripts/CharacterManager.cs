@@ -5,12 +5,12 @@ using Eppy;
 // Tracks all components related to a given player's avatar.
 public class CharacterManager : MonoBehaviour {
 	public CharacterDataManager characterDataManager;
-	public CharacterLightController characterLight;
-	public CharacterMovement characterMovement;
-	public TriggerCollisionManager collisionManager;
-	public CharacterGuiController guiController;
-	public HitboxController hitBox;
-	public InputManager inputManager;
+	CharacterLightController characterLight;
+	CharacterMovement characterMovement;
+	TriggerCollisionManager collisionManager;
+	CharacterGuiController guiController;
+	HitboxController hitBox;
+	InputManager inputManager;
 
 	public bool isPlayer1;
 	public bool isBot;
@@ -54,21 +54,25 @@ public class CharacterManager : MonoBehaviour {
 		DirectionalInput directionalInput;
 		bool toggleIllumination = false;
 
-
 		ButtonInput[] buttons = new ButtonInput[0];
-		bool hey = false;
 		// 1: Get input.
 		if (isBot) {
 			directionalInput = new DirectionalInput (botDirectionalInputRaw);
 			attack = botAttackInput;
 			toggleIllumination = true;
 		} else {
+			bool garbage = false;
 			inputManager.GetInputs (out directionalInput, out attack, out toggleIllumination);
-			inputManager.NewGetInputs (out buttons, out hey);
+			inputManager.NewGetInputs (out buttons, out garbage);
 		}
 
 		if (toggleIllumination) {
-			characterDataManager.ToggleCharacterIllumination ();
+			if (!characterDataManager.isCarryingOrb) {
+				characterDataManager.ToggleCharacterIllumination ();
+			} else {
+				//  Throw orb
+
+			}
 		}
 
 		if (!characterMovement.isFacingRight) {
@@ -89,8 +93,6 @@ public class CharacterManager : MonoBehaviour {
 			PerformFrame (currentFrame, movementDuringFrame);
 		}
 
-//		MoveType currentMoveType = currentFrame != null ? currentFrame.moveType : MoveType.NONE;
-//		characterLight.SetLight(isLit, currentMoveType);
 	}
 
 	public bool ResolveAttackCollisions () {
@@ -152,7 +154,7 @@ public class CharacterManager : MonoBehaviour {
 		orb.gameObject.SetActive (false);
 		characterDataManager.isCarryingOrb = true;
 		//  Replace magic figure with predefined variable within characterDataManager
-		characterDataManager.MultiplyWalkSpeedByFactor (0.75f);
+		//  characterDataManager.MultiplyWalkSpeedByFactor (0.75f);
 	}
 
 	public MoveType GetLastFrameMoveType () {

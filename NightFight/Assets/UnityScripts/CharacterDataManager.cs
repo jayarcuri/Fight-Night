@@ -183,10 +183,6 @@ public class CharacterDataManager
 		characterData.SetWalkSpeed (newWalkSpeed);
 	}
 
-	public void MultiplyWalkSpeedByFactor (float factor) {
-		characterData.SetWalkSpeed (characterData.walkSpeed * factor);
-	}
-
 	void QueueMove (IFrameSequence newMove)
 	{
 		currentMove = newMove;
