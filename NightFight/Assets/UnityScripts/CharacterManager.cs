@@ -159,10 +159,11 @@ public class CharacterManager : MonoBehaviour {
 
 	void ThrowOrb () {
 		orbController.gameObject.SetActive (true);
-		orbController.currentState = OrbState.NORMAL;
+		orbController.currentState = OrbState.THROWN;
 		characterDataManager.isCarryingOrb = false;
 		//  Activate Hitbox
 		//  Place in front of character
+		orbController.transform.localPosition = this.transform.localPosition;
 		//  Add force
 		Rigidbody orbRigidbody = orbController.gameObject.GetComponent<Rigidbody> ();
 		orbRigidbody.velocity = Vector3.zero;
